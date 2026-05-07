@@ -1,0 +1,126 @@
+<div class="page-title-row">
+  <div>
+    <h1>Projects</h1>
+    <p style="color:var(--text-2);margin-top:4px;font-size:0.9rem;">Manage your test case projects and repositories</p>
+  </div>
+  <button class="btn btn-primary" data-modal="modal-new-project">+ New Project</button>
+</div>
+
+{{#if projects.length}}
+<div class="grid-3">
+  {{#each projects}}
+  <div class="project-card">
+    <div class="project-card-header">
+      <div style="display:flex;align-items:flex-start;gap:10px;flex:1">
+        <div class="project-color-dot" style="background:{{color}}"></div>
+        <div style="flex:1">
+          <div class="project-name"><a href="/projects/{{slug}}">{{name}}</a></div>
+          {{#if description}}<div class="project-desc" style="margin-top:3px">{{truncate description 80}}</div>{{/if}}
+        </div>
+      </div>
+      <button class="btn btn-icon btn-ghost" data-modal="modal-edit-project-{{id}}" title="Edit" style="font-size:0.9rem">✎</button>
+    </div>
+    <div class="project-stats">
+      <div class="project-stat">
+        <div class="project-stat-value">{{repo_count}}</div>
+        <div class="project-stat-label">Repos</div>
+      </div>
+      <div class="project-stat">
+        <div class="project-stat-value">{{test_case_count}}</div>
+        <div class="project-stat-label">Cases</div>
+      </div>
+      <div class="project-stat">
+        <div class="project-stat-value">{{test_run_count}}</div>
+        <div class="project-stat-label">Runs</div>
+      </div>
+    </div>
+    <a href="/projects/{{slug}}" class="btn btn-secondary" style="width:100%;justify-content:center">Open Project →</a>
+  </div>
+
+  <!-- Edit Project Modal -->
+  <div class="modal-overlay" id="modal-edit-project-{{id}}">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Edit Project</h2>
+        <button class="modal-close" data-close-modal="modal-edit-project-{{id}}">✕</button>
+      </div>
+      <form action="/projects/{{slug}}/edit" method="POST">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Name</label>
+            <input class="form-control" name="name" value="{{name}}" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="2">{{description}}</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Color</label>
+            <div class="color-swatches">
+              {{#each (colorList)}}
+              <div class="color-swatch {{#if (eq this ../color)}}selected{{/if}}" style="background:{{this}}" data-color="{{this}}" data-target="color-{{../id}}"></div>
+              {{/each}}
+            </div>
+            <input type="hidden" name="color" id="color-{{id}}" value="{{color}}">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <form action="/projects/{{slug}}/delete" method="POST" style="margin-right:auto">
+            <button type="submit" class="btn btn-danger btn-sm" data-confirm="Delete this project and ALL its data?">Delete Project</button>
+          </form>
+          <button type="button" class="btn btn-secondary" data-close-modal="modal-edit-project-{{id}}">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  {{/each}}
+</div>
+{{else}}
+<div class="empty-state">
+  <div class="empty-state-icon">📋</div>
+  <h3>No projects yet</h3>
+  <p>Create your first project to start organizing test cases</p>
+</div>
+{{/if}}
+
+<!-- New Project Modal -->
+<div class="modal-overlay" id="modal-new-project">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>New Project</h2>
+      <button class="modal-close" data-close-modal="modal-new-project">✕</button>
+    </div>
+    <form action="/projects" method="POST">
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Project Name *</label>
+          <input class="form-control" name="name" placeholder="e.g. E-commerce Platform" required autofocus>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" name="description" rows="2" placeholder="What is this project about?"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color</label>
+          <div class="color-swatches">
+            <div class="color-swatch selected" style="background:#4f7ef8" data-color="#4f7ef8" data-target="new-project-color"></div>
+            <div class="color-swatch" style="background:#16a34a" data-color="#16a34a" data-target="new-project-color"></div>
+            <div class="color-swatch" style="background:#dc2626" data-color="#dc2626" data-target="new-project-color"></div>
+            <div class="color-swatch" style="background:#d97706" data-color="#d97706" data-target="new-project-color"></div>
+            <div class="color-swatch" style="background:#7c3aed" data-color="#7c3aed" data-target="new-project-color"></div>
+            <div class="color-swatch" style="background:#ea580c" data-color="#ea580c" data-target="new-project-color"></div>
+            <div class="color-swatch" style="background:#0891b2" data-color="#0891b2" data-target="new-project-color"></div>
+            <div class="color-swatch" style="background:#db2777" data-color="#db2777" data-target="new-project-color"></div>
+            <div class="color-swatch" style="background:#374151" data-color="#374151" data-target="new-project-color"></div>
+          </div>
+          <input type="hidden" name="color" id="new-project-color" value="#4f7ef8">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-new-project">Cancel</button>
+        <button type="submit" class="btn btn-primary">Create Project</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+<div class="page-title-row">
+  <h1>Edit Test Case</h1>
+  <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{testCase.id}}" class="btn btn-secondary">← Back</a>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{testCase.id}}/edit" method="POST">
+      <div class="form-group">
+        <label class="form-label">Title *</label>
+        <input class="form-control" name="title" value="{{testCase.title}}" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Priority</label>
+          <select class="form-control" name="priority">
+            <option value="critical" {{#if (eq testCase.priority 'critical')}}selected{{/if}}>🔴 Critical</option>
+            <option value="high" {{#if (eq testCase.priority 'high')}}selected{{/if}}>🟠 High</option>
+            <option value="medium" {{#if (eq testCase.priority 'medium')}}selected{{/if}}>🟡 Medium</option>
+            <option value="low" {{#if (eq testCase.priority 'low')}}selected{{/if}}>⚪ Low</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <select class="form-control" name="type">
+            <option value="functional" {{#if (eq testCase.type 'functional')}}selected{{/if}}>Functional</option>
+            <option value="regression" {{#if (eq testCase.type 'regression')}}selected{{/if}}>Regression</option>
+            <option value="smoke" {{#if (eq testCase.type 'smoke')}}selected{{/if}}>Smoke</option>
+            <option value="performance" {{#if (eq testCase.type 'performance')}}selected{{/if}}>Performance</option>
+            <option value="security" {{#if (eq testCase.type 'security')}}selected{{/if}}>Security</option>
+            <option value="usability" {{#if (eq testCase.type 'usability')}}selected{{/if}}>Usability</option>
+            <option value="other" {{#if (eq testCase.type 'other')}}selected{{/if}}>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Group</label>
+          <select class="form-control" name="group_id">
+            <option value="">— Ungrouped —</option>
+            {{#each groups}}
+            <option value="{{id}}" {{#if (eq id ../testCase.group_id)}}selected{{/if}}>{{name}}</option>
+            {{/each}}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-control" name="status">
+            <option value="active" {{#if (eq testCase.status 'active')}}selected{{/if}}>Active</option>
+            <option value="draft" {{#if (eq testCase.status 'draft')}}selected{{/if}}>Draft</option>
+            <option value="deprecated" {{#if (eq testCase.status 'deprecated')}}selected{{/if}}>Deprecated</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">URL</label>
+        <input class="form-control" name="url" value="{{testCase.url}}" placeholder="https://...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" name="description" rows="3">{{testCase.description}}</textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Preconditions</label>
+        <textarea class="form-control" name="preconditions" rows="2">{{testCase.preconditions}}</textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Steps</label>
+        <textarea class="form-control" name="steps" rows="6">{{testCase.steps}}</textarea>
+        <div class="form-hint">Enter each step on a new line. You can prefix with numbers (1. 2. 3.)</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Expected Result</label>
+        <textarea class="form-control" name="expected_result" rows="2">{{testCase.expected_result}}</textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tags</label>
+        <input class="form-control" name="tags" value="{{testCase.tags}}" placeholder="login, auth, regression">
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px">
+        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{testCase.id}}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>

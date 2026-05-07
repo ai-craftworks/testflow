@@ -1,0 +1,148 @@
+<div class="page-title-row">
+  <h1>New Test Run</h1>
+  <a href="/projects/{{project.slug}}/repos/{{repo.slug}}" class="btn btn-secondary">← Back</a>
+</div>
+
+<form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs" method="POST" id="run-form">
+  <div style="display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start">
+    <div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header"><h2>Run Details</h2></div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Run Name *</label>
+            <input class="form-control" name="name" placeholder="e.g. Sprint 12 - Regression Run" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="2" placeholder="Notes about this run"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header"><h2>Test Case Source</h2></div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">How to select cases?</label>
+            <select class="form-control" id="run-source" name="_source">
+              <option value="plan">From a Test Plan</option>
+              <option value="manual">Manual Selection</option>
+            </select>
+          </div>
+
+          <!-- Plan selection -->
+          <div id="run-plan-section">
+            <div class="form-group">
+              <label class="form-label">Test Plan</label>
+              <select class="form-control" name="test_plan_id">
+                <option value="">— No plan (will use manual selection) —</option>
+                {{#each plans}}
+                <option value="{{id}}" {{#if (eq (json ../selectedPlanId) (json id))}}selected{{/if}}>{{name}} ({{case_count}} cases)</option>
+                {{/each}}
+              </select>
+              <div class="form-hint">All cases from the selected plan will be included in this run</div>
+            </div>
+          </div>
+
+          <!-- Manual selection -->
+          <div id="run-manual-section" class="hidden">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <label class="form-label" style="margin:0">Select Test Cases</label>
+              <div style="display:flex;gap:8px;align-items:center">
+                <input type="text" class="form-control" id="case-search" placeholder="Search…" style="width:180px">
+                <label style="display:flex;align-items:center;gap:5px;font-size:0.82rem;cursor:pointer;white-space:nowrap">
+                  <input type="checkbox" id="select-all-cases"> All
+                </label>
+              </div>
+            </div>
+
+            {{#if testCases.length}}
+              {{#if ungroupedCases.length}}
+              <div class="group-section">
+                <div class="group-label">Ungrouped</div>
+                {{#each ungroupedCases}}
+                <div class="tc-card" style="margin-bottom:8px">
+                  <div class="tc-card-check">
+                    <input type="checkbox" name="case_ids" value="{{id}}" class="case-checkbox">
+                  </div>
+                  <div class="tc-card-body">
+                    <div class="tc-card-title">{{title}}</div>
+                    <div class="tc-card-meta">
+                      <span class="priority-badge {{priority}}"><span class="priority-dot {{priority}}"></span>{{capitalize priority}}</span>
+                      <span class="badge badge-gray">{{typeLabel type}}</span>
+                    </div>
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+              {{/if}}
+
+              {{#each groupedCases}}
+              <div class="group-section">
+                <div class="group-label">{{name}} <span class="badge badge-gray">{{cases.length}}</span></div>
+                {{#each cases}}
+                <div class="tc-card" style="margin-bottom:8px">
+                  <div class="tc-card-check">
+                    <input type="checkbox" name="case_ids" value="{{id}}" class="case-checkbox">
+                  </div>
+                  <div class="tc-card-body">
+                    <div class="tc-card-title">{{title}}</div>
+                    <div class="tc-card-meta">
+                      <span class="priority-badge {{priority}}"><span class="priority-dot {{priority}}"></span>{{capitalize priority}}</span>
+                      <span class="badge badge-gray">{{typeLabel type}}</span>
+                    </div>
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+              {{/each}}
+            {{else}}
+            <div class="empty-state" style="padding:20px"><h3>No test cases available</h3></div>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="position:sticky;top:calc(var(--nav-h)+16px)">
+      <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:0.875rem;color:var(--text-2)" id="run-summary">Configure your test run above</div>
+        <div class="divider"></div>
+        <button type="submit" class="btn btn-primary" style="justify-content:center">▶ Start Run</button>
+        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}" class="btn btn-secondary" style="justify-content:center">Cancel</a>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+// Pre-select plan from query param
+const urlParams = new URLSearchParams(window.location.search);
+const planId = urlParams.get('plan_id');
+if (planId) {
+  const sel = document.querySelector('[name=test_plan_id]');
+  if (sel) { sel.value = planId; }
+}
+
+// Update summary
+function updateSummary() {
+  const src = document.getElementById('run-source')?.value;
+  if (src === 'plan') {
+    const planSel = document.querySelector('[name=test_plan_id]');
+    const planName = planSel?.options[planSel.selectedIndex]?.text || 'No plan';
+    document.getElementById('run-summary').textContent = planName !== '— No plan (will use manual selection) —' ? `Using: ${planName}` : 'No plan selected';
+  } else {
+    const n = document.querySelectorAll('.case-checkbox:checked').length;
+    document.getElementById('run-summary').textContent = n + ' case' + (n !== 1 ? 's' : '') + ' manually selected';
+  }
+}
+document.getElementById('run-source')?.addEventListener('change', updateSummary);
+document.querySelectorAll('.case-checkbox').forEach(c => c.addEventListener('change', updateSummary));
+document.querySelector('[name=test_plan_id]')?.addEventListener('change', updateSummary);
+updateSummary();
+</script>
+
+<style>
+.hidden { display: none !important; }
+</style>

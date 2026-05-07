@@ -1,0 +1,25 @@
+{
+  "name": "testflow",
+  "version": "0.1.0",
+  "description": "Test Case Management Platform — no native addons, runs anywhere Node.js runs",
+  "main": "src/app.js",
+  "bin": {
+    "testflow": "./src/cli.js"
+  },
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "init-db": "node src/utils/initDb.js",
+    "reset-db": "node src/utils/resetDb.js",
+    "seed": "node src/utils/seed.js"
+  },
+  "dependencies": {
+    "express": "^4.18.3",
+    "express-handlebars": "^7.1.2",
+    "multer": "^2.0.1",
+    "sql.js": "^1.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

@@ -1,0 +1,331 @@
+<div class="page-title-row">
+  <div>
+    <h1>{{repo.name}}</h1>
+    {{#if repo.description}}<p>{{repo.description}}</p>{{/if}}
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-secondary" data-modal="modal-edit-repo">✎ Edit</button>
+    <button class="btn btn-primary" data-modal="modal-new-case">+ New Test Case</button>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-value">{{stats.totalCases}}</div>
+    <div class="stat-label">Test Cases</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{stats.totalPlans}}</div>
+    <div class="stat-label">Test Plans</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{stats.totalRuns}}</div>
+    <div class="stat-label">Total Runs</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" style="color:var(--accent)">{{stats.activeRuns}}</div>
+    <div class="stat-label">Active Runs</div>
+  </div>
+</div>
+
+<!-- Priority / Type breakdown -->
+{{#if testCases.length}}
+<div class="card" style="margin-bottom:24px">
+  <div class="card-body" style="display:flex;gap:24px;flex-wrap:wrap;align-items:center">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:0.78rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em">Priority</span>
+      {{#each priorityStats}}
+      <span class="priority-badge {{priority}}"><span class="priority-dot {{priority}}"></span>{{capitalize priority}} <strong>{{cnt}}</strong></span>
+      {{/each}}
+    </div>
+    <div class="toolbar-sep" style="height:18px;background:var(--border);width:1px"></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:0.78rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em">Type</span>
+      {{#each typeStats}}
+      <span class="badge badge-gray">{{typeLabel type}} {{cnt}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>
+{{/if}}
+
+<!-- Tabs -->
+<div class="tab-set">
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="tab-cases">Test Cases <span class="badge badge-gray" style="margin-left:4px">{{testCases.length}}</span></button>
+    <button class="tab-btn" data-tab="tab-plans">Test Plans <span class="badge badge-gray" style="margin-left:4px">{{testPlans.length}}</span></button>
+    <button class="tab-btn" data-tab="tab-runs">Test Runs <span class="badge badge-gray" style="margin-left:4px">{{testRuns.length}}</span></button>
+  </div>
+
+  <!-- Test Cases Tab -->
+  <div class="tab-panel active" id="tab-cases">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap">
+      <div class="search-wrap" style="flex:1;max-width:320px">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="form-control" id="case-search" placeholder="Search test cases…">
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-secondary btn-sm" data-modal="modal-manage-groups">⊞ Manage Groups</button>
+        <button class="btn btn-primary btn-sm" data-modal="modal-new-case">+ New Case</button>
+      </div>
+    </div>
+
+    {{#if testCases.length}}
+      <!-- Ungrouped cases -->
+      {{#if ungroupedCases.length}}
+      <div class="group-section">
+        <div class="group-label"><span>Ungrouped</span></div>
+        {{#each ungroupedCases}}
+        {{> case-card project=../project repo=../repo case=this}}
+        {{/each}}
+      </div>
+      {{/if}}
+
+      <!-- Grouped cases -->
+      {{#each groupedCases}}
+      <div class="group-section">
+        <div class="group-label"><span>{{name}}</span> <span class="badge badge-gray">{{cases.length}}</span></div>
+        {{#each cases}}
+        {{> case-card project=../../project repo=../../repo case=this}}
+        {{/each}}
+      </div>
+      {{/each}}
+    {{else}}
+    <div class="empty-state">
+      <div class="empty-state-icon">🧪</div>
+      <h3>No test cases yet</h3>
+      <p>Create your first test case to get started</p>
+    </div>
+    {{/if}}
+  </div>
+
+  <!-- Test Plans Tab -->
+  <div class="tab-panel" id="tab-plans">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+      <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/plans/new" class="btn btn-primary btn-sm">+ New Plan</a>
+    </div>
+    {{#if testPlans.length}}
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Name</th><th>Description</th><th>Cases</th><th>Status</th><th>Created</th><th></th>
+          </tr></thead>
+          <tbody>
+          {{#each testPlans}}
+          <tr>
+            <td><a href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/plans/{{id}}" style="font-weight:500">{{name}}</a></td>
+            <td style="color:var(--text-2);font-size:0.85rem">{{truncate description 60}}</td>
+            <td><span class="badge badge-blue">{{case_count}}</span></td>
+            <td><span class="status-badge {{status}}">{{statusLabel status}}</span></td>
+            <td style="color:var(--text-3);font-size:0.82rem">{{formatDate created_at}}</td>
+            <td>
+              <a href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/plans/{{id}}" class="btn btn-ghost btn-sm">View</a>
+            </td>
+          </tr>
+          {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {{else}}
+    <div class="empty-state">
+      <div class="empty-state-icon">📋</div>
+      <h3>No test plans yet</h3>
+      <p>Create a test plan to group test cases for a run</p>
+    </div>
+    {{/if}}
+  </div>
+
+  <!-- Test Runs Tab -->
+  <div class="tab-panel" id="tab-runs">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+      <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/new" class="btn btn-primary btn-sm">+ New Run</a>
+    </div>
+    {{#if testRuns.length}}
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Name</th><th>Plan</th><th>Progress</th><th>Status</th><th>Created</th><th></th>
+          </tr></thead>
+          <tbody>
+          {{#each testRuns}}
+          <tr>
+            <td><a href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/runs/{{id}}" style="font-weight:500">{{name}}</a></td>
+            <td style="color:var(--text-2);font-size:0.85rem">{{or plan_name '—'}}</td>
+            <td style="min-width:120px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="progress-bar" style="flex:1;height:5px">
+                  <div class="progress-fill" style="width:{{pct (add passed (add failed (add blocked skipped))) total}}%;background:{{#if failed}}var(--red){{else}}var(--green){{/if}}"></div>
+                </div>
+                <span style="font-size:0.75rem;color:var(--text-3)">{{add passed (add failed (add blocked skipped))}}/{{total}}</span>
+              </div>
+            </td>
+            <td><span class="status-badge {{status}}">{{statusLabel status}}</span></td>
+            <td style="color:var(--text-3);font-size:0.82rem">{{formatDate created_at}}</td>
+            <td><a href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/runs/{{id}}" class="btn btn-ghost btn-sm">Open</a></td>
+          </tr>
+          {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {{else}}
+    <div class="empty-state">
+      <div class="empty-state-icon">▶️</div>
+      <h3>No test runs yet</h3>
+      <p>Start a test run to execute test cases</p>
+    </div>
+    {{/if}}
+  </div>
+</div>
+
+<!-- New Test Case Modal -->
+<div class="modal-overlay" id="modal-new-case">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h2>New Test Case</h2>
+      <button class="modal-close" data-close-modal="modal-new-case">✕</button>
+    </div>
+    <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/cases" method="POST">
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Title *</label>
+          <input class="form-control" name="title" placeholder="e.g. User can add item to cart" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Priority</label>
+            <select class="form-control" name="priority">
+              <option value="critical">🔴 Critical</option>
+              <option value="high">🟠 High</option>
+              <option value="medium" selected>🟡 Medium</option>
+              <option value="low">⚪ Low</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Type</label>
+            <select class="form-control" name="type">
+              <option value="functional" selected>Functional</option>
+              <option value="regression">Regression</option>
+              <option value="smoke">Smoke</option>
+              <option value="performance">Performance</option>
+              <option value="security">Security</option>
+              <option value="usability">Usability</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Group</label>
+            <select class="form-control" name="group_id">
+              <option value="">— Ungrouped —</option>
+              {{#each groups}}
+              <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select class="form-control" name="status">
+              <option value="active" selected>Active</option>
+              <option value="draft">Draft</option>
+              <option value="deprecated">Deprecated</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">URL</label>
+          <input class="form-control" name="url" placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" name="description" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Preconditions</label>
+          <textarea class="form-control" name="preconditions" rows="2" placeholder="What must be set up before running this test?"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Steps</label>
+          <textarea class="form-control" name="steps" rows="4" placeholder="1. Navigate to...&#10;2. Click on...&#10;3. Verify that..."></textarea>
+          <div class="form-hint">Enter each step on a new line</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Expected Result</label>
+          <textarea class="form-control" name="expected_result" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tags</label>
+          <input class="form-control" name="tags" placeholder="login, auth, regression (comma-separated)">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-new-case">Cancel</button>
+        <button type="submit" class="btn btn-primary">Create Test Case</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Repo Modal -->
+<div class="modal-overlay" id="modal-edit-repo">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Edit Repository</h2>
+      <button class="modal-close" data-close-modal="modal-edit-repo">✕</button>
+    </div>
+    <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/edit" method="POST">
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input class="form-control" name="name" value="{{repo.name}}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" name="description" rows="2">{{repo.description}}</textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/delete" method="POST" style="margin-right:auto">
+          <button type="submit" class="btn btn-danger btn-sm" data-confirm="Delete this repository and all its data?">Delete</button>
+        </form>
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-edit-repo">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Manage Groups Modal -->
+<div class="modal-overlay" id="modal-manage-groups">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Manage Groups</h2>
+      <button class="modal-close" data-close-modal="modal-manage-groups">✕</button>
+    </div>
+    <div class="modal-body">
+      {{#if groups.length}}
+      <div style="margin-bottom:16px">
+        {{#each groups}}
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-light)">
+          <span style="font-weight:500">{{name}}</span>
+          <form action="/projects/{{../project.slug}}/repos/{{../repo.slug}}/groups/{{id}}/delete" method="POST" style="display:inline">
+            <button type="submit" class="btn btn-ghost btn-sm" style="color:var(--red)" data-confirm="Delete this group? Cases won't be deleted.">✕</button>
+          </form>
+        </div>
+        {{/each}}
+      </div>
+      {{/if}}
+      <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/groups" method="POST">
+        <div style="display:flex;gap:8px">
+          <input class="form-control" name="name" placeholder="New group name" required>
+          <button type="submit" class="btn btn-primary" style="white-space:nowrap">Add Group</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

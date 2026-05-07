@@ -1,0 +1,135 @@
+<div class="page-title-row">
+  <div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+      <span class="priority-badge {{testCase.priority}}">
+        <span class="priority-dot {{testCase.priority}}"></span>{{capitalize testCase.priority}}
+      </span>
+      <span class="badge badge-gray">{{typeLabel testCase.type}}</span>
+      <span class="status-badge {{testCase.status}}">{{capitalize testCase.status}}</span>
+      {{#if testCase.group_name}}<span class="badge badge-blue">{{testCase.group_name}}</span>{{/if}}
+    </div>
+    <h1>{{testCase.title}}</h1>
+  </div>
+  <div class="btn-group">
+    <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{testCase.id}}/edit" class="btn btn-secondary">✎ Edit</a>
+    <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{testCase.id}}/delete" method="POST" style="display:inline">
+      <button type="submit" class="btn btn-danger" data-confirm="Delete this test case?">Delete</button>
+    </form>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start">
+  <div>
+    {{#if testCase.url}}
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-body" style="display:flex;align-items:center;gap:10px">
+        <span style="color:var(--text-3)">🔗</span>
+        <a href="{{testCase.url}}" target="_blank" style="word-break:break-all;font-size:0.875rem">{{testCase.url}}</a>
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if testCase.description}}
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><h3>Description</h3></div>
+      <div class="card-body" style="font-size:0.875rem;line-height:1.7;color:var(--text-2)">{{testCase.description}}</div>
+    </div>
+    {{/if}}
+
+    {{#if testCase.preconditions}}
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><h3>Preconditions</h3></div>
+      <div class="card-body" style="font-size:0.875rem;line-height:1.7;color:var(--text-2)">{{testCase.preconditions}}</div>
+    </div>
+    {{/if}}
+
+    {{#if testCase.steps}}
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><h3>Steps</h3></div>
+      <div class="card-body">
+        <ol class="steps-list">
+          {{#each (json testCase.steps)}}{{else}}
+          {{/each}}
+        </ol>
+        <div id="steps-text" style="font-size:0.875rem;line-height:1.8;white-space:pre-line">{{testCase.steps}}</div>
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if testCase.expected_result}}
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><h3>Expected Result</h3></div>
+      <div class="card-body">
+        <div style="font-size:0.875rem;line-height:1.7;padding:10px;background:var(--green-dim);border-radius:var(--radius);border-left:3px solid var(--green);color:var(--text)">
+          {{testCase.expected_result}}
+        </div>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+
+  <div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><h3>Details</h3></div>
+      <div class="card-body">
+        <table style="width:100%;border-collapse:collapse">
+          <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3);width:45%">Priority</td><td><span class="priority-badge {{testCase.priority}}"><span class="priority-dot {{testCase.priority}}"></span>{{capitalize testCase.priority}}</span></td></tr>
+          <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3)">Type</td><td><span class="badge badge-gray" style="font-size:0.78rem">{{typeLabel testCase.type}}</span></td></tr>
+          <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3)">Status</td><td><span class="status-badge {{testCase.status}}">{{capitalize testCase.status}}</span></td></tr>
+          {{#if testCase.group_name}}<tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3)">Group</td><td style="font-size:0.85rem">{{testCase.group_name}}</td></tr>{{/if}}
+          <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3)">Created</td><td style="font-size:0.82rem">{{formatDate testCase.created_at}}</td></tr>
+          <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3)">Updated</td><td style="font-size:0.82rem">{{formatDate testCase.updated_at}}</td></tr>
+        </table>
+        {{#if testCase.tags}}
+        <div class="divider"></div>
+        <div class="tags-wrap">
+          {{testCase.tags}}
+        </div>
+        {{/if}}
+      </div>
+    </div>
+
+    {{#if plans.length}}
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><h3>Included in Plans</h3></div>
+      <div class="card-body">
+        {{#each plans}}
+        <div style="padding:4px 0"><a href="/projects/{{../../project.slug}}/repos/{{../../repo.slug}}/plans/{{id}}" style="font-size:0.875rem">{{name}}</a></div>
+        {{/each}}
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if results.length}}
+    <div class="card">
+      <div class="card-header"><h3>Recent Results</h3></div>
+      <div class="card-body">
+        {{#each results}}
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border-light)">
+          <a href="/projects/{{../../project.slug}}/repos/{{../../repo.slug}}/runs/{{run_id}}" style="font-size:0.82rem;color:var(--text-2)">{{run_name}}</a>
+          <span class="status-badge {{status}}">{{status}}</span>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+    {{/if}}
+  </div>
+</div>
+
+<script>
+// Convert plain-text steps to numbered list
+const stepsEl = document.getElementById('steps-text');
+if (stepsEl) {
+  const lines = stepsEl.textContent.split('\n').map(l => l.replace(/^\d+[\.\)]\s*/, '').trim()).filter(Boolean);
+  if (lines.length > 1) {
+    const ol = document.createElement('ol');
+    ol.className = 'steps-list';
+    lines.forEach(line => {
+      const li = document.createElement('li');
+      li.textContent = line;
+      ol.appendChild(li);
+    });
+    stepsEl.replaceWith(ol);
+  }
+}
+</script>

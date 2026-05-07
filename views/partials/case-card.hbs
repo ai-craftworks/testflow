@@ -1,0 +1,28 @@
+<div class="tc-card" style="margin-bottom:8px">
+  <div class="tc-card-body">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+      <div class="tc-card-title">
+        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{case.id}}">{{case.title}}</a>
+      </div>
+      <div class="tc-card-actions">
+        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{case.id}}/edit" class="btn btn-ghost btn-icon btn-sm" title="Edit">✎</a>
+        <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{case.id}}/delete" method="POST" style="display:inline">
+          <button type="submit" class="btn btn-ghost btn-icon btn-sm" style="color:var(--red)" title="Delete" data-confirm="Delete this test case?">✕</button>
+        </form>
+      </div>
+    </div>
+    <div class="tc-card-meta">
+      <span class="priority-badge {{case.priority}}">
+        <span class="priority-dot {{case.priority}}"></span>{{capitalize case.priority}}
+      </span>
+      <span class="badge badge-gray">{{typeLabel case.type}}</span>
+      {{#if case.url}}<span style="font-size:0.78rem;color:var(--text-3)">🔗 URL</span>{{/if}}
+      {{#if case.tags}}
+      <div class="tags-wrap">
+        {{case.tags}}
+      </div>
+      {{/if}}
+      <span class="status-badge {{case.status}}" style="margin-left:auto">{{capitalize case.status}}</span>
+    </div>
+  </div>
+</div>

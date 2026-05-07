@@ -1,0 +1,109 @@
+<div class="page-title-row">
+  <div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+      <span class="status-badge {{plan.status}}">{{statusLabel plan.status}}</span>
+      <span style="font-size:0.82rem;color:var(--text-3)">{{formatDate plan.created_at}}</span>
+    </div>
+    <h1>{{plan.name}}</h1>
+    {{#if plan.description}}<p>{{plan.description}}</p>{{/if}}
+  </div>
+  <div class="btn-group">
+    <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/plans/{{plan.id}}/edit" class="btn btn-secondary">✎ Edit Plan</a>
+    <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/new?plan_id={{plan.id}}" class="btn btn-primary">▶ Start Run</a>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start">
+  <div>
+    <!-- Cases -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header">
+        <h2>Test Cases <span class="badge badge-gray" style="margin-left:4px">{{cases.length}}</span></h2>
+      </div>
+      <div class="card-body">
+        {{#if cases.length}}
+          {{#each cases}}
+          <div class="tc-card" style="margin-bottom:8px">
+            <div class="tc-card-body">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between">
+                <div class="tc-card-title">
+                  <a href="/projects/{{../../project.slug}}/repos/{{../../repo.slug}}/cases/{{id}}">{{title}}</a>
+                </div>
+                <span style="font-size:0.75rem;color:var(--text-3);white-space:nowrap;margin-left:8px">#{{@index}}</span>
+              </div>
+              <div class="tc-card-meta" style="margin-top:5px">
+                <span class="priority-badge {{priority}}"><span class="priority-dot {{priority}}"></span>{{capitalize priority}}</span>
+                <span class="badge badge-gray">{{typeLabel type}}</span>
+                {{#if group_name}}<span class="badge badge-blue">{{group_name}}</span>{{/if}}
+              </div>
+            </div>
+          </div>
+          {{/each}}
+        {{else}}
+        <div class="empty-state" style="padding:24px">
+          <div class="empty-state-icon">🧪</div>
+          <h3>No test cases in this plan</h3>
+          <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/plans/{{plan.id}}/edit" class="btn btn-secondary btn-sm" style="margin-top:10px">Add Cases</a>
+        </div>
+        {{/if}}
+      </div>
+    </div>
+
+    <!-- Runs using this plan -->
+    {{#if runs.length}}
+    <div class="card">
+      <div class="card-header"><h2>Test Runs</h2></div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Progress</th><th>Status</th><th>Date</th><th></th></tr></thead>
+            <tbody>
+            {{#each runs}}
+            <tr>
+              <td><a href="/projects/{{../../project.slug}}/repos/{{../../repo.slug}}/runs/{{id}}" style="font-weight:500">{{name}}</a></td>
+              <td>
+                <div style="display:flex;align-items:center;gap:8px;min-width:100px">
+                  <div class="progress-bar" style="flex:1">
+                    <div class="progress-fill" style="width:{{pct (add passed failed) total}}%"></div>
+                  </div>
+                  <span style="font-size:0.75rem;color:var(--text-3)">{{add passed failed}}/{{total}}</span>
+                </div>
+              </td>
+              <td><span class="status-badge {{status}}">{{statusLabel status}}</span></td>
+              <td style="color:var(--text-3);font-size:0.82rem">{{formatDate created_at}}</td>
+              <td><a href="/projects/{{../../project.slug}}/repos/{{../../repo.slug}}/runs/{{id}}" class="btn btn-ghost btn-sm">Open</a></td>
+            </tr>
+            {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+
+  <div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-header"><h3>Plan Info</h3></div>
+      <div class="card-body">
+        <table style="width:100%;border-collapse:collapse">
+          <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3);width:45%">Status</td><td><span class="status-badge {{plan.status}}">{{statusLabel plan.status}}</span></td></tr>
+          <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3)">Cases</td><td style="font-size:0.875rem;font-weight:600">{{cases.length}}</td></tr>
+          <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3)">Runs</td><td style="font-size:0.875rem">{{runs.length}}</td></tr>
+          <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3)">Created</td><td style="font-size:0.82rem">{{formatDate plan.created_at}}</td></tr>
+          <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3)">Updated</td><td style="font-size:0.82rem">{{formatDate plan.updated_at}}</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
+        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/new?plan_id={{plan.id}}" class="btn btn-primary" style="justify-content:center">▶ Start New Run</a>
+        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/plans/{{plan.id}}/edit" class="btn btn-secondary" style="justify-content:center">✎ Edit Plan</a>
+        <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/plans/{{plan.id}}/delete" method="POST">
+          <button type="submit" class="btn btn-danger" style="width:100%;justify-content:center" data-confirm="Delete this test plan?">Delete Plan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

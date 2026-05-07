@@ -1,0 +1,106 @@
+<div class="page-title-row">
+  <h1>New Test Plan</h1>
+  <a href="/projects/{{project.slug}}/repos/{{repo.slug}}" class="btn btn-secondary">← Back</a>
+</div>
+
+<form action="/projects/{{project.slug}}/repos/{{repo.slug}}/plans" method="POST">
+  <div style="display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start">
+    <div class="card">
+      <div class="card-header"><h2>Plan Details</h2></div>
+      <div class="card-body">
+        <div class="form-group">
+          <label class="form-label">Plan Name *</label>
+          <input class="form-control" name="name" placeholder="e.g. Sprint 12 Regression" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" name="description" rows="2" placeholder="Goals and scope of this test plan"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="position:sticky;top:calc(var(--nav-h) + 16px)">
+      <div class="card-header">
+        <h2>Summary</h2>
+      </div>
+      <div class="card-body">
+        <div id="selection-count" style="font-size:0.875rem;color:var(--text-2)">0 cases selected</div>
+        <div class="divider"></div>
+        <button type="submit" class="btn btn-primary" style="width:100%">Create Test Plan</button>
+        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}" class="btn btn-secondary" style="width:100%;margin-top:8px;justify-content:center">Cancel</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-header">
+      <h2>Select Test Cases</h2>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="text" class="form-control" id="case-search" placeholder="Search…" style="width:200px">
+        <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer;white-space:nowrap">
+          <input type="checkbox" id="select-all-cases"> Select All
+        </label>
+      </div>
+    </div>
+    <div class="card-body">
+      {{#if testCases.length}}
+        <!-- Ungrouped -->
+        {{#if ungroupedCases.length}}
+        <div class="group-section">
+          <div class="group-label">Ungrouped</div>
+          {{#each ungroupedCases}}
+          <div class="tc-card" style="margin-bottom:8px">
+            <div class="tc-card-check">
+              <input type="checkbox" name="case_ids" value="{{id}}" class="case-checkbox">
+            </div>
+            <div class="tc-card-body">
+              <div class="tc-card-title">{{title}}</div>
+              <div class="tc-card-meta">
+                <span class="priority-badge {{priority}}"><span class="priority-dot {{priority}}"></span>{{capitalize priority}}</span>
+                <span class="badge badge-gray">{{typeLabel type}}</span>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+        {{/if}}
+
+        {{#each groupedCases}}
+        <div class="group-section">
+          <div class="group-label">{{name}} <span class="badge badge-gray">{{cases.length}}</span></div>
+          {{#each cases}}
+          <div class="tc-card" style="margin-bottom:8px">
+            <div class="tc-card-check">
+              <input type="checkbox" name="case_ids" value="{{id}}" class="case-checkbox">
+            </div>
+            <div class="tc-card-body">
+              <div class="tc-card-title">{{title}}</div>
+              <div class="tc-card-meta">
+                <span class="priority-badge {{priority}}"><span class="priority-dot {{priority}}"></span>{{capitalize priority}}</span>
+                <span class="badge badge-gray">{{typeLabel type}}</span>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+        {{/each}}
+      {{else}}
+      <div class="empty-state">
+        <div class="empty-state-icon">🧪</div>
+        <h3>No test cases in this repository</h3>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</form>
+
+<script>
+const checkboxes = document.querySelectorAll('.case-checkbox');
+const counter = document.getElementById('selection-count');
+function updateCount() {
+  const n = document.querySelectorAll('.case-checkbox:checked').length;
+  counter.textContent = n + ' case' + (n !== 1 ? 's' : '') + ' selected';
+}
+checkboxes.forEach(c => c.addEventListener('change', updateCount));
+updateCount();
+</script>

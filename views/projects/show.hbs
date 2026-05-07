@@ -1,0 +1,193 @@
+<div class="page-title-row">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div style="width:14px;height:14px;border-radius:50%;background:{{project.color}};flex-shrink:0"></div>
+    <div>
+      <h1>{{project.name}}</h1>
+      {{#if project.description}}<p>{{project.description}}</p>{{/if}}
+    </div>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-secondary" data-modal="modal-edit-project">✎ Edit</button>
+    <button class="btn btn-primary" data-modal="modal-new-repo">+ New Repository</button>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-value" style="color:var(--accent)">{{stats.total_repos}}</div>
+    <div class="stat-label">Repositories</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{stats.total_cases}}</div>
+    <div class="stat-label">Test Cases</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{stats.total_plans}}</div>
+    <div class="stat-label">Test Plans</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" style="color:var(--accent)">{{stats.active_runs}}</div>
+    <div class="stat-label">Active Runs</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" style="color:var(--green)">{{stats.completed_runs}}</div>
+    <div class="stat-label">Completed Runs</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:28px">
+  <!-- Priority breakdown -->
+  <div class="card">
+    <div class="card-header"><h3>Test Case Priority Distribution</h3></div>
+    <div class="card-body" style="display:flex;gap:12px;flex-wrap:wrap">
+      {{#each priorityStats}}
+      <div style="display:flex;align-items:center;gap:7px;font-size:0.875rem">
+        <span class="priority-dot {{priority}}"></span>
+        <span style="text-transform:capitalize;font-weight:500">{{priority}}</span>
+        <span class="badge badge-gray">{{cnt}}</span>
+      </div>
+      {{else}}
+      <span style="color:var(--text-3);font-size:0.85rem">No test cases yet</span>
+      {{/each}}
+    </div>
+  </div>
+  <!-- Run status -->
+  <div class="card">
+    <div class="card-header"><h3>Run Results</h3></div>
+    <div class="card-body" style="display:flex;gap:10px;flex-wrap:wrap">
+      {{#each runStatusStats}}
+      <div style="text-align:center;min-width:48px">
+        <div style="font-size:1.3rem;font-weight:600">{{cnt}}</div>
+        <div class="status-badge {{status}}" style="margin-top:3px">{{status}}</div>
+      </div>
+      {{else}}
+      <span style="color:var(--text-3);font-size:0.85rem">No results yet</span>
+      {{/each}}
+    </div>
+  </div>
+</div>
+
+<!-- Repositories -->
+<div class="section">
+  <div class="section-header">
+    <h2>Repositories <span class="badge badge-gray" style="margin-left:6px">{{repos.length}}</span></h2>
+  </div>
+  {{#if repos.length}}
+  <div class="grid-3">
+    {{#each repos}}
+    <div class="repo-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px">
+        <div>
+          <div style="font-weight:600;font-size:0.95rem"><a href="/projects/{{../project.slug}}/repos/{{slug}}" style="color:var(--text)">{{name}}</a></div>
+          {{#if description}}<div style="font-size:0.82rem;color:var(--text-2);margin-top:3px">{{truncate description 60}}</div>{{/if}}
+        </div>
+        <button class="btn btn-icon btn-ghost btn-sm" data-modal="modal-edit-repo-{{id}}" style="font-size:0.85rem">✎</button>
+      </div>
+      <div style="display:flex;gap:14px;font-size:0.8rem;color:var(--text-3)">
+        <span>{{test_case_count}} cases</span>
+        <span>{{test_plan_count}} plans</span>
+        <span>{{test_run_count}} runs</span>
+      </div>
+      <a href="/projects/{{../project.slug}}/repos/{{slug}}" class="btn btn-secondary btn-sm" style="margin-top:12px;width:100%;justify-content:center">Open →</a>
+    </div>
+
+    <!-- Edit Repo Modal -->
+    <div class="modal-overlay" id="modal-edit-repo-{{id}}">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>Edit Repository</h2>
+          <button class="modal-close" data-close-modal="modal-edit-repo-{{id}}">✕</button>
+        </div>
+        <form action="/projects/{{../project.slug}}/repos/{{slug}}/edit" method="POST">
+          <div class="modal-body">
+            <div class="form-group">
+              <label class="form-label">Name</label>
+              <input class="form-control" name="name" value="{{name}}" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" name="description" rows="2">{{description}}</textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <form action="/projects/{{../project.slug}}/repos/{{slug}}/delete" method="POST" style="margin-right:auto">
+              <button type="submit" class="btn btn-danger btn-sm" data-confirm="Delete this repository and ALL its data?">Delete</button>
+            </form>
+            <button type="button" class="btn btn-secondary" data-close-modal="modal-edit-repo-{{id}}">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  {{else}}
+  <div class="empty-state">
+    <div class="empty-state-icon">📁</div>
+    <h3>No repositories yet</h3>
+    <p>Create a repository to organize test cases</p>
+  </div>
+  {{/if}}
+</div>
+
+<!-- Edit Project Modal -->
+<div class="modal-overlay" id="modal-edit-project">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Edit Project</h2>
+      <button class="modal-close" data-close-modal="modal-edit-project">✕</button>
+    </div>
+    <form action="/projects/{{project.slug}}/edit" method="POST">
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input class="form-control" name="name" value="{{project.name}}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" name="description" rows="2">{{project.description}}</textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color</label>
+          <div class="color-swatches">
+            {{#each (colorList)}}
+            <div class="color-swatch {{#if (eq this ../project.color)}}selected{{/if}}" style="background:{{this}}" data-color="{{this}}" data-target="edit-project-color"></div>
+            {{/each}}
+          </div>
+          <input type="hidden" name="color" id="edit-project-color" value="{{project.color}}">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-edit-project">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- New Repo Modal -->
+<div class="modal-overlay" id="modal-new-repo">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>New Repository</h2>
+      <button class="modal-close" data-close-modal="modal-new-repo">✕</button>
+    </div>
+    <form action="/projects/{{project.slug}}/repos" method="POST">
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Repository Name *</label>
+          <input class="form-control" name="name" placeholder="e.g. Checkout Flow" required autofocus>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" name="description" rows="2" placeholder="What will this repository contain?"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-new-repo">Cancel</button>
+        <button type="submit" class="btn btn-primary">Create Repository</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -79,8 +79,9 @@ router.get('/:runId', (req, res) => {
     FROM test_run_results trr
     JOIN test_cases tc ON tc.id = trr.test_case_id
     LEFT JOIN test_groups tg ON tg.id = tc.group_id
+    LEFT JOIN test_plan_cases tpc ON tpc.test_case_id = tc.id AND tpc.test_plan_id = (SELECT test_plan_id FROM test_runs WHERE id = trr.test_run_id)
     WHERE trr.test_run_id = ?
-    ORDER BY tg.name, tc.priority, tc.title
+    ORDER BY CASE WHEN tpc.sort_order IS NULL THEN 9999 ELSE tpc.sort_order END, tc.priority, tc.title
   `).all(run.id);
 
   results.forEach(r => {

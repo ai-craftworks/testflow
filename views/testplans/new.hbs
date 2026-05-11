@@ -6,7 +6,9 @@
 <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/plans" method="POST">
   <div style="display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start">
     <div class="card">
-      <div class="card-header"><h2>Plan Details</h2></div>
+      <div class="card-header">
+        <h2>Plan Details</h2>
+      </div>
       <div class="card-body">
         <div class="form-group">
           <label class="form-label">Plan Name *</label>
@@ -14,7 +16,8 @@
         </div>
         <div class="form-group">
           <label class="form-label">Description</label>
-          <textarea class="form-control" name="description" rows="2" placeholder="Goals and scope of this test plan"></textarea>
+          <textarea class="form-control" name="description" rows="2"
+            placeholder="Goals and scope of this test plan"></textarea>
         </div>
       </div>
     </div>
@@ -27,80 +30,273 @@
         <div id="selection-count" style="font-size:0.875rem;color:var(--text-2)">0 cases selected</div>
         <div class="divider"></div>
         <button type="submit" class="btn btn-primary" style="width:100%">Create Test Plan</button>
-        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}" class="btn btn-secondary" style="width:100%;margin-top:8px;justify-content:center">Cancel</a>
+        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}" class="btn btn-secondary"
+          style="width:100%;margin-top:8px;justify-content:center">Cancel</a>
       </div>
     </div>
   </div>
 
   <div class="card" style="margin-top:16px">
     <div class="card-header">
-      <h2>Select Test Cases</h2>
+      <h2>Select &amp; Order Test Cases</h2>
       <div style="display:flex;gap:8px;align-items:center">
         <input type="text" class="form-control" id="case-search" placeholder="Search…" style="width:200px">
-        <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;cursor:pointer;white-space:nowrap">
-          <input type="checkbox" id="select-all-cases"> Select All
-        </label>
       </div>
     </div>
-    <div class="card-body">
-      {{#if testCases.length}}
-        <!-- Ungrouped -->
-        {{#if ungroupedCases.length}}
-        <div class="group-section">
-          <div class="group-label">Ungrouped</div>
-          {{#each ungroupedCases}}
-          <div class="tc-card" style="margin-bottom:8px">
-            <div class="tc-card-check">
-              <input type="checkbox" name="case_ids" value="{{id}}" class="case-checkbox">
-            </div>
-            <div class="tc-card-body">
-              <div class="tc-card-title">{{title}}</div>
-              <div class="tc-card-meta">
-                <span class="priority-badge {{priority}}"><span class="priority-dot {{priority}}"></span>{{capitalize priority}}</span>
-                <span class="badge badge-gray">{{typeLabel type}}</span>
-              </div>
-            </div>
-          </div>
-          {{/each}}
-        </div>
-        {{/if}}
+    <div class="card-body" style="padding:0">
+      <div style="display:grid;grid-template-columns:1fr 1fr;min-height:400px">
 
-        {{#each groupedCases}}
-        <div class="group-section">
-          <div class="group-label">{{name}} <span class="badge badge-gray">{{cases.length}}</span></div>
-          {{#each cases}}
-          <div class="tc-card" style="margin-bottom:8px">
-            <div class="tc-card-check">
-              <input type="checkbox" name="case_ids" value="{{id}}" class="case-checkbox">
-            </div>
-            <div class="tc-card-body">
-              <div class="tc-card-title">{{title}}</div>
-              <div class="tc-card-meta">
-                <span class="priority-badge {{priority}}"><span class="priority-dot {{priority}}"></span>{{capitalize priority}}</span>
-                <span class="badge badge-gray">{{typeLabel type}}</span>
+        <!-- Left: Available cases -->
+        <div style="border-right:1px solid var(--border);padding:16px">
+          <div
+            style="font-size:0.78rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px">
+            Available — click to add
+          </div>
+          <div id="available-list">
+            {{#if ungroupedCases.length}}
+            <div class="group-label" style="margin-bottom:6px">Ungrouped</div>
+            {{#each ungroupedCases}}
+            <div class="plan-avail-card" data-id="{{id}}" data-title="{{title}}" data-priority="{{priority}}"
+              data-type="{{type}}" style="margin-bottom:6px">
+              <div class="tc-card-body" style="flex:1">
+                <div class="tc-card-title" style="font-size:0.85rem">{{title}}</div>
+                <div class="tc-card-meta" style="margin-top:3px">
+                  <span class="priority-badge {{priority}}"><span class="priority-dot {{priority}}"></span>{{capitalize
+                    priority}}</span>
+                  <span class="badge badge-gray">{{typeLabel type}}</span>
+                </div>
               </div>
+              <span style="color:var(--accent);font-size:1rem;padding:0 4px">+</span>
+            </div>
+            {{/each}}
+            {{/if}}
+
+            {{#each groupedCases}}
+            <div class="group-label" style="margin-bottom:6px">{{name}}</div>
+            {{#each cases}}
+            <div class="plan-avail-card" data-id="{{id}}" data-title="{{title}}" data-priority="{{priority}}"
+              data-type="{{type}}" style="margin-bottom:6px">
+              <div class="tc-card-body" style="flex:1">
+                <div class="tc-card-title" style="font-size:0.85rem">{{title}}</div>
+                <div class="tc-card-meta" style="margin-top:3px">
+                  <span class="priority-badge {{priority}}"><span class="priority-dot {{priority}}"></span>{{capitalize
+                    priority}}</span>
+                  <span class="badge badge-gray">{{typeLabel type}}</span>
+                </div>
+              </div>
+              <span style="color:var(--accent);font-size:1rem;padding:0 4px">+</span>
+            </div>
+            {{/each}}
+            {{/each}}
+
+            {{#unless testCases.length}}
+            <div class="empty-state" style="padding:24px">
+              <h3>No test cases available</h3>
+            </div>
+            {{/unless}}
+          </div>
+        </div>
+
+        <!-- Right: Selected & ordered -->
+        <div style="padding:16px">
+          <div
+            style="font-size:0.78rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px">
+            Selected — drag to reorder
+          </div>
+          <div id="selected-list" style="min-height:200px">
+            <div id="selected-empty" style="color:var(--text-3);font-size:0.85rem;padding:16px 0">
+              Click cases on the left to add them here
             </div>
           </div>
-          {{/each}}
         </div>
-        {{/each}}
-      {{else}}
-      <div class="empty-state">
-        <div class="empty-state-icon">🧪</div>
-        <h3>No test cases in this repository</h3>
+
       </div>
-      {{/if}}
     </div>
   </div>
+
+  <!-- Hidden inputs populated by JS -->
+  <div id="hidden-inputs"></div>
 </form>
 
 <script>
-const checkboxes = document.querySelectorAll('.case-checkbox');
-const counter = document.getElementById('selection-count');
-function updateCount() {
-  const n = document.querySelectorAll('.case-checkbox:checked').length;
-  counter.textContent = n + ' case' + (n !== 1 ? 's' : '') + ' selected';
-}
-checkboxes.forEach(c => c.addEventListener('change', updateCount));
-updateCount();
+  var selectedIds = [];   // ordered list of case IDs
+  var caseData = {};      // id -> {title, priority, type}
+
+  // Build caseData map from available cards
+  document.querySelectorAll('.plan-avail-card').forEach(function (card) {
+    var id = card.dataset.id;
+    caseData[id] = { title: card.dataset.title, priority: card.dataset.priority, type: card.dataset.type };
+  });
+
+  function renderSelected() {
+    var list = document.getElementById('selected-list');
+    var empty = document.getElementById('selected-empty');
+    var hidden = document.getElementById('hidden-inputs');
+    var counter = document.getElementById('selection-count');
+
+    // Clear hidden inputs
+    hidden.innerHTML = '';
+    selectedIds.forEach(function (id, i) {
+      var inp = document.createElement('input');
+      inp.type = 'hidden'; inp.name = 'case_ids'; inp.value = id;
+      hidden.appendChild(inp);
+      // sort_order handled server-side by array position
+    });
+
+    // Update counter
+    if (counter) counter.textContent = selectedIds.length + ' case' + (selectedIds.length !== 1 ? 's' : '') + ' selected';
+
+    // Empty state
+    if (selectedIds.length === 0) {
+      list.innerHTML = '<div id="selected-empty" style="color:var(--text-3);font-size:0.85rem;padding:16px 0">Click cases on the left to add them here</div>';
+      return;
+    }
+
+    list.innerHTML = '';
+    selectedIds.forEach(function (id, index) {
+      var c = caseData[id] || { title: 'Case ' + id, priority: 'medium', type: 'functional' };
+      var div = document.createElement('div');
+      div.className = 'plan-selected-card';
+      div.dataset.id = id;
+      div.draggable = true;
+      div.innerHTML =
+        '<span class="drag-handle" title="Drag to reorder">⠿</span>' +
+        '<span style="font-size:0.72rem;color:var(--text-3);min-width:18px;text-align:right;margin-right:4px">' + (index + 1) + '</span>' +
+        '<div style="flex:1;min-width:0">' +
+        '<div style="font-size:0.85rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escHtml(c.title) + '</div>' +
+        '<div style="display:flex;gap:6px;margin-top:2px">' +
+        '<span class="priority-badge ' + c.priority + '"><span class="priority-dot ' + c.priority + '"></span>' + cap(c.priority) + '</span>' +
+        '</div>' +
+        '</div>' +
+        '<button type="button" class="btn btn-ghost btn-icon btn-sm remove-selected" data-id="' + id + '" title="Remove" style="color:var(--red);flex-shrink:0">✕</button>';
+      list.appendChild(div);
+    });
+
+    // Wire drag events
+    initDragDrop();
+  }
+
+  function escHtml(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+
+  // Click available card to add
+  document.getElementById('available-list').addEventListener('click', function (e) {
+    var card = e.target.closest('.plan-avail-card');
+    if (!card) return;
+    var id = card.dataset.id;
+    if (selectedIds.indexOf(id) === -1) {
+      selectedIds.push(id);
+      card.style.opacity = '0.4';
+      card.style.pointerEvents = 'none';
+      renderSelected();
+    }
+  });
+
+  // Click remove button on selected card
+  document.getElementById('selected-list').addEventListener('click', function (e) {
+    var btn = e.target.closest('.remove-selected');
+    if (!btn) return;
+    var id = btn.dataset.id;
+    selectedIds = selectedIds.filter(function (x) { return x !== id; });
+    // Re-enable in available list
+    var avail = document.querySelector('.plan-avail-card[data-id="' + id + '"]');
+    if (avail) { avail.style.opacity = ''; avail.style.pointerEvents = ''; }
+    renderSelected();
+  });
+
+  // Drag and drop reordering
+  var dragSrcId = null;
+
+  function initDragDrop() {
+    document.querySelectorAll('.plan-selected-card').forEach(function (card) {
+      card.addEventListener('dragstart', function (e) {
+        dragSrcId = card.dataset.id;
+        card.style.opacity = '0.4';
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      card.addEventListener('dragend', function () {
+        card.style.opacity = '';
+        document.querySelectorAll('.plan-selected-card').forEach(function (c) {
+          c.classList.remove('drag-over');
+        });
+      });
+      card.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        document.querySelectorAll('.plan-selected-card').forEach(function (c) { c.classList.remove('drag-over'); });
+        card.classList.add('drag-over');
+      });
+      card.addEventListener('drop', function (e) {
+        e.preventDefault();
+        if (dragSrcId === card.dataset.id) return;
+        var srcIdx = selectedIds.indexOf(dragSrcId);
+        var tgtIdx = selectedIds.indexOf(card.dataset.id);
+        if (srcIdx === -1 || tgtIdx === -1) return;
+        selectedIds.splice(srcIdx, 1);
+        selectedIds.splice(tgtIdx, 0, dragSrcId);
+        renderSelected();
+      });
+    });
+  }
+
+  // Search filter
+  document.getElementById('case-search')?.addEventListener('input', function () {
+    var q = this.value.toLowerCase();
+    document.querySelectorAll('.plan-avail-card').forEach(function (card) {
+      card.style.display = card.dataset.title.toLowerCase().includes(q) ? '' : 'none';
+    });
+  });
+
+  // Initial render
+  renderSelected();
 </script>
+
+<style>
+  .plan-avail-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+
+  .plan-avail-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .plan-selected-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    cursor: default;
+    transition: border-color var(--transition);
+  }
+
+  .plan-selected-card.drag-over {
+    border-color: var(--accent);
+    border-style: dashed;
+    background: var(--accent-dim);
+  }
+
+  .drag-handle {
+    cursor: grab;
+    color: var(--text-3);
+    font-size: 1rem;
+    flex-shrink: 0;
+    user-select: none;
+  }
+
+  .drag-handle:active {
+    cursor: grabbing;
+  }
+</style>

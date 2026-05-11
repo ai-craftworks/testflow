@@ -97,7 +97,7 @@ router.get('/:planId/edit', (req, res) => {
   const plan = db.prepare('SELECT * FROM test_plans WHERE id = ? AND repository_id = ?').get(req.params.planId, c.repo.id);
   if (!plan) { db.close(); return res.redirect(`/projects/${req.params.projectSlug}/repos/${req.params.repoSlug}`); }
 
-  const selectedIds = db.prepare('SELECT test_case_id FROM test_plan_cases WHERE test_plan_id = ?').all(plan.id).map(r => String(r.test_case_id));
+  const selectedIds = db.prepare('SELECT test_case_id FROM test_plan_cases WHERE test_plan_id = ? ORDER BY sort_order').all(plan.id).map(r => String(r.test_case_id));
   const groups = db.prepare('SELECT * FROM test_groups WHERE repository_id = ? ORDER BY name').all(c.repo.id);
   const testCases = db.prepare(`
     SELECT tc.*, tg.name as group_name FROM test_cases tc

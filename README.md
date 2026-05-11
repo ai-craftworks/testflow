@@ -16,6 +16,21 @@ npm start
 
 Open **http://localhost:3000** in your browser.
 
+### Access globally
+
+Alternatively, you can link it globally and run from anywhere.
+
+```bash
+# 1. Link globally
+npm link
+
+# 2. Check version
+testflow version
+
+# 3. Run from anywhere
+testflow start
+```
+
 ---
 
 ## NPM Scripts

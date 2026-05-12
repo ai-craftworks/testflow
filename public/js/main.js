@@ -74,7 +74,7 @@ document.addEventListener('change', async e => {
       // update progress counts
       updateProgress();
     }
-  } catch {}
+  } catch { }
 });
 
 function updateProgress() {
@@ -85,7 +85,7 @@ function updateProgress() {
 
   const bar = document.querySelector('.progress-stacked');
   if (bar && total > 0) {
-    ['passed','failed','blocked','skipped','pending'].forEach(st => {
+    ['passed', 'failed', 'blocked', 'skipped', 'pending'].forEach(st => {
       const seg = bar.querySelector(`.seg-${st}`);
       if (seg) seg.style.width = ((counts[st] / total) * 100) + '%';
     });
@@ -128,6 +128,8 @@ function initRichEditor(wrap) {
     const val = btn.dataset.val;
     if (cmd === 'insertImage') {
       triggerImageUpload(editor);
+    } else if (cmd === 'insertVideo') {
+      triggerVideoUpload(editor, () => syncHidden(editor, hidden));
     } else if (cmd === 'createLink') {
       const url = prompt('URL:');
       if (url) document.execCommand('createLink', false, url);
@@ -151,7 +153,8 @@ function initRichEditor(wrap) {
       if (item.type.startsWith('image/')) {
         e.preventDefault();
         e.stopPropagation();
-        uploadImage(item.getAsFile()).then(url => {
+        const file = item.getAsFile();
+        uploadImage(file).then(url => {
           if (url) {
             editor.focus();
             document.execCommand('insertImage', false, url);
@@ -169,10 +172,22 @@ function initRichEditor(wrap) {
     if (!files?.length) return;
     for (const file of files) {
       if (file.type.startsWith('image/')) {
-        e.preventDefault();
-        const url = await uploadImage(file);
-        if (url) document.execCommand('insertImage', false, url);
-        syncHidden(editor, hidden);
+        e.preventDefault(); handled = true;
+        uploadImage(file).then(url => {
+          if (url) {
+            editor.focus();
+            document.execCommand('insertImage', false, url);
+          }
+        });
+      } else if (file.type.startsWith('video/')) {
+        e.preventDefault(); handled = true;
+        uploadVideo(file).then(url => {
+          if (url) {
+            editor.focus();
+            insertVideo(editor, url);
+            syncHidden(editor, hidden);
+          }
+        });
       }
     }
   });
@@ -185,7 +200,7 @@ function syncHidden(editor, hidden) {
 function updateToolbarState(toolbar, editor) {
   toolbar.querySelectorAll('.toolbar-btn[data-cmd]').forEach(btn => {
     const cmd = btn.dataset.cmd;
-    if (['bold','italic','underline','strikeThrough'].includes(cmd)) {
+    if (['bold', 'italic', 'underline', 'strikeThrough'].includes(cmd)) {
       btn.classList.toggle('active', document.queryCommandState(cmd));
     }
   });
@@ -212,6 +227,52 @@ function triggerImageUpload(editor) {
     }
   };
   inp.click();
+}
+
+async function uploadVideo(file) {
+  const fd = new FormData();
+  fd.append('video', file);
+  try {
+    const r = await fetch('/upload/video', { method: 'POST', body: fd });
+    const data = await r.json();
+    return data.url;
+  } catch { return null; }
+}
+
+function triggerVideoUpload(editor, syncFn) {
+  const inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = 'video/*';
+  inp.onchange = async () => {
+    const url = await uploadVideo(inp.files[0]);
+    if (url) {
+      editor.focus();
+      insertVideo(editor, url);
+      if (syncFn) syncFn();
+    }
+  };
+  inp.click();
+}
+
+function insertVideo(editor, url) {
+  const video = document.createElement('video');
+  video.src = url;
+  video.controls = true;
+  video.style.maxWidth = '100%';
+  video.style.borderRadius = '4px';
+  video.style.margin = '4px 0';
+  // Insert at cursor position
+  const sel = window.getSelection();
+  if (sel && sel.rangeCount) {
+    const range = sel.getRangeAt(0);
+    range.collapse(false);
+    range.insertNode(video);
+    range.setStartAfter(video);
+    range.setEndAfter(video);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  } else {
+    editor.appendChild(video);
+  }
 }
 
 document.querySelectorAll('.rich-editor-wrap').forEach(initRichEditor);
@@ -244,7 +305,7 @@ document.addEventListener('submit', async e => {
       if (hidden) hidden.value = '';
       showToast('Note added', 'success');
     }
-  } catch {}
+  } catch { }
 });
 
 /* ── Select all test cases ── */

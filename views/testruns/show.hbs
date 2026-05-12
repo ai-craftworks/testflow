@@ -143,6 +143,7 @@
           <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="pre">{ }</button>
           <span class="toolbar-sep"></span>
           <button type="button" class="toolbar-btn" data-cmd="insertImage">📷 Image</button>
+          <button type="button" class="toolbar-btn" data-cmd="insertVideo" title="Upload video">🎥 Video</button>
           <button type="button" class="toolbar-btn" data-cmd="createLink">🔗 Link</button>
           <span class="toolbar-sep"></span>
           <button type="button" class="toolbar-btn" data-cmd="removeFormat">✕</button>
@@ -266,6 +267,7 @@
               <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="pre">{ }</button>
               <span class="toolbar-sep"></span>
               <button type="button" class="toolbar-btn" data-cmd="insertImage">📷 Image</button>
+              <button type="button" class="toolbar-btn" data-cmd="insertVideo" title="Upload video">🎥 Video</button>
               <button type="button" class="toolbar-btn" data-cmd="createLink">🔗 Link</button>
               <span class="toolbar-sep"></span>
               <button type="button" class="toolbar-btn" data-cmd="removeFormat">✕</button>
@@ -324,6 +326,7 @@ function initInlineEditor(wrap) {
     if (!btn) return;
     const cmd = btn.dataset.cmd, val = btn.dataset.val;
     if (cmd === 'insertImage') triggerImageUpload(editor);
+    else if (cmd === 'insertVideo') triggerVideoUpload(editor, () => { if (hidden) hidden.value = editor.innerHTML; });
     else if (cmd === 'createLink') { const u = prompt('URL:'); if (u) document.execCommand('createLink', false, u); }
     else document.execCommand(cmd, false, val || null);
     editor.focus();
@@ -339,8 +342,13 @@ function initInlineEditor(wrap) {
       if (item.type.startsWith('image/')) {
         e.preventDefault();
         e.stopPropagation();
-        uploadImage(item.getAsFile()).then(url => {
-          if (url) { editor.focus(); document.execCommand('insertImage', false, url); if (hidden) hidden.value = editor.innerHTML; }
+        const file = item.getAsFile();
+        uploadImage(file).then(url => {
+          if (url) {
+            editor.focus();
+            document.execCommand('insertImage', false, url);
+            syncHidden(editor, hidden);
+          }
         });
         return;
       }
@@ -355,6 +363,11 @@ function initInlineEditor(wrap) {
         if (!handled) { e.preventDefault(); handled = true; }
         uploadImage(f).then(url => {
           if (url) { editor.focus(); document.execCommand('insertImage', false, url); if (hidden) hidden.value = editor.innerHTML; }
+        });
+      } else if (f.type.startsWith('video/')) {
+        if (!handled) { e.preventDefault(); handled = true; }
+        uploadVideo(f).then(url => {
+          if (url) { editor.focus(); insertVideo(editor, url); if (hidden) hidden.value = editor.innerHTML; }
         });
       }
     }
@@ -442,6 +455,7 @@ if (runNoteEditorWrap) {
     if (!btn) return;
     const cmd = btn.dataset.cmd, val = btn.dataset.val;
     if (cmd === 'insertImage') triggerImageUpload(editor);
+    else if (cmd === 'insertVideo') triggerVideoUpload(editor, () => { if (hidden) hidden.value = editor.innerHTML; });
     else if (cmd === 'createLink') { const u = prompt('URL:'); if (u) document.execCommand('createLink', false, u); }
     else document.execCommand(cmd, false, val || null);
     editor.focus(); hidden.value = editor.innerHTML;

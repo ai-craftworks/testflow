@@ -374,3 +374,10 @@ pre { background: var(--gray-dim); padding: 14px; border-radius: var(--radius); 
 
 /* ── Inline color indicator ── */
 .color-bar { width: 3px; border-radius: 99px; flex-shrink: 0; }
+
+/* Add inside the .rich-editor block: */
+.rich-editor video { max-width: 100%; border-radius: 4px; margin: 4px 0; }
+
+/* Also add for note content display: */
+.note-content video { max-width: 100%; border-radius: 4px; margin: 4px 0; }
+.note-item-content video { max-width: 100%; border-radius: 4px; margin: 4px 0; }

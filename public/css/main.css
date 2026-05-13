@@ -10,6 +10,8 @@
   --text-3: #6b7793;
   --accent: #2355d4;
   --accent-dim: #e8eefb;
+  --secondary: #2FA4D7;
+  --secondary-dim: #56B6C6;
   --accent-hover: #1a44bf;
   --green: #0f7f3b;
   --green-dim: #d4f0e2;
@@ -290,13 +292,13 @@ img {
 }
 
 .btn-secondary {
-  background: var(--surface);
-  color: var(--text);
-  border-color: var(--border);
+  background: var(--secondary);
+  color: var(--surface);
+  border-color: var(--secondary);
 }
 
 .btn-secondary:hover {
-  background: var(--gray-dim);
+  background: var(--secondary-dim);
 }
 
 .btn-danger {
@@ -912,10 +914,10 @@ tr:hover td {
 }
 
 .project-card:hover {
-  border-color: var(--accent);
+  border-color: var(--secondary);
   box-shadow: var(--shadow);
   transform: translateY(-2px);
-  border-top: 3px solid var(--accent);
+  border-top: 3px solid var(--secondary);
 }
 
 .project-card-header {
@@ -980,7 +982,7 @@ tr:hover td {
 /* ── Repo cards ── */
 .repo-card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--secondary);
   border-radius: var(--radius);
   padding: 16px;
   transition: border-color var(--transition), box-shadow var(--transition);

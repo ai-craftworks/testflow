@@ -74,21 +74,33 @@
     {{#if testCases.length}}
       <!-- Ungrouped cases -->
       {{#if ungroupedCases.length}}
-      <div class="group-section">
-        <div class="group-label"><span>Ungrouped</span></div>
-        {{#each ungroupedCases}}
-        {{> case-card project=../project repo=../repo case=this}}
-        {{/each}}
+      <div class="accordion-group">
+        <button type="button" class="accordion-trigger" aria-expanded="true">
+          <span class="accordion-arrow">▼</span>
+          <span class="accordion-title">Ungrouped</span>
+          <span class="badge badge-gray" style="margin-left:6px">{{ungroupedCases.length}}</span>
+        </button>
+        <div class="accordion-body open">
+          {{#each ungroupedCases}}
+          {{> case-card project=../project repo=../repo case=this}}
+          {{/each}}
+        </div>
       </div>
       {{/if}}
 
       <!-- Grouped cases -->
       {{#each groupedCases}}
-      <div class="group-section">
-        <div class="group-label"><span>{{name}}</span> <span class="badge badge-gray">{{cases.length}}</span></div>
-        {{#each cases}}
-        {{> case-card project=../../project repo=../../repo case=this}}
-        {{/each}}
+      <div class="accordion-group">
+        <button type="button" class="accordion-trigger" aria-expanded="true">
+          <span class="accordion-arrow">▼</span>
+          <span class="accordion-title">{{name}}</span>
+          <span class="badge badge-gray" style="margin-left:6px">{{cases.length}}</span>
+        </button>
+        <div class="accordion-body open">
+          {{#each cases}}
+          {{> case-card project=../../project repo=../../repo case=this}}
+          {{/each}}
+        </div>
       </div>
       {{/each}}
     {{else}}

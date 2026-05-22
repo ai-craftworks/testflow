@@ -349,3 +349,14 @@ document.querySelectorAll('[data-confirm]').forEach(btn => {
 /* small helpers */
 function $(s) { return document.querySelector(s); }
 function $$(s) { return document.querySelectorAll(s); }
+
+/* ── Accordion ── */
+document.addEventListener('click', e => {
+  const trigger = e.target.closest('.accordion-trigger');
+  if (!trigger) return;
+  const group = trigger.closest('.accordion-group');
+  const body = group.querySelector('.accordion-body');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  trigger.setAttribute('aria-expanded', String(!isOpen));
+});

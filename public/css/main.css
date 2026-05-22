@@ -1441,3 +1441,48 @@ pre {
 .env-staging   { background: #fef3c7; color: #92400e; }
 .env-prod      { background: #fde8e8; color: #991b1b; }
 .env-default   { background: #e8eaf0; color: #374257; }
+
+/* ── Accordion ── */
+.accordion-group {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.accordion-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 14px;
+  background: var(--gray-dim);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-2);
+  transition: background var(--transition);
+}
+
+.accordion-trigger:hover { background: var(--accent-dim); color: var(--accent); }
+.accordion-trigger[aria-expanded="true"] { background: var(--accent-dim); color: var(--accent); border-bottom: 1px solid var(--border-light); }
+
+.accordion-arrow {
+  font-size: 0.65rem;
+  transition: transform 200ms ease;
+  color: var(--text-3);
+  flex-shrink: 0;
+}
+.accordion-trigger[aria-expanded="false"] .accordion-arrow { transform: rotate(-90deg); }
+
+.accordion-title { flex: 1; }
+
+.accordion-body {
+  display: none;
+  padding: 12px;
+  background: var(--surface);
+}
+.accordion-body.open { display: block; }

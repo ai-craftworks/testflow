@@ -38,17 +38,17 @@
   {{#if steps.length}}
     {{#each steps}}
     <div class="accordion-group" style="margin-bottom:10px">
-      <button type="button" class="accordion-trigger" aria-expanded="false">
+      <div class="accordion-trigger" role="button" tabindex="0" aria-expanded="false" style="cursor:pointer">
         <span class="accordion-arrow">▼</span>
-        <span style="font-size:0.72rem;color:var(--text-3);min-width:22px">{{add @index 1}}.</span>
-        <span class="accordion-title">{{title}}</span>
-        <span style="margin-left:auto;display:flex;gap:6px">
-          <a href="#" class="btn btn-ghost btn-sm" data-modal="modal-edit-step-{{id}}" onclick="event.stopPropagation()" style="font-size:0.78rem">✎</a>
-          <form action="/projects/{{../project.slug}}/issues/{{../issue.id}}/steps/{{id}}/delete" method="POST" style="display:inline" onclick="event.stopPropagation()">
-            <button type="submit" class="btn btn-ghost btn-sm" style="color:var(--red);font-size:0.78rem" data-confirm="Delete this debug step?">✕</button>
+        <span style="font-size:0.75rem;color:var(--text-3);flex-shrink:0;min-width:20px;font-weight:600">{{add @index 1}}.</span>
+        <span class="accordion-title" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px">{{title}}</span>
+        <span style="display:flex;align-items:center;gap:4px;flex-shrink:0" onclick="event.stopPropagation()">
+          <button type="button" class="btn btn-ghost btn-sm" data-modal="modal-edit-step-{{id}}" style="font-size:0.78rem;padding:3px 8px">✎ Edit</button>
+          <form action="/projects/{{../project.slug}}/issues/{{../issue.id}}/steps/{{id}}/delete" method="POST" style="display:inline;margin:0">
+            <button type="submit" class="btn btn-ghost btn-sm" style="color:var(--red);font-size:0.78rem;padding:3px 8px" data-confirm="Delete this debug step?">✕</button>
           </form>
         </span>
-      </button>
+      </div>
       <div class="accordion-body">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:16px">
           {{#if description}}

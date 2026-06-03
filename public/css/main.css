@@ -1455,7 +1455,7 @@ pre {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 11px 14px;
+  padding: 10px 14px;
   background: var(--gray-dim);
   border: none;
   cursor: pointer;
@@ -1465,6 +1465,9 @@ pre {
   font-weight: 600;
   color: var(--text-2);
   transition: background var(--transition);
+  flex-wrap: nowrap;
+  min-height: 44px;
+  box-sizing: border-box;
 }
 
 .accordion-trigger:hover { background: var(--accent-dim); color: var(--accent); }
@@ -1514,33 +1517,34 @@ pre {
 .issue-wontfix     { background: #fde8e8; color: #991b1b; }
 
 /* ── Code editor ── */
+/* ── Code editor (CodeMirror) ── */
 .code-editor-wrap {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  background: #1a1e2e;
 }
-.code-editor {
-  width: 100%; min-height: 200px;
-  background: #1a1e2e; color: #e2e8f0;
-  font-family: var(--mono); font-size: 0.84rem;
-  line-height: 1.7; padding: 14px;
-  border: none; outline: none; resize: vertical;
-  tab-size: 2;
+.code-editor-wrap .CodeMirror {
+  height: auto;
+  min-height: 180px;
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  line-height: 1.6;
+  border-radius: var(--radius);
 }
+.code-editor-wrap .CodeMirror-scroll {
+  min-height: 180px;
+}
+/* Hide the original textarea */
+.code-editor { display: none; }
+
 .code-block {
   border-radius: var(--radius);
   overflow: hidden;
   margin: 4px 0;
 }
-.code-block pre {
-  margin: 0; padding: 14px;
-  background: #1a1e2e !important;
-  border-radius: 0; overflow-x: auto;
-}
-.code-block code {
-  font-family: var(--mono); font-size: 0.84rem;
-  background: transparent; padding: 0;
+.code-block pre[class*="language-"] {
+  margin: 0;
+  border-radius: 0;
 }
 
 /* ── Issue multi-select ── */

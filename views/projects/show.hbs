@@ -39,7 +39,13 @@
     <div class="stat-label">Issues</div>
   </div>
   <div class="stat-card">
-    <div class="stat-value" style="color:var(--red)">{{issueStats.open_issues}}</div>
+    <div class="stat-value" style="color:var(--red)">
+      {{#if issueStats.open_issues}}
+        {{issueStats.open_issues}}
+      {{else}}
+        0
+      {{/if}}
+    </div>
     <div class="stat-label">Open Issues</div>
   </div>
 </div>

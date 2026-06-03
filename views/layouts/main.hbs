@@ -9,7 +9,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/theme/dracula.min.css">
   <link rel="stylesheet" href="/css/main.css">
 </head>
 
@@ -40,22 +41,123 @@
     {{{body}}}
   </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="/js/main.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/clike/clike.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/sql/sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/shell/shell.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/ruby/ruby.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/go/go.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/rust/rust.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/php/php.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/yaml/yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/edit/closebrackets.min.js"></script>
   <script>
-    // Re-highlight whenever an accordion opens (code blocks inside)
+    // Language to CodeMirror mode map
+    const CM_MODES = {
+      javascript: 'javascript', typescript: 'javascript',
+      python: 'python',
+      java: 'text/x-java', csharp: 'text/x-csharp', cpp: 'text/x-c++src',
+      kotlin: 'text/x-kotlin', swift: 'text/x-swift',
+      sql: 'sql', html: 'htmlmixed', css: 'css', xml: 'xml',
+      bash: 'shell', ruby: 'ruby', go: 'go', rust: 'rust',
+      php: 'php', yaml: 'yaml', json: 'javascript', plaintext: null
+    };
+
+    const cmInstances = new Map();
+
+    function initCodeEditor(textarea) {
+      if (!textarea || cmInstances.has(textarea)) return;
+      const lang = textarea.dataset.language || 'javascript';
+      const mode = CM_MODES[lang] || null;
+      const cm = CodeMirror.fromTextArea(textarea, {
+        mode: mode,
+        theme: 'dracula',
+        lineNumbers: true,
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        indentUnit: 2,
+        tabSize: 2,
+        lineWrapping: false,
+        viewportMargin: Infinity
+      });
+      cm.setSize('100%', null);
+      // Sync back to textarea on change
+      cm.on('change', function () { cm.save(); });
+      cmInstances.set(textarea, cm);
+      return cm;
+    }
+
+    function updateCodeEditorMode(textarea, language) {
+      const cm = cmInstances.get(textarea);
+      if (!cm) return;
+      const mode = CM_MODES[language] || null;
+      cm.setOption('mode', mode);
+    }
+
+    // Init all code editors currently in DOM
+    document.querySelectorAll('.code-editor').forEach(initCodeEditor);
+
+    // Re-init when a modal opens (editors inside modals need refresh)
     document.addEventListener('click', function (e) {
-      const trigger = e.target.closest('.accordion-trigger');
+      const trigger = e.target.closest('[data-modal]');
       if (!trigger) return;
       setTimeout(function () {
-        document.querySelectorAll('.code-block code').forEach(function (block) {
-          if (window.Prism) Prism.highlightElement(block);
+        const modalId = trigger.dataset.modal || trigger.closest('[data-modal]')?.dataset.modal;
+        if (!modalId) return;
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+        modal.querySelectorAll('.code-editor').forEach(function (ta) {
+          const cm = initCodeEditor(ta);
+          if (cm) cm.refresh();
         });
       }, 50);
     });
-  </script>
 
-  <script src="/js/main.js"></script>
+    // Language select change updates CodeMirror mode
+    document.querySelectorAll('.code-lang-select').forEach(function (sel) {
+      sel.addEventListener('change', function () {
+        const targetId = this.dataset.target;
+        const hidden = document.getElementById(targetId);
+        if (hidden) hidden.value = this.value;
+        // Find the associated textarea
+        const wrap = this.closest('.form-group, .modal-body');
+        if (!wrap) return;
+        const ta = wrap.querySelector('.code-editor');
+        if (ta) updateCodeEditorMode(ta, this.value);
+      });
+    });
+
+    // Display mode: highlight static code blocks using CodeMirror's runMode
+    // Use Prism as fallback for display blocks since runMode needs extra addon
+    // Load Prism just for display blocks
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script>
+    // Highlight static display blocks
+    function highlightDisplayBlocks() {
+      document.querySelectorAll('.code-block code').forEach(function (block) {
+        if (window.Prism) Prism.highlightElement(block);
+      });
+    }
+    highlightDisplayBlocks();
+
+    // Re-highlight when accordion opens
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('.accordion-trigger')) {
+        setTimeout(highlightDisplayBlocks, 60);
+      }
+    });
+  </script>
 </body>
 
 </html>

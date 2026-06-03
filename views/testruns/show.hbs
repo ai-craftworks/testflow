@@ -9,23 +9,28 @@
     {{#if run.description}}<p style="color:var(--text-2);margin-top:4px">{{run.description}}</p>{{/if}}
   </div>
   <div class="btn-group">
-    <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/pdf" target="_blank" class="btn btn-secondary">⬇ Export PDF</a>
+    <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/pdf" target="_blank"
+      class="btn btn-secondary">⬇ Export PDF</a>
     {{#if (eq run.status 'in_progress')}}
-    <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/status" method="POST" style="display:inline">
+    <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/status" method="POST"
+      style="display:inline">
       <input type="hidden" name="status" value="completed">
       <button type="submit" class="btn btn-primary" data-confirm="Mark this run as completed?">✔ Complete Run</button>
     </form>
-    <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/status" method="POST" style="display:inline">
+    <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/status" method="POST"
+      style="display:inline">
       <input type="hidden" name="status" value="aborted">
       <button type="submit" class="btn btn-secondary" data-confirm="Abort this run?">✕ Abort</button>
     </form>
     {{else}}
-    <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/status" method="POST" style="display:inline">
+    <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/status" method="POST"
+      style="display:inline">
       <input type="hidden" name="status" value="in_progress">
       <button type="submit" class="btn btn-secondary">↩ Reopen</button>
     </form>
     {{/if}}
-    <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/delete" method="POST" style="display:inline">
+    <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/delete" method="POST"
+      style="display:inline">
       <button type="submit" class="btn btn-danger" data-confirm="Delete this run and all results?">Delete</button>
     </form>
   </div>
@@ -59,6 +64,25 @@
 </div>
 {{/if}}
 
+{{#if linkedIssues.length}}
+<div class="card" style="margin-bottom:16px">
+  <div class="card-header">
+    <h3>🐛 Linked Issues</h3>
+  </div>
+  <div class="card-body" style="display:flex;gap:8px;flex-wrap:wrap;padding:12px 20px">
+    {{#each linkedIssues}}
+    <a href="/projects/{{project_slug}}/issues/{{id}}"
+      style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;font-size:0.85rem;color:var(--text);background:var(--surface);transition:border-color 150ms ease"
+      onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+      <span class="issue-type-badge {{issueTypeClass type}}">{{issueTypeLabel type}}</span>
+      <span style="font-weight:500">{{title}}</span>
+      <span class="issue-status-badge {{issueStatusClass status}}">{{issueStatusLabel status}}</span>
+    </a>
+    {{/each}}
+  </div>
+</div>
+{{/if}}
+
 <div class="card" style="margin-bottom:20px">
   <div class="card-body">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:16px;margin-bottom:14px">
@@ -67,23 +91,28 @@
         <div style="font-size:0.75rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em">Total</div>
       </div>
       <div style="text-align:center">
-        <div style="font-size:1.6rem;font-weight:600;color:var(--green)" class="count-passed">{{statusCounts.passed}}</div>
+        <div style="font-size:1.6rem;font-weight:600;color:var(--green)" class="count-passed">{{statusCounts.passed}}
+        </div>
         <div style="font-size:0.75rem;color:var(--green);text-transform:uppercase;letter-spacing:0.04em">Passed</div>
       </div>
       <div style="text-align:center">
-        <div style="font-size:1.6rem;font-weight:600;color:var(--red)" class="count-failed">{{statusCounts.failed}}</div>
+        <div style="font-size:1.6rem;font-weight:600;color:var(--red)" class="count-failed">{{statusCounts.failed}}
+        </div>
         <div style="font-size:0.75rem;color:var(--red);text-transform:uppercase;letter-spacing:0.04em">Failed</div>
       </div>
       <div style="text-align:center">
-        <div style="font-size:1.6rem;font-weight:600;color:var(--purple)" class="count-blocked">{{statusCounts.blocked}}</div>
+        <div style="font-size:1.6rem;font-weight:600;color:var(--purple)" class="count-blocked">{{statusCounts.blocked}}
+        </div>
         <div style="font-size:0.75rem;color:var(--purple);text-transform:uppercase;letter-spacing:0.04em">Blocked</div>
       </div>
       <div style="text-align:center">
-        <div style="font-size:1.6rem;font-weight:600;color:var(--text-3)" class="count-skipped">{{statusCounts.skipped}}</div>
+        <div style="font-size:1.6rem;font-weight:600;color:var(--text-3)" class="count-skipped">{{statusCounts.skipped}}
+        </div>
         <div style="font-size:0.75rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em">Skipped</div>
       </div>
       <div style="text-align:center">
-        <div style="font-size:1.6rem;font-weight:600;color:var(--text-3)" class="count-pending">{{statusCounts.pending}}</div>
+        <div style="font-size:1.6rem;font-weight:600;color:var(--text-3)" class="count-pending">{{statusCounts.pending}}
+        </div>
         <div style="font-size:0.75rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em">Pending</div>
       </div>
     </div>
@@ -107,7 +136,8 @@
 <div class="card" style="margin-bottom:20px">
   <div class="card-header">
     <h2>📝 Run Notes</h2>
-    <span style="font-size:0.8rem;color:var(--text-3)">General observations, suggestions, and thoughts about this run</span>
+    <span style="font-size:0.8rem;color:var(--text-3)">General observations, suggestions, and thoughts about this
+      run</span>
   </div>
   <div class="card-body">
     <div id="run-notes-list">
@@ -118,7 +148,8 @@
           {{#if (eq ../run.status 'in_progress')}}
           <div style="display:flex;gap:4px">
             <button type="button" class="btn btn-ghost btn-sm run-note-edit-btn" style="font-size:0.78rem">Edit</button>
-            <button type="button" class="btn btn-ghost btn-sm run-note-delete-btn" style="font-size:0.78rem;color:var(--red)"
+            <button type="button" class="btn btn-ghost btn-sm run-note-delete-btn"
+              style="font-size:0.78rem;color:var(--red)"
               data-url="/projects/{{../project.slug}}/repos/{{../repo.slug}}/runs/{{../run.id}}/run-notes/{{id}}/delete">✕</button>
           </div>
           {{/if}}
@@ -128,7 +159,8 @@
       {{/each}}
     </div>
     {{#if (eq run.status 'in_progress')}}
-    <div class="run-note-add-form" data-url="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/run-notes" style="margin-top:12px">
+    <div class="run-note-add-form" data-url="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/run-notes"
+      style="margin-top:12px">
       <div class="rich-editor-wrap" id="run-note-editor-wrap">
         <div class="rich-editor-toolbar">
           <button type="button" class="toolbar-btn" data-cmd="bold"><b>B</b></button>
@@ -171,373 +203,386 @@
 </div>
 
 <div id="results-list">
-{{#each results}}
-<div class="run-result-row" data-status="{{status}}">
-  <div class="run-result-header">
-    <span class="result-arrow" style="color:var(--text-3);font-size:0.7rem;width:14px;flex-shrink:0">▼</span>
-    <div style="flex:1;min-width:0">
-      <div class="result-title">
-        <a href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/cases/{{test_case_id}}" target="_blank" style="color:var(--text)">{{title}}</a>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;margin-top:3px;flex-wrap:wrap">
-        <span class="priority-badge {{priority}}"><span class="priority-dot {{priority}}"></span>{{capitalize priority}}</span>
-        <span class="badge badge-gray" style="font-size:0.72rem">{{typeLabel type}}</span>
-        {{#if group_name}}<span class="badge badge-blue" style="font-size:0.72rem">{{group_name}}</span>{{/if}}
-        {{#if url}}<a href="{{url}}" target="_blank" style="font-size:0.75rem;color:var(--text-3)">🔗 URL</a>{{/if}}
-        <span style="font-size:0.75rem;color:var(--text-3)">{{notes.length}} note{{#if (ne notes.length 1)}}s{{/if}}</span>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
-      <span class="status-badge result-status-badge {{status}}">{{status}}</span>
-      {{#if (eq ../run.status 'in_progress')}}
-      <select class="form-control result-status-select"
-        data-url="/projects/{{../project.slug}}/repos/{{../repo.slug}}/runs/{{../run.id}}/results/{{id}}/status"
-        style="width:auto;padding:4px 8px;font-size:0.82rem"
-        onclick="event.stopPropagation()">
-        <option value="pending" {{#if (eq status 'pending')}}selected{{/if}}>⬜ Pending</option>
-        <option value="passed" {{#if (eq status 'passed')}}selected{{/if}}>✅ Passed</option>
-        <option value="failed" {{#if (eq status 'failed')}}selected{{/if}}>❌ Failed</option>
-        <option value="blocked" {{#if (eq status 'blocked')}}selected{{/if}}>🚫 Blocked</option>
-        <option value="skipped" {{#if (eq status 'skipped')}}selected{{/if}}>⏭ Skipped</option>
-      </select>
-      {{/if}}
-    </div>
-  </div>
-  <div class="run-result-body">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-      {{#if case_description}}
-      <div>
-        <div style="font-size:0.78rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:5px">Description</div>
-        <div style="font-size:0.85rem;color:var(--text-2);line-height:1.6">{{case_description}}</div>
-      </div>
-      {{/if}}
-      {{#if expected_result}}
-      <div>
-        <div style="font-size:0.78rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:5px">Expected Result</div>
-        <div style="font-size:0.85rem;padding:8px;background:var(--green-dim);border-radius:var(--radius);border-left:3px solid var(--green);color:var(--text)">{{expected_result}}</div>
-      </div>
-      {{/if}}
-    </div>
-
-    {{#if steps}}
-    <div style="margin-bottom:16px">
-      <div style="font-size:0.78rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px">Steps</div>
-      <div class="steps-raw" style="font-size:0.85rem;line-height:1.8;white-space:pre-line;color:var(--text-2)">{{steps}}</div>
-    </div>
-    {{/if}}
-
-    <div class="divider"></div>
-
-    <div style="margin-bottom:12px">
-      <div style="font-size:0.82rem;font-weight:600;color:var(--text-2);margin-bottom:10px">📝 Test Case Notes</div>
-      <div class="notes-list">
-        {{#each notes}}
-        <div class="note-card" data-note-id="{{id}}" style="margin-bottom:8px">
-          <div class="note-card-header">
-            <span class="note-time">{{formatDateTime created_at}}</span>
-            {{#if (eq ../../run.status 'in_progress')}}
-            <div style="display:flex;gap:4px">
-              <button type="button" class="btn btn-ghost btn-sm edit-note-btn" style="font-size:0.78rem">Edit</button>
-              <button type="button" class="btn btn-ghost btn-sm delete-note-btn" style="font-size:0.78rem;color:var(--red)"
-                data-url="/projects/{{../../../project.slug}}/repos/{{../../../repo.slug}}/runs/{{../../../run.id}}/results/{{../../id}}/notes/{{id}}/delete">✕</button>
-            </div>
-            {{/if}}
-          </div>
-          <div class="note-content">{{{content}}}</div>
+  {{#each results}}
+  <div class="run-result-row" data-status="{{status}}">
+    <div class="run-result-header">
+      <span class="result-arrow" style="color:var(--text-3);font-size:0.7rem;width:14px;flex-shrink:0">▼</span>
+      <div style="flex:1;min-width:0">
+        <div class="result-title">
+          <a href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/cases/{{test_case_id}}" target="_blank"
+            style="color:var(--text)">{{title}}</a>
         </div>
-        {{/each}}
-      </div>
-
-      {{#if (eq ../run.status 'in_progress')}}
-      <div style="margin-top:10px">
-        <div style="font-size:0.8rem;color:var(--text-3);margin-bottom:6px">Add a note — supports rich text, images (paste or drag)</div>
-        <div class="add-note-form"
-          data-url="/projects/{{../project.slug}}/repos/{{../repo.slug}}/runs/{{../run.id}}/results/{{id}}/notes">
-          <div class="rich-editor-wrap">
-            <div class="rich-editor-toolbar">
-              <button type="button" class="toolbar-btn" data-cmd="bold"><b>B</b></button>
-              <button type="button" class="toolbar-btn" data-cmd="italic"><i>I</i></button>
-              <button type="button" class="toolbar-btn" data-cmd="underline"><u>U</u></button>
-              <button type="button" class="toolbar-btn" data-cmd="strikeThrough"><s>S</s></button>
-              <span class="toolbar-sep"></span>
-              <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList">• List</button>
-              <button type="button" class="toolbar-btn" data-cmd="insertOrderedList">1. List</button>
-              <span class="toolbar-sep"></span>
-              <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="blockquote">❝</button>
-              <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="pre">{ }</button>
-              <span class="toolbar-sep"></span>
-              <button type="button" class="toolbar-btn" data-cmd="insertImage">📷 Image</button>
-              <button type="button" class="toolbar-btn" data-cmd="insertVideo" title="Upload video">🎥 Video</button>
-              <button type="button" class="toolbar-btn" data-cmd="createLink">🔗 Link</button>
-              <span class="toolbar-sep"></span>
-              <button type="button" class="toolbar-btn" data-cmd="removeFormat">✕</button>
-            </div>
-            <div class="rich-editor" contenteditable="true" style="min-height:80px"></div>
-            <input type="hidden" name="content">
-          </div>
-          <div style="display:flex;justify-content:flex-end;margin-top:8px">
-            <button type="button" class="btn btn-primary btn-sm add-note-submit">Add Note</button>
-          </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:3px;flex-wrap:wrap">
+          <span class="priority-badge {{priority}}"><span class="priority-dot {{priority}}"></span>{{capitalize
+            priority}}</span>
+          <span class="badge badge-gray" style="font-size:0.72rem">{{typeLabel type}}</span>
+          {{#if group_name}}<span class="badge badge-blue" style="font-size:0.72rem">{{group_name}}</span>{{/if}}
+          {{#if url}}<a href="{{url}}" target="_blank" style="font-size:0.75rem;color:var(--text-3)">🔗 URL</a>{{/if}}
+          <span style="font-size:0.75rem;color:var(--text-3)">{{notes.length}} note{{#if (ne notes.length
+            1)}}s{{/if}}</span>
         </div>
       </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <span class="status-badge result-status-badge {{status}}">{{status}}</span>
+        {{#if (eq ../run.status 'in_progress')}}
+        <select class="form-control result-status-select"
+          data-url="/projects/{{../project.slug}}/repos/{{../repo.slug}}/runs/{{../run.id}}/results/{{id}}/status"
+          style="width:auto;padding:4px 8px;font-size:0.82rem" onclick="event.stopPropagation()">
+          <option value="pending" {{#if (eq status 'pending' )}}selected{{/if}}>⬜ Pending</option>
+          <option value="passed" {{#if (eq status 'passed' )}}selected{{/if}}>✅ Passed</option>
+          <option value="failed" {{#if (eq status 'failed' )}}selected{{/if}}>❌ Failed</option>
+          <option value="blocked" {{#if (eq status 'blocked' )}}selected{{/if}}>🚫 Blocked</option>
+          <option value="skipped" {{#if (eq status 'skipped' )}}selected{{/if}}>⏭ Skipped</option>
+        </select>
+        {{/if}}
+      </div>
+    </div>
+    <div class="run-result-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        {{#if case_description}}
+        <div>
+          <div
+            style="font-size:0.78rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:5px">
+            Description</div>
+          <div style="font-size:0.85rem;color:var(--text-2);line-height:1.6">{{case_description}}</div>
+        </div>
+        {{/if}}
+        {{#if expected_result}}
+        <div>
+          <div
+            style="font-size:0.78rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:5px">
+            Expected Result</div>
+          <div
+            style="font-size:0.85rem;padding:8px;background:var(--green-dim);border-radius:var(--radius);border-left:3px solid var(--green);color:var(--text)">
+            {{expected_result}}</div>
+        </div>
+        {{/if}}
+      </div>
+
+      {{#if steps}}
+      <div style="margin-bottom:16px">
+        <div
+          style="font-size:0.78rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px">
+          Steps</div>
+        <div class="steps-raw" style="font-size:0.85rem;line-height:1.8;white-space:pre-line;color:var(--text-2)">
+          {{steps}}</div>
+      </div>
       {{/if}}
+
+      <div class="divider"></div>
+
+      <div style="margin-bottom:12px">
+        <div style="font-size:0.82rem;font-weight:600;color:var(--text-2);margin-bottom:10px">📝 Test Case Notes</div>
+        <div class="notes-list">
+          {{#each notes}}
+          <div class="note-card" data-note-id="{{id}}" style="margin-bottom:8px">
+            <div class="note-card-header">
+              <span class="note-time">{{formatDateTime created_at}}</span>
+              {{#if (eq ../../run.status 'in_progress')}}
+              <div style="display:flex;gap:4px">
+                <button type="button" class="btn btn-ghost btn-sm edit-note-btn" style="font-size:0.78rem">Edit</button>
+                <button type="button" class="btn btn-ghost btn-sm delete-note-btn"
+                  style="font-size:0.78rem;color:var(--red)"
+                  data-url="/projects/{{../../../project.slug}}/repos/{{../../../repo.slug}}/runs/{{../../../run.id}}/results/{{../../id}}/notes/{{id}}/delete">✕</button>
+              </div>
+              {{/if}}
+            </div>
+            <div class="note-content">{{{content}}}</div>
+          </div>
+          {{/each}}
+        </div>
+
+        {{#if (eq ../run.status 'in_progress')}}
+        <div style="margin-top:10px">
+          <div style="font-size:0.8rem;color:var(--text-3);margin-bottom:6px">Add a note — supports rich text, images
+            (paste or drag)</div>
+          <div class="add-note-form"
+            data-url="/projects/{{../project.slug}}/repos/{{../repo.slug}}/runs/{{../run.id}}/results/{{id}}/notes">
+            <div class="rich-editor-wrap">
+              <div class="rich-editor-toolbar">
+                <button type="button" class="toolbar-btn" data-cmd="bold"><b>B</b></button>
+                <button type="button" class="toolbar-btn" data-cmd="italic"><i>I</i></button>
+                <button type="button" class="toolbar-btn" data-cmd="underline"><u>U</u></button>
+                <button type="button" class="toolbar-btn" data-cmd="strikeThrough"><s>S</s></button>
+                <span class="toolbar-sep"></span>
+                <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList">• List</button>
+                <button type="button" class="toolbar-btn" data-cmd="insertOrderedList">1. List</button>
+                <span class="toolbar-sep"></span>
+                <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="blockquote">❝</button>
+                <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="pre">{ }</button>
+                <span class="toolbar-sep"></span>
+                <button type="button" class="toolbar-btn" data-cmd="insertImage">📷 Image</button>
+                <button type="button" class="toolbar-btn" data-cmd="insertVideo" title="Upload video">🎥 Video</button>
+                <button type="button" class="toolbar-btn" data-cmd="createLink">🔗 Link</button>
+                <span class="toolbar-sep"></span>
+                <button type="button" class="toolbar-btn" data-cmd="removeFormat">✕</button>
+              </div>
+              <div class="rich-editor" contenteditable="true" style="min-height:80px"></div>
+              <input type="hidden" name="content">
+            </div>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px">
+              <button type="button" class="btn btn-primary btn-sm add-note-submit">Add Note</button>
+            </div>
+          </div>
+        </div>
+        {{/if}}
+      </div>
     </div>
   </div>
-</div>
-{{else}}
-<div class="empty-state">
-  <div class="empty-state-icon">🧪</div>
-  <h3>No test cases in this run</h3>
-</div>
-{{/each}}
+  {{else}}
+  <div class="empty-state">
+    <div class="empty-state-icon">🧪</div>
+    <h3>No test cases in this run</h3>
+  </div>
+  {{/each}}
 </div>
 
 <script>
-document.querySelectorAll('.run-filter').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.run-filter').forEach(b => b.classList.remove('active','btn-primary'));
-    btn.classList.add('active','btn-primary');
-    const f = btn.dataset.filter;
-    document.querySelectorAll('.run-result-row').forEach(row => {
-      row.style.display = (f === 'all' || row.dataset.status === f) ? '' : 'none';
+  document.querySelectorAll('.run-filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.run-filter').forEach(b => b.classList.remove('active', 'btn-primary'));
+      btn.classList.add('active', 'btn-primary');
+      const f = btn.dataset.filter;
+      document.querySelectorAll('.run-result-row').forEach(row => {
+        row.style.display = (f === 'all' || row.dataset.status === f) ? '' : 'none';
+      });
     });
   });
-});
 
-document.querySelectorAll('.steps-raw').forEach(el => {
-  const lines = el.textContent.split('\n').map(l => l.replace(/^\d+[\.\)]\s*/, '').trim()).filter(Boolean);
-  if (lines.length > 1) {
-    const ol = document.createElement('ol'); ol.className = 'steps-list';
-    lines.forEach(l => { const li = document.createElement('li'); li.textContent = l; ol.appendChild(li); });
-    el.replaceWith(ol);
-  }
-});
-
-// ── Inline rich editor (paste fix: preventDefault is synchronous) ──
-function initInlineEditor(wrap) {
-  const toolbar = wrap.querySelector('.rich-editor-toolbar');
-  const editor = wrap.querySelector('.rich-editor');
-  const hidden = wrap.querySelector('input[name=content], input[type=hidden]');
-  if (!toolbar || !editor) return;
-
-  toolbar.addEventListener('mousedown', e => {
-    e.preventDefault();
-    const btn = e.target.closest('.toolbar-btn');
-    if (!btn) return;
-    const cmd = btn.dataset.cmd, val = btn.dataset.val;
-    if (cmd === 'insertImage') triggerImageUpload(editor);
-    else if (cmd === 'insertVideo') triggerVideoUpload(editor, () => { if (hidden) hidden.value = editor.innerHTML; });
-    else if (cmd === 'createLink') { const u = prompt('URL:'); if (u) document.execCommand('createLink', false, u); }
-    else document.execCommand(cmd, false, val || null);
-    editor.focus();
-    if (hidden) hidden.value = editor.innerHTML;
-  });
-
-  editor.addEventListener('input', () => { if (hidden) hidden.value = editor.innerHTML; });
-
-  editor.addEventListener('paste', e => {
-    const items = e.clipboardData?.items;
-    if (!items) return;
-    for (const item of items) {
-      if (item.type.startsWith('image/')) {
-        e.preventDefault();
-        e.stopPropagation();
-        const file = item.getAsFile();
-        uploadImage(file).then(url => {
-          if (url) {
-            editor.focus();
-            document.execCommand('insertImage', false, url);
-            syncHidden(editor, hidden);
-          }
-        });
-        return;
-      }
+  document.querySelectorAll('.steps-raw').forEach(el => {
+    const lines = el.textContent.split('\n').map(l => l.replace(/^\d+[\.\)]\s*/, '').trim()).filter(Boolean);
+    if (lines.length > 1) {
+      const ol = document.createElement('ol'); ol.className = 'steps-list';
+      lines.forEach(l => { const li = document.createElement('li'); li.textContent = l; ol.appendChild(li); });
+      el.replaceWith(ol);
     }
   });
 
-  editor.addEventListener('drop', e => {
-    const files = e.dataTransfer?.files; if (!files?.length) return;
-    let handled = false;
-    for (const f of files) {
-      if (f.type.startsWith('image/')) {
-        if (!handled) { e.preventDefault(); handled = true; }
-        uploadImage(f).then(url => {
-          if (url) { editor.focus(); document.execCommand('insertImage', false, url); if (hidden) hidden.value = editor.innerHTML; }
-        });
-      } else if (f.type.startsWith('video/')) {
-        if (!handled) { e.preventDefault(); handled = true; }
-        uploadVideo(f).then(url => {
-          if (url) { editor.focus(); insertVideo(editor, url); if (hidden) hidden.value = editor.innerHTML; }
-        });
-      }
-    }
-  });
-}
+  // ── Inline rich editor (paste fix: preventDefault is synchronous) ──
+  function initInlineEditor(wrap) {
+    const toolbar = wrap.querySelector('.rich-editor-toolbar');
+    const editor = wrap.querySelector('.rich-editor');
+    const hidden = wrap.querySelector('input[name=content], input[type=hidden]');
+    if (!toolbar || !editor) return;
 
-document.querySelectorAll('.add-note-form .rich-editor-wrap').forEach(initInlineEditor);
+    toolbar.addEventListener('mousedown', e => {
+      e.preventDefault();
+      const btn = e.target.closest('.toolbar-btn');
+      if (!btn) return;
+      const cmd = btn.dataset.cmd, val = btn.dataset.val;
+      if (cmd === 'insertImage') triggerImageUpload(editor);
+      else if (cmd === 'insertVideo') triggerVideoUpload(editor, () => { if (hidden) hidden.value = editor.innerHTML; });
+      else if (cmd === 'createLink') { const u = prompt('URL:'); if (u) document.execCommand('createLink', false, u); }
+      else document.execCommand(cmd, false, val || null);
+      editor.focus();
+      if (hidden) hidden.value = editor.innerHTML;
+    });
 
-// ── Per-case note: submit ──
-document.addEventListener('click', async e => {
-  const submitBtn = e.target.closest('.add-note-submit');
-  if (submitBtn) {
-    const form = submitBtn.closest('.add-note-form');
-    const editor = form.querySelector('.rich-editor');
-    const hidden = form.querySelector('input[name=content]');
-    const content = editor.innerHTML.trim();
-    if (!content || content === '<br>') { showToast('Note is empty','error'); return; }
-    try {
-      const r = await fetch(form.dataset.url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ content }) });
-      const data = await r.json();
-      if (data.ok) {
-        const notesList = form.closest('.run-result-body').querySelector('.notes-list');
-        const div = document.createElement('div');
-        div.className = 'note-card'; div.dataset.noteId = data.note.id; div.style.marginBottom = '8px';
-        div.innerHTML = `<div class="note-card-header"><span class="note-time">Just now</span><div style="display:flex;gap:4px"><button type="button" class="btn btn-ghost btn-sm edit-note-btn" style="font-size:0.78rem">Edit</button><button type="button" class="btn btn-ghost btn-sm delete-note-btn" style="font-size:0.78rem;color:var(--red)">✕</button></div></div><div class="note-content">${data.note.content}</div>`;
-        notesList.appendChild(div);
-        editor.innerHTML = ''; if (hidden) hidden.value = '';
-        showToast('Note added','success');
+    editor.addEventListener('input', () => { if (hidden) hidden.value = editor.innerHTML; });
+
+    editor.addEventListener('paste', e => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (const item of items) {
+        if (item.type.startsWith('image/')) {
+          e.preventDefault();
+          e.stopPropagation();
+          const file = item.getAsFile();
+          uploadImage(file).then(url => {
+            if (url) {
+              editor.focus();
+              document.execCommand('insertImage', false, url);
+              syncHidden(editor, hidden);
+            }
+          });
+          return;
+        }
       }
-    } catch { showToast('Error saving note','error'); }
-    return;
+    });
+
+    editor.addEventListener('drop', e => {
+      const files = e.dataTransfer?.files; if (!files?.length) return;
+      let handled = false;
+      for (const f of files) {
+        if (f.type.startsWith('image/')) {
+          if (!handled) { e.preventDefault(); handled = true; }
+          uploadImage(f).then(url => {
+            if (url) { editor.focus(); document.execCommand('insertImage', false, url); if (hidden) hidden.value = editor.innerHTML; }
+          });
+        } else if (f.type.startsWith('video/')) {
+          if (!handled) { e.preventDefault(); handled = true; }
+          uploadVideo(f).then(url => {
+            if (url) { editor.focus(); insertVideo(editor, url); if (hidden) hidden.value = editor.innerHTML; }
+          });
+        }
+      }
+    });
   }
 
-  // Delete per-case note
-  const delBtn = e.target.closest('.delete-note-btn');
-  if (delBtn) {
-    if (!confirm('Delete this note?')) return;
-    const noteCard = delBtn.closest('.note-card');
-    const noteId = noteCard?.dataset?.noteId;
-    const addForm = noteCard?.closest('.run-result-body')?.querySelector('.add-note-form');
-    const deleteUrl = delBtn.dataset.url || (addForm ? addForm.dataset.url + '/' + noteId + '/delete' : null);
-    if (!deleteUrl) return;
-    try {
-      const r = await fetch(deleteUrl, { method:'POST' });
-      const data = await r.json();
-      if (data.ok) { noteCard.remove(); showToast('Note deleted'); }
-    } catch {}
-    return;
-  }
+  document.querySelectorAll('.add-note-form .rich-editor-wrap').forEach(initInlineEditor);
 
-  // Edit per-case note inline
-  const editBtn = e.target.closest('.edit-note-btn');
-  if (editBtn) {
-    const noteCard = editBtn.closest('.note-card');
-    const contentEl = noteCard.querySelector('.note-content');
-    const noteId = noteCard.dataset.noteId;
-    const addForm = noteCard.closest('.run-result-body')?.querySelector('.add-note-form');
-    if (!addForm) return;
-    const editUrl = addForm.dataset.url + '/' + noteId + '/edit';
-    if (editBtn.textContent === 'Edit') {
-      contentEl.contentEditable = 'true';
-      contentEl.style.cssText = 'border:1px solid var(--accent);border-radius:var(--radius);padding:6px;outline:none';
-      contentEl.focus(); editBtn.textContent = 'Save';
-    } else {
+  // ── Per-case note: submit ──
+  document.addEventListener('click', async e => {
+    const submitBtn = e.target.closest('.add-note-submit');
+    if (submitBtn) {
+      const form = submitBtn.closest('.add-note-form');
+      const editor = form.querySelector('.rich-editor');
+      const hidden = form.querySelector('input[name=content]');
+      const content = editor.innerHTML.trim();
+      if (!content || content === '<br>') { showToast('Note is empty', 'error'); return; }
       try {
-        const r = await fetch(editUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ content: contentEl.innerHTML }) });
+        const r = await fetch(form.dataset.url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content }) });
         const data = await r.json();
-        if (data.ok) { contentEl.contentEditable='false'; contentEl.style.cssText=''; editBtn.textContent='Edit'; showToast('Note updated','success'); }
-      } catch { showToast('Error','error'); }
+        if (data.ok) {
+          const notesList = form.closest('.run-result-body').querySelector('.notes-list');
+          const div = document.createElement('div');
+          div.className = 'note-card'; div.dataset.noteId = data.note.id; div.style.marginBottom = '8px';
+          div.innerHTML = `<div class="note-card-header"><span class="note-time">Just now</span><div style="display:flex;gap:4px"><button type="button" class="btn btn-ghost btn-sm edit-note-btn" style="font-size:0.78rem">Edit</button><button type="button" class="btn btn-ghost btn-sm delete-note-btn" style="font-size:0.78rem;color:var(--red)">✕</button></div></div><div class="note-content">${data.note.content}</div>`;
+          notesList.appendChild(div);
+          editor.innerHTML = ''; if (hidden) hidden.value = '';
+          showToast('Note added', 'success');
+        }
+      } catch { showToast('Error saving note', 'error'); }
+      return;
     }
-    return;
-  }
-});
 
-// ── Run-level notes ──
-const runNoteEditorWrap = document.getElementById('run-note-editor-wrap');
-if (runNoteEditorWrap) {
-  const editor = document.getElementById('run-note-editor');
-  const hidden = document.getElementById('run-note-content');
-  const toolbar = runNoteEditorWrap.querySelector('.rich-editor-toolbar');
-
-  toolbar?.addEventListener('mousedown', e => {
-    e.preventDefault();
-    const btn = e.target.closest('.toolbar-btn');
-    if (!btn) return;
-    const cmd = btn.dataset.cmd, val = btn.dataset.val;
-    if (cmd === 'insertImage') triggerImageUpload(editor);
-    else if (cmd === 'insertVideo') triggerVideoUpload(editor, () => { if (hidden) hidden.value = editor.innerHTML; });
-    else if (cmd === 'createLink') { const u = prompt('URL:'); if (u) document.execCommand('createLink', false, u); }
-    else document.execCommand(cmd, false, val || null);
-    editor.focus(); hidden.value = editor.innerHTML;
-  });
-
-  editor?.addEventListener('input', () => { hidden.value = editor.innerHTML; });
-
-  editor?.addEventListener('paste', e => {
-    const items = e.clipboardData?.items; if (!items) return;
-    for (const item of items) {
-      if (item.type.startsWith('image/')) {
-        e.preventDefault(); e.stopPropagation();
-        uploadImage(item.getAsFile()).then(url => {
-          if (url) { editor.focus(); document.execCommand('insertImage', false, url); hidden.value = editor.innerHTML; }
-        });
-        return;
-      }
-    }
-  });
-
-  editor?.addEventListener('drop', e => {
-    const files = e.dataTransfer?.files; if (!files?.length) return;
-    let handled = false;
-    for (const f of files) {
-      if (f.type.startsWith('image/')) {
-        if (!handled) { e.preventDefault(); handled = true; }
-        uploadImage(f).then(url => {
-          if (url) { editor.focus(); document.execCommand('insertImage', false, url); hidden.value = editor.innerHTML; }
-        });
-      }
-    }
-  });
-
-  document.getElementById('run-note-submit')?.addEventListener('click', async () => {
-    const content = editor.innerHTML.trim();
-    if (!content || content === '<br>') { showToast('Note is empty','error'); return; }
-    const form = document.querySelector('.run-note-add-form');
-    try {
-      const r = await fetch(form.dataset.url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ content }) });
-      const data = await r.json();
-      if (data.ok) {
-        const list = document.getElementById('run-notes-list');
-        const div = document.createElement('div');
-        div.className = 'note-card'; div.dataset.runNoteId = data.note.id; div.style.marginBottom = '10px';
-        div.innerHTML = `<div class="note-card-header"><span class="note-time">Just now</span><div style="display:flex;gap:4px"><button type="button" class="btn btn-ghost btn-sm run-note-edit-btn" style="font-size:0.78rem">Edit</button><button type="button" class="btn btn-ghost btn-sm run-note-delete-btn" style="font-size:0.78rem;color:var(--red)" data-url="${form.dataset.url}/${data.note.id}/delete">✕</button></div></div><div class="note-content">${data.note.content}</div>`;
-        list.appendChild(div);
-        editor.innerHTML = ''; hidden.value = '';
-        showToast('Note added','success');
-      }
-    } catch { showToast('Error','error'); }
-  });
-}
-
-document.addEventListener('click', async e => {
-  const delBtn = e.target.closest('.run-note-delete-btn');
-  if (delBtn) {
-    if (!confirm('Delete this note?')) return;
-    try {
-      const r = await fetch(delBtn.dataset.url, { method:'POST' });
-      const data = await r.json();
-      if (data.ok) { delBtn.closest('.note-card')?.remove(); showToast('Note deleted'); }
-    } catch {}
-    return;
-  }
-  const editBtn = e.target.closest('.run-note-edit-btn');
-  if (editBtn) {
-    const noteCard = editBtn.closest('.note-card');
-    const contentEl = noteCard.querySelector('.note-content');
-    const noteId = noteCard.dataset.runNoteId;
-    const form = document.querySelector('.run-note-add-form');
-    const editUrl = form.dataset.url + '/' + noteId + '/edit';
-    if (editBtn.textContent === 'Edit') {
-      contentEl.contentEditable = 'true';
-      contentEl.style.cssText = 'border:1px solid var(--accent);border-radius:var(--radius);padding:6px;outline:none';
-      contentEl.focus(); editBtn.textContent = 'Save';
-    } else {
+    // Delete per-case note
+    const delBtn = e.target.closest('.delete-note-btn');
+    if (delBtn) {
+      if (!confirm('Delete this note?')) return;
+      const noteCard = delBtn.closest('.note-card');
+      const noteId = noteCard?.dataset?.noteId;
+      const addForm = noteCard?.closest('.run-result-body')?.querySelector('.add-note-form');
+      const deleteUrl = delBtn.dataset.url || (addForm ? addForm.dataset.url + '/' + noteId + '/delete' : null);
+      if (!deleteUrl) return;
       try {
-        const r = await fetch(editUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ content: contentEl.innerHTML }) });
+        const r = await fetch(deleteUrl, { method: 'POST' });
         const data = await r.json();
-        if (data.ok) { contentEl.contentEditable='false'; contentEl.style.cssText=''; editBtn.textContent='Edit'; showToast('Updated','success'); }
-      } catch { showToast('Error','error'); }
+        if (data.ok) { noteCard.remove(); showToast('Note deleted'); }
+      } catch { }
+      return;
     }
+
+    // Edit per-case note inline
+    const editBtn = e.target.closest('.edit-note-btn');
+    if (editBtn) {
+      const noteCard = editBtn.closest('.note-card');
+      const contentEl = noteCard.querySelector('.note-content');
+      const noteId = noteCard.dataset.noteId;
+      const addForm = noteCard.closest('.run-result-body')?.querySelector('.add-note-form');
+      if (!addForm) return;
+      const editUrl = addForm.dataset.url + '/' + noteId + '/edit';
+      if (editBtn.textContent === 'Edit') {
+        contentEl.contentEditable = 'true';
+        contentEl.style.cssText = 'border:1px solid var(--accent);border-radius:var(--radius);padding:6px;outline:none';
+        contentEl.focus(); editBtn.textContent = 'Save';
+      } else {
+        try {
+          const r = await fetch(editUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: contentEl.innerHTML }) });
+          const data = await r.json();
+          if (data.ok) { contentEl.contentEditable = 'false'; contentEl.style.cssText = ''; editBtn.textContent = 'Edit'; showToast('Note updated', 'success'); }
+        } catch { showToast('Error', 'error'); }
+      }
+      return;
+    }
+  });
+
+  // ── Run-level notes ──
+  const runNoteEditorWrap = document.getElementById('run-note-editor-wrap');
+  if (runNoteEditorWrap) {
+    const editor = document.getElementById('run-note-editor');
+    const hidden = document.getElementById('run-note-content');
+    const toolbar = runNoteEditorWrap.querySelector('.rich-editor-toolbar');
+
+    toolbar?.addEventListener('mousedown', e => {
+      e.preventDefault();
+      const btn = e.target.closest('.toolbar-btn');
+      if (!btn) return;
+      const cmd = btn.dataset.cmd, val = btn.dataset.val;
+      if (cmd === 'insertImage') triggerImageUpload(editor);
+      else if (cmd === 'insertVideo') triggerVideoUpload(editor, () => { if (hidden) hidden.value = editor.innerHTML; });
+      else if (cmd === 'createLink') { const u = prompt('URL:'); if (u) document.execCommand('createLink', false, u); }
+      else document.execCommand(cmd, false, val || null);
+      editor.focus(); hidden.value = editor.innerHTML;
+    });
+
+    editor?.addEventListener('input', () => { hidden.value = editor.innerHTML; });
+
+    editor?.addEventListener('paste', e => {
+      const items = e.clipboardData?.items; if (!items) return;
+      for (const item of items) {
+        if (item.type.startsWith('image/')) {
+          e.preventDefault(); e.stopPropagation();
+          uploadImage(item.getAsFile()).then(url => {
+            if (url) { editor.focus(); document.execCommand('insertImage', false, url); hidden.value = editor.innerHTML; }
+          });
+          return;
+        }
+      }
+    });
+
+    editor?.addEventListener('drop', e => {
+      const files = e.dataTransfer?.files; if (!files?.length) return;
+      let handled = false;
+      for (const f of files) {
+        if (f.type.startsWith('image/')) {
+          if (!handled) { e.preventDefault(); handled = true; }
+          uploadImage(f).then(url => {
+            if (url) { editor.focus(); document.execCommand('insertImage', false, url); hidden.value = editor.innerHTML; }
+          });
+        }
+      }
+    });
+
+    document.getElementById('run-note-submit')?.addEventListener('click', async () => {
+      const content = editor.innerHTML.trim();
+      if (!content || content === '<br>') { showToast('Note is empty', 'error'); return; }
+      const form = document.querySelector('.run-note-add-form');
+      try {
+        const r = await fetch(form.dataset.url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content }) });
+        const data = await r.json();
+        if (data.ok) {
+          const list = document.getElementById('run-notes-list');
+          const div = document.createElement('div');
+          div.className = 'note-card'; div.dataset.runNoteId = data.note.id; div.style.marginBottom = '10px';
+          div.innerHTML = `<div class="note-card-header"><span class="note-time">Just now</span><div style="display:flex;gap:4px"><button type="button" class="btn btn-ghost btn-sm run-note-edit-btn" style="font-size:0.78rem">Edit</button><button type="button" class="btn btn-ghost btn-sm run-note-delete-btn" style="font-size:0.78rem;color:var(--red)" data-url="${form.dataset.url}/${data.note.id}/delete">✕</button></div></div><div class="note-content">${data.note.content}</div>`;
+          list.appendChild(div);
+          editor.innerHTML = ''; hidden.value = '';
+          showToast('Note added', 'success');
+        }
+      } catch { showToast('Error', 'error'); }
+    });
   }
-});
+
+  document.addEventListener('click', async e => {
+    const delBtn = e.target.closest('.run-note-delete-btn');
+    if (delBtn) {
+      if (!confirm('Delete this note?')) return;
+      try {
+        const r = await fetch(delBtn.dataset.url, { method: 'POST' });
+        const data = await r.json();
+        if (data.ok) { delBtn.closest('.note-card')?.remove(); showToast('Note deleted'); }
+      } catch { }
+      return;
+    }
+    const editBtn = e.target.closest('.run-note-edit-btn');
+    if (editBtn) {
+      const noteCard = editBtn.closest('.note-card');
+      const contentEl = noteCard.querySelector('.note-content');
+      const noteId = noteCard.dataset.runNoteId;
+      const form = document.querySelector('.run-note-add-form');
+      const editUrl = form.dataset.url + '/' + noteId + '/edit';
+      if (editBtn.textContent === 'Edit') {
+        contentEl.contentEditable = 'true';
+        contentEl.style.cssText = 'border:1px solid var(--accent);border-radius:var(--radius);padding:6px;outline:none';
+        contentEl.focus(); editBtn.textContent = 'Save';
+      } else {
+        try {
+          const r = await fetch(editUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content: contentEl.innerHTML }) });
+          const data = await r.json();
+          if (data.ok) { contentEl.contentEditable = 'false'; contentEl.style.cssText = ''; editBtn.textContent = 'Edit'; showToast('Updated', 'success'); }
+        } catch { showToast('Error', 'error'); }
+      }
+    }
+  });
 </script>

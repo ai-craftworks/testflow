@@ -1,0 +1,77 @@
+<div class="page-title-row">
+  <div>
+    <h1>Issues</h1>
+    <p style="color:var(--text-2);margin-top:4px;font-size:0.9rem">{{project.name}}</p>
+  </div>
+  <button class="btn btn-primary" data-modal="modal-new-issue">+ New Issue</button>
+</div>
+
+{{#if issues.length}}
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Title</th><th>Type</th><th>Status</th><th>Steps</th><th>Created</th><th></th>
+      </tr></thead>
+      <tbody>
+      {{#each issues}}
+      <tr>
+        <td>
+          <a href="/projects/{{../project.slug}}/issues/{{id}}" style="font-weight:500">{{title}}</a>
+          {{#if description}}<div style="font-size:0.78rem;color:var(--text-3);margin-top:2px">{{truncate description 60}}</div>{{/if}}
+        </td>
+        <td><span class="issue-type-badge {{issueTypeClass type}}">{{issueTypeLabel type}}</span></td>
+        <td><span class="issue-status-badge {{issueStatusClass status}}">{{issueStatusLabel status}}</span></td>
+        <td><span class="badge badge-gray">{{step_count}}</span></td>
+        <td style="color:var(--text-3);font-size:0.82rem">{{formatDate created_at}}</td>
+        <td><a href="/projects/{{../project.slug}}/issues/{{id}}" class="btn btn-ghost btn-sm">Open</a></td>
+      </tr>
+      {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+{{else}}
+<div class="empty-state">
+  <div class="empty-state-icon">🐛</div>
+  <h3>No issues yet</h3>
+  <p>Track bugs, features and tasks here</p>
+</div>
+{{/if}}
+
+<!-- New Issue Modal -->
+<div class="modal-overlay" id="modal-new-issue">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h2>New Issue</h2>
+      <button class="modal-close" data-close-modal="modal-new-issue">✕</button>
+    </div>
+    <form action="/projects/{{project.slug}}/issues" method="POST">
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Title *</label>
+          <input class="form-control" name="title" placeholder="e.g. Login button unresponsive on mobile" required autofocus>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <select class="form-control" name="type">
+            <option value="bug">🐛 Bug</option>
+            <option value="feature">✨ Feature</option>
+            <option value="improvement">⚡ Improvement</option>
+            <option value="task">📋 Task</option>
+            <option value="question">❓ Question</option>
+            <option value="documentation">📄 Documentation</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" name="description" rows="3" placeholder="Describe the issue…"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-new-issue">Cancel</button>
+        <button type="submit" class="btn btn-primary">Create Issue</button>
+      </div>
+    </form>
+  </div>
+</div>

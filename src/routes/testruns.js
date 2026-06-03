@@ -17,6 +17,11 @@ router.get('/new', (req, res) => {
   if (!c) { db.close(); return res.redirect('/'); }
 
   const plans = db.prepare('SELECT * FROM test_plans WHERE repository_id = ? AND status = ? ORDER BY name').all(c.repo.id, 'active');
+
+  // Add after getting plans:
+  const project = db.prepare('SELECT * FROM projects WHERE id = ?').get(c.repo.project_id);
+  const projectIssues = db.prepare("SELECT * FROM issues WHERE project_id = ? AND status NOT IN ('closed','wont_fix') ORDER BY type, title").all(c.repo.project_id);
+
   const testCases = db.prepare(`
     SELECT tc.*, tg.name as group_name FROM test_cases tc
     LEFT JOIN test_groups tg ON tg.id = tc.group_id
@@ -24,6 +29,7 @@ router.get('/new', (req, res) => {
     ORDER BY tc.group_id, tc.priority, tc.title
   `).all(c.repo.id);
   const groups = db.prepare('SELECT * FROM test_groups WHERE repository_id = ? ORDER BY name').all(c.repo.id);
+
   db.close();
 
   const ungroupedCases = testCases.filter(c => c.group_id === null || c.group_id === undefined);
@@ -32,7 +38,7 @@ router.get('/new', (req, res) => {
     cases: testCases.filter(c => String(c.group_id) === String(g.id))
   })).filter(g => g.cases.length > 0);
 
-  res.render('testruns/new', { project: c.project, repo: c.repo, plans, testCases, groups, ungroupedCases, groupedCases, title: 'New Test Run' });
+  res.render('testruns/new', { project: c.project, repo: c.repo, plans, testCases, groups, ungroupedCases, groupedCases, projectIssues, title: 'New Test Run' });
 });
 
 // Create run
@@ -55,6 +61,12 @@ router.post('/', (req, res) => {
 
   const insertResult = db.prepare('INSERT OR IGNORE INTO test_run_results (test_run_id, test_case_id) VALUES (?,?)');
   caseIds.forEach(id => insertResult.run(runId, id));
+
+  // After caseIds.forEach(id => insertResult.run(runId, id));
+  let issueIds = req.body.issue_ids || [];
+  if (!Array.isArray(issueIds)) issueIds = [issueIds];
+  const insertIssue = db.prepare('INSERT OR IGNORE INTO test_run_issues (test_run_id, issue_id) VALUES (?,?)');
+  issueIds.forEach(id => insertIssue.run(runId, id));
 
   db.close();
   res.redirect(`/projects/${req.params.projectSlug}/repos/${req.params.repoSlug}/runs/${runId}`);
@@ -90,6 +102,15 @@ router.get('/:runId', (req, res) => {
 
   const runNotes = db.prepare('SELECT * FROM test_run_run_notes WHERE test_run_id = ? ORDER BY created_at').all(run.id);
 
+  const linkedIssues = db.prepare(`
+    SELECT i.*, p.slug as project_slug
+    FROM test_run_issues tri
+    JOIN issues i ON i.id = tri.issue_id
+    JOIN projects p ON p.id = i.project_id
+    WHERE tri.test_run_id = ?
+    ORDER BY i.type, i.title
+  `).all(run.id);
+
   const statusCounts = {
     total: results.length,
     passed: results.filter(r => r.status === 'passed').length,
@@ -100,7 +121,7 @@ router.get('/:runId', (req, res) => {
   };
 
   db.close();
-  res.render('testruns/show', { project: c.project, repo: c.repo, run, results, runNotes, statusCounts, title: run.name });
+  res.render('testruns/show', { project: c.project, repo: c.repo, run, results, runNotes, linkedIssues, statusCounts, title: run.name });
 });
 
 // PDF export

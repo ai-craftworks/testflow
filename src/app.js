@@ -16,9 +16,9 @@ const hbs = create({
     eq: (a, b) => a == b,
     ne: (a, b) => a != b,
     includes: (arr, val) => Array.isArray(arr) && arr.map(String).includes(String(val)),
-    json: (v) => { try { return typeof v === 'string' ? JSON.parse(v) : JSON.stringify(v); } catch(e) { return JSON.stringify(v); } },
-    parseJson: (v) => { try { return JSON.parse(v); } catch(e) { return []; } },
-    colorList: () => ["#4f7ef8","#16a34a","#dc2626","#d97706","#7c3aed","#ea580c","#0891b2","#db2777","#374151"],
+    json: (v) => { try { return typeof v === 'string' ? JSON.parse(v) : JSON.stringify(v); } catch (e) { return JSON.stringify(v); } },
+    parseJson: (v) => { try { return JSON.parse(v); } catch (e) { return []; } },
+    colorList: () => ["#4f7ef8", "#16a34a", "#dc2626", "#d97706", "#7c3aed", "#ea580c", "#0891b2", "#db2777", "#374151"],
     envClass: (e) => ({ 'Local': 'local', 'Development': 'dev', 'QA': 'qa', 'Staging': 'staging', 'Production': 'prod' }[e] || 'default'),
     priorityClass: (p) => ({ critical: 'priority-critical', high: 'priority-high', medium: 'priority-medium', low: 'priority-low' }[p] || ''),
     statusClass: (s) => ({ passed: 'status-passed', failed: 'status-failed', blocked: 'status-blocked', skipped: 'status-skipped', pending: 'status-pending', in_progress: 'status-inprogress', completed: 'status-completed', aborted: 'status-aborted', active: 'status-active', archived: 'status-archived' }[s] || ''),
@@ -28,19 +28,46 @@ const hbs = create({
     pct: (a, b) => b > 0 ? Math.round((a / b) * 100) : 0,
     or: (a, b) => a || b,
     and: (a, b) => a && b,
-    ifCond: function(v1, op, v2, options) {
-      switch(op) {
-        case '==': return (v1==v2) ? options.fn(this) : options.inverse(this);
-        case '>': return (v1>v2) ? options.fn(this) : options.inverse(this);
-        case '<': return (v1<v2) ? options.fn(this) : options.inverse(this);
+    ifCond: function (v1, op, v2, options) {
+      switch (op) {
+        case '==': return (v1 == v2) ? options.fn(this) : options.inverse(this);
+        case '>': return (v1 > v2) ? options.fn(this) : options.inverse(this);
+        case '<': return (v1 < v2) ? options.fn(this) : options.inverse(this);
         default: return options.inverse(this);
       }
     },
     add: (a, b) => Number(a) + Number(b),
     sub: (a, b) => Number(a) - Number(b),
-    typeLabel: (t) => ({ functional:'Functional',regression:'Regression',smoke:'Smoke',performance:'Performance',security:'Security',usability:'Usability',other:'Other' }[t] || t),
-    statusLabel: (s) => ({ in_progress:'In Progress',completed:'Completed',aborted:'Aborted',active:'Active',archived:'Archived' }[s] || s),
+    typeLabel: (t) => ({ functional: 'Functional', regression: 'Regression', smoke: 'Smoke', performance: 'Performance', security: 'Security', usability: 'Usability', other: 'Other' }[t] || t),
+    statusLabel: (s) => ({ in_progress: 'In Progress', completed: 'Completed', aborted: 'Aborted', active: 'Active', archived: 'Archived' }[s] || s),
     truncate: (s, len) => s && s.length > len ? s.slice(0, len) + '…' : s,
+    issueTypeClass: (t) => ({ bug: 'issue-bug', feature: 'issue-feature', improvement: 'issue-improvement', task: 'issue-task', question: 'issue-question', documentation: 'issue-docs' }[t] || 'issue-default'),
+    issueStatusClass: (s) => ({ open: 'issue-open', in_progress: 'issue-inprogress', resolved: 'issue-resolved', closed: 'issue-closed', wont_fix: 'issue-wontfix' }[s] || ''),
+    issueTypeLabel: (t) => ({ bug: 'Bug', feature: 'Feature', improvement: 'Improvement', task: 'Task', question: 'Question', documentation: 'Docs' }[t] || t),
+    issueStatusLabel: (s) => ({ open: 'Open', in_progress: 'In Progress', resolved: 'Resolved', closed: 'Closed', wont_fix: "Won't Fix" }[s] || s),
+    capitalize: (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : '', // already exists, skip if duplicate
+    codeLanguages: () => [
+      { value: 'javascript', label: 'JavaScript' },
+      { value: 'typescript', label: 'TypeScript' },
+      { value: 'python', label: 'Python' },
+      { value: 'java', label: 'Java' },
+      { value: 'csharp', label: 'C#' },
+      { value: 'cpp', label: 'C++' },
+      { value: 'go', label: 'Go' },
+      { value: 'rust', label: 'Rust' },
+      { value: 'php', label: 'PHP' },
+      { value: 'ruby', label: 'Ruby' },
+      { value: 'swift', label: 'Swift' },
+      { value: 'kotlin', label: 'Kotlin' },
+      { value: 'sql', label: 'SQL' },
+      { value: 'html', label: 'HTML' },
+      { value: 'css', label: 'CSS' },
+      { value: 'bash', label: 'Bash' },
+      { value: 'json', label: 'JSON' },
+      { value: 'xml', label: 'XML' },
+      { value: 'yaml', label: 'YAML' },
+      { value: 'plaintext', label: 'Plain Text' },
+    ],
   }
 });
 
@@ -60,6 +87,7 @@ const casesRouter = require('./routes/testcases');
 const plansRouter = require('./routes/testplans');
 const runsRouter = require('./routes/testruns');
 const uploadsRouter = require('./routes/uploads');
+const issuesRouter = require('./routes/issues');
 
 app.use('/', projectsRouter);
 app.use('/projects/:projectSlug/repos', reposRouter);
@@ -67,6 +95,7 @@ app.use('/projects/:projectSlug/repos/:repoSlug/cases', casesRouter);
 app.use('/projects/:projectSlug/repos/:repoSlug/plans', plansRouter);
 app.use('/projects/:projectSlug/repos/:repoSlug/runs', runsRouter);
 app.use('/upload', uploadsRouter);
+app.use('/projects/:projectSlug/issues', issuesRouter);
 
 // 404
 app.use((req, res) => res.status(404).render('404', { title: 'Not Found' }));

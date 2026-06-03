@@ -85,8 +85,15 @@ router.get('/projects/:slug', (req, res) => {
     GROUP BY trr.status
   `).all(project.id);
 
+  const issueStats = db.prepare(`
+    SELECT
+      COUNT(*) as total_issues,
+      SUM(CASE WHEN status='open' THEN 1 ELSE 0 END) as open_issues
+    FROM issues WHERE project_id = ?
+  `).get(project.id);
+
   db.close();
-  res.render('projects/show', { project, repos, stats, priorityStats, runStatusStats, title: project.name });
+  res.render('projects/show', { project, repos, stats, priorityStats, runStatusStats, issueStats, title: project.name });
 });
 
 // Edit project

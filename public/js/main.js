@@ -360,3 +360,40 @@ document.addEventListener('click', e => {
   body.classList.toggle('open', !isOpen);
   trigger.setAttribute('aria-expanded', String(!isOpen));
 });
+
+/* ── Issue multi-select toggle ── */
+const issueSelectTrigger = document.getElementById('issue-multiselect-trigger');
+const issueSelectDropdown = document.getElementById('issue-multiselect-dropdown');
+
+if (issueSelectTrigger && issueSelectDropdown) {
+  issueSelectTrigger.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const isOpen = issueSelectDropdown.style.display !== 'none';
+    issueSelectDropdown.style.display = isOpen ? 'none' : 'block';
+  });
+
+  document.addEventListener('click', function() {
+    if (issueSelectDropdown) issueSelectDropdown.style.display = 'none';
+  });
+
+  // Update trigger label to show selected count
+  document.querySelectorAll('.issue-checkbox').forEach(function(cb) {
+    cb.addEventListener('change', function() {
+      const checked = document.querySelectorAll('.issue-checkbox:checked').length;
+      const label = document.getElementById('issue-select-label');
+      if (label) {
+        label.textContent = checked === 0 ? 'Select issues to link…' : checked + ' issue' + (checked !== 1 ? 's' : '') + ' linked';
+        label.style.color = checked === 0 ? 'var(--text-3)' : 'var(--text)';
+      }
+    });
+  });
+}
+
+/* ── Code language select sync ── */
+document.querySelectorAll('.code-lang-select').forEach(function(sel) {
+  sel.addEventListener('change', function() {
+    const targetId = this.dataset.target;
+    const hidden = document.getElementById(targetId);
+    if (hidden) hidden.value = this.value;
+  });
+});

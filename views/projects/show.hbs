@@ -34,6 +34,14 @@
     <div class="stat-value" style="color:var(--green)">{{stats.completed_runs}}</div>
     <div class="stat-label">Completed Runs</div>
   </div>
+  <div class="stat-card">
+    <div class="stat-value">{{issueStats.total_issues}}</div>
+    <div class="stat-label">Issues</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" style="color:var(--red)">{{issueStats.open_issues}}</div>
+    <div class="stat-label">Open Issues</div>
+  </div>
 </div>
 
 <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:28px">
@@ -72,6 +80,10 @@
 <div class="section">
   <div class="section-header">
     <h2>Repositories <span class="badge badge-gray" style="margin-left:6px">{{repos.length}}</span></h2>
+    <!-- Quick links -->
+    <div style="display:flex;gap:10px;margin-bottom:24px">
+      <a href="/projects/{{project.slug}}/issues" class="btn btn-secondary">🐛 View Issues</a>
+    </div>
   </div>
   {{#if repos.length}}
   <div class="grid-3">

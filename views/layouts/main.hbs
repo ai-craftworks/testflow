@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{title}} — TestFlow</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
   <link rel="stylesheet" href="/css/main.css">
 </head>
+
 <body>
   <nav class="topnav">
     <div class="topnav-inner">
@@ -17,15 +22,15 @@
       </a>
       <div class="topnav-right">
         {{#if project}}
-          <span class="nav-crumb">
-            <a href="/projects">Projects</a>
-            <span class="crumb-sep">/</span>
-            <a href="/projects/{{project.slug}}">{{project.name}}</a>
-            {{#if repo}}
-              <span class="crumb-sep">/</span>
-              <a href="/projects/{{project.slug}}/repos/{{repo.slug}}">{{repo.name}}</a>
-            {{/if}}
-          </span>
+        <span class="nav-crumb">
+          <a href="/projects">Projects</a>
+          <span class="crumb-sep">/</span>
+          <a href="/projects/{{project.slug}}">{{project.name}}</a>
+          {{#if repo}}
+          <span class="crumb-sep">/</span>
+          <a href="/projects/{{project.slug}}/repos/{{repo.slug}}">{{repo.name}}</a>
+          {{/if}}
+        </span>
         {{/if}}
       </div>
     </div>
@@ -35,6 +40,22 @@
     {{{body}}}
   </main>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script>
+    // Re-highlight whenever an accordion opens (code blocks inside)
+    document.addEventListener('click', function (e) {
+      const trigger = e.target.closest('.accordion-trigger');
+      if (!trigger) return;
+      setTimeout(function () {
+        document.querySelectorAll('.code-block code').forEach(function (block) {
+          if (window.Prism) Prism.highlightElement(block);
+        });
+      }, 50);
+    });
+  </script>
+
   <script src="/js/main.js"></script>
 </body>
+
 </html>

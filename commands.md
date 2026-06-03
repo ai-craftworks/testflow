@@ -81,3 +81,42 @@ initDb().then(() => {
 }).catch(e => console.error(e));
 "
 ```
+
+```sh
+node -e "
+const { initDb, getDb } = require('./src/utils/db');
+initDb().then(() => {
+  const db = getDb();
+  db._raw.run(\`CREATE TABLE IF NOT EXISTS issues (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    description TEXT,
+    type TEXT DEFAULT 'bug',
+    status TEXT DEFAULT 'open',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )\`);
+  db._raw.run(\`CREATE TABLE IF NOT EXISTS debug_steps (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    issue_id INTEGER NOT NULL REFERENCES issues(id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    description TEXT,
+    observation TEXT,
+    code_snippet TEXT,
+    code_language TEXT DEFAULT 'javascript',
+    sort_order INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )\`);
+  db._raw.run(\`CREATE TABLE IF NOT EXISTS test_run_issues (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    test_run_id INTEGER NOT NULL REFERENCES test_runs(id) ON DELETE CASCADE,
+    issue_id INTEGER NOT NULL REFERENCES issues(id) ON DELETE CASCADE,
+    UNIQUE(test_run_id, issue_id)
+  )\`);
+  db.close();
+  console.log('Migration done');
+}).catch(e => console.error(e));
+"
+```

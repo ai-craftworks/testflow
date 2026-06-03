@@ -46,24 +46,6 @@
       <span>{{run.environment}}</span>
     </div>
     {{/if}}
-    {{#if linkedIssues.length}}
-    <div class="card" style="margin-bottom:16px">
-      <div class="card-header">
-        <h3>🐛 Linked Issues</h3>
-      </div>
-      <div class="card-body" style="display:flex;gap:8px;flex-wrap:wrap;padding:12px 20px">
-        {{#each linkedIssues}}
-        <a href="/projects/{{project_slug}}/issues/{{id}}"
-          style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;font-size:0.85rem;color:var(--text);background:var(--surface);transition:border-color 150ms ease"
-          onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-          <span class="issue-type-badge {{issueTypeClass type}}">{{issueTypeLabel type}}</span>
-          <span style="font-weight:500">{{title}}</span>
-          <span class="issue-status-badge {{issueStatusClass status}}">{{issueStatusLabel status}}</span>
-        </a>
-        {{/each}}
-      </div>
-    </div>
-    {{/if}}
     {{#if run.browser}}
     <div style="display:flex;align-items:center;gap:7px;font-size:0.875rem">
       <span style="color:var(--text-3)">🌐</span>
@@ -78,6 +60,25 @@
       <a href="{{run.test_url}}" target="_blank">{{run.test_url}}</a>
     </div>
     {{/if}}
+  </div>
+</div>
+{{/if}}
+
+{{#if linkedIssues.length}}
+<div class="card" style="margin-bottom:16px">
+  <div class="card-header">
+    <h3>🐛 Linked Issues</h3>
+  </div>
+  <div class="card-body" style="display:flex;gap:8px;flex-wrap:wrap;padding:12px 20px">
+    {{#each linkedIssues}}
+    <a href="/projects/{{project_slug}}/issues/{{id}}"
+      style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;font-size:0.85rem;color:var(--text);background:var(--surface);transition:border-color 150ms ease"
+      onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+      <span class="issue-type-badge {{issueTypeClass type}}">{{issueTypeLabel type}}</span>
+      <span style="font-weight:500">{{title}}</span>
+      <span class="issue-status-badge {{issueStatusClass status}}">{{issueStatusLabel status}}</span>
+    </a>
+    {{/each}}
   </div>
 </div>
 {{/if}}

@@ -1269,7 +1269,7 @@ tr:hover td {
 .tag {
   font-size: 0.73rem;
   padding: 2px 8px;
-  background: var(--gray-dim);
+  /* background: var(--gray-dim); */
   color: var(--text-2);
   border-radius: 99px;
   font-weight: 500;

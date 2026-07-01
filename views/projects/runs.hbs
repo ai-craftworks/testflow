@@ -1,0 +1,145 @@
+<div class="page-title-row">
+  <div>
+    <div style="margin-bottom:4px">
+      <a href="/projects/{{project.slug}}" style="font-size:0.85rem;color:var(--text-3)">← {{project.name}}</a>
+    </div>
+    <h1>All Test Runs</h1>
+    <p style="color:var(--text-2);margin-top:4px;font-size:0.9rem">{{runs.length}} run{{#if (ne runs.length 1)}}s{{/if}} across all repositories</p>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="card" style="margin-bottom:20px">
+  <div class="card-body">
+    <form method="GET" action="/projects/{{project.slug}}/runs" id="filter-form">
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" name="search" class="form-control" placeholder="Search by name…" value="{{filters.search}}">
+        </div>
+        <select name="repo_id" class="form-control">
+          <option value="">All Repositories</option>
+          {{#each repos}}
+          <option value="{{id}}" {{#if (eq (json id) (json ../filters.repo_id))}}selected{{/if}}>{{name}}</option>
+          {{/each}}
+        </select>
+        <select name="environment" class="form-control">
+          <option value="">All Environments</option>
+          {{#each environments}}
+          <option value="{{this}}" {{#if (eq this ../filters.environment)}}selected{{/if}}>{{this}}</option>
+          {{/each}}
+        </select>
+        <select name="status" class="form-control">
+          <option value="">All Statuses</option>
+          <option value="in_progress" {{#if (eq filters.status 'in_progress')}}selected{{/if}}>In Progress</option>
+          <option value="completed"   {{#if (eq filters.status 'completed')}}selected{{/if}}>Completed</option>
+          <option value="aborted"     {{#if (eq filters.status 'aborted')}}selected{{/if}}>Aborted</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.875rem">
+          <label style="color:var(--text-2);white-space:nowrap">From</label>
+          <input type="date" name="date_from" class="form-control" style="width:160px" value="{{filters.date_from}}">
+          <label style="color:var(--text-2);white-space:nowrap">To</label>
+          <input type="date" name="date_to" class="form-control" style="width:160px" value="{{filters.date_to}}">
+        </div>
+        <div style="display:flex;gap:8px;margin-left:auto">
+          <a href="/projects/{{project.slug}}/runs" class="btn btn-secondary">Clear</a>
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Results -->
+{{#if runs.length}}
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Repository</th>
+          <th>Environment</th>
+          <th>Plan</th>
+          <th>Progress</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each runs}}
+        <tr style="cursor:pointer" onclick="window.location='/projects/{{../project.slug}}/repos/{{repo_slug}}/runs/{{id}}'">
+          <td>
+            <div style="font-weight:500;font-size:0.9rem">{{name}}</div>
+            {{#if description}}<div style="font-size:0.78rem;color:var(--text-3);margin-top:1px">{{truncate description 50}}</div>{{/if}}
+          </td>
+          <td>
+            <a href="/projects/{{../project.slug}}/repos/{{repo_slug}}"
+               style="font-size:0.85rem;color:var(--accent)"
+               onclick="event.stopPropagation()">{{repo_name}}</a>
+          </td>
+          <td>
+            {{#if environment}}
+            <span class="env-badge env-{{envClass environment}}">{{environment}}</span>
+            {{else}}
+            <span style="color:var(--text-3);font-size:0.82rem">—</span>
+            {{/if}}
+          </td>
+          <td style="color:var(--text-2);font-size:0.85rem">{{or plan_name '—'}}</td>
+          <td style="min-width:140px">
+            {{#if total}}
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="progress-stacked" style="flex:1;height:6px">
+                <div class="seg seg-passed"  style="width:{{pct passed  total}}%"></div>
+                <div class="seg seg-failed"  style="width:{{pct failed  total}}%"></div>
+                <div class="seg seg-blocked" style="width:{{pct blocked total}}%"></div>
+                <div class="seg seg-skipped" style="width:{{pct skipped total}}%"></div>
+                <div class="seg seg-pending" style="width:{{pct pending total}}%"></div>
+              </div>
+              <span style="font-size:0.75rem;color:var(--text-3);white-space:nowrap">
+                {{add passed (add failed (add blocked skipped))}}/{{total}}
+              </span>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:4px;font-size:0.72rem">
+              {{#if passed}}<span style="color:var(--green)">✓{{passed}}</span>{{/if}}
+              {{#if failed}}<span style="color:var(--red)">✗{{failed}}</span>{{/if}}
+              {{#if blocked}}<span style="color:var(--purple)">⊘{{blocked}}</span>{{/if}}
+              {{#if pending}}<span style="color:var(--text-3)">◌{{pending}}</span>{{/if}}
+            </div>
+            {{else}}
+            <span style="color:var(--text-3);font-size:0.82rem">No cases</span>
+            {{/if}}
+          </td>
+          <td><span class="status-badge {{status}}">{{statusLabel status}}</span></td>
+          <td style="color:var(--text-3);font-size:0.82rem;white-space:nowrap">{{formatDate created_at}}</td>
+          <td onclick="event.stopPropagation()">
+            <a href="/projects/{{../project.slug}}/repos/{{repo_slug}}/runs/{{id}}" class="btn btn-ghost btn-sm">Open →</a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+{{else}}
+<div class="empty-state">
+  <div class="empty-state-icon">▶️</div>
+  <h3>No test runs found</h3>
+  <p>{{#if (or filters.search (or filters.repo_id (or filters.environment (or filters.status (or filters.date_from filters.date_to)))))}}Try adjusting your filters{{else}}No test runs exist in this project yet{{/if}}</p>
+  {{#if (or filters.search (or filters.repo_id (or filters.environment (or filters.status (or filters.date_from filters.date_to)))))}}
+  <a href="/projects/{{project.slug}}/runs" class="btn btn-secondary" style="margin-top:12px">Clear Filters</a>
+  {{/if}}
+</div>
+{{/if}}
+
+<script>
+// Auto-submit form on select change
+document.querySelectorAll('#filter-form select').forEach(function(sel) {
+  sel.addEventListener('change', function() {
+    document.getElementById('filter-form').submit();
+  });
+});
+</script>

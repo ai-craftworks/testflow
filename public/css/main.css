@@ -667,8 +667,15 @@ tr:hover td {
 
 /* ── Compact tables (Bootstrap table-sm style) ── */
 .table-wrap {
+  width: 100%;
   max-width: 100%;
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .table-sm {
@@ -678,76 +685,75 @@ tr:hover td {
 .table-sm th {
   padding: 6px 10px;
   font-size: 0.7rem;
+  white-space: nowrap;
 }
 
 .table-sm td {
   padding: 6px 10px;
+  vertical-align: top;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .case-table {
-  min-width: 560px;
+  min-width: 540px;
 }
 
 .plan-table {
-  min-width: 440px;
-}
-
-.case-table th,
-.case-table td {
-  white-space: nowrap;
+  min-width: 520px;
 }
 
 .case-table .col-case {
   min-width: 220px;
-  max-width: 420px;
 }
 
 .case-link,
 .case-title {
-  display: inline-block;
-  max-width: 360px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: middle;
+  display: inline;
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  vertical-align: baseline;
 }
 
 .case-url-link {
   margin-left: 6px;
   text-decoration: none;
-}
-
-.case-table .col-tags {
-  max-width: 180px;
+  white-space: nowrap;
 }
 
 .case-tags {
-  display: inline-block;
-  max-width: 160px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: middle;
+  display: inline;
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  vertical-align: baseline;
 }
 
-.case-table .col-group {
-  max-width: 160px;
+.col-order {
+  width: 1%;
+  text-align: right;
+  color: var(--text-3);
+  font-size: 0.75rem;
+  white-space: nowrap;
 }
 
 .case-table .col-actions {
   width: 1%;
   text-align: right;
-}
-
-.case-table .col-order {
-  width: 1%;
-  text-align: right;
-  color: var(--text-3);
-  font-size: 0.75rem;
+  white-space: nowrap;
 }
 
 .case-table .col-drag {
   width: 1%;
+  white-space: nowrap;
 }
 
 .table-body,
@@ -768,8 +774,12 @@ tr:hover td {
 
 .plan-columns {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   min-height: 400px;
+}
+
+.plan-columns > div {
+  min-width: 0;
 }
 
 .plan-avail-card {
@@ -795,8 +805,8 @@ tr:hover td {
 
 .plan-empty-cell {
   color: var(--text-3);
-  font-size: 0.82rem;
-  padding: 16px 10px !important;
+  font-size: 0.8rem;
+  padding: 10px !important;
   text-align: center;
 }
 
@@ -1466,7 +1476,7 @@ pre {
   }
 
   .plan-columns {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .plan-columns > div:first-child {

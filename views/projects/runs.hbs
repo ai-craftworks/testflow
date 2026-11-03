@@ -56,9 +56,10 @@
 {{#if runs.length}}
 <div class="card">
   <div class="table-wrap">
-    <table>
+    <table class="table table-sm">
       <thead>
         <tr>
+          <th class="col-order">S.No</th>
           <th>Name</th>
           <th>Repository</th>
           <th>Environment</th>
@@ -72,6 +73,7 @@
       <tbody>
         {{#each runs}}
         <tr style="cursor:pointer" onclick="window.location='/projects/{{../project.slug}}/repos/{{repo_slug}}/runs/{{id}}'">
+          <td class="col-order">{{add @index 1}}</td>
           <td>
             <div style="font-weight:500;font-size:0.9rem">{{name}}</div>
             {{#if description}}<div style="font-size:0.78rem;color:var(--text-3);margin-top:1px">{{truncate description 50}}</div>{{/if}}

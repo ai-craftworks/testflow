@@ -65,9 +65,9 @@
           </div>
         </div>
         <div class="modal-footer">
-          <form action="/projects/{{slug}}/delete" method="POST" style="margin-right:auto">
-            <button type="submit" class="btn btn-danger btn-sm" data-confirm="Delete this project and ALL its data?">Delete Project</button>
-          </form>
+          <button type="submit" formaction="/projects/{{slug}}/delete" formmethod="post"
+            class="btn btn-danger btn-sm" style="margin-right:auto"
+            data-confirm="Delete this project and ALL its data?">Delete Project</button>
           <button type="button" class="btn btn-secondary" data-close-modal="modal-edit-project-{{id}}">Cancel</button>
           <button type="submit" class="btn btn-primary">Save</button>
         </div>

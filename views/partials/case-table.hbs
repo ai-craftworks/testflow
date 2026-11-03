@@ -1,0 +1,56 @@
+<div class="table-wrap">
+  <table class="table table-sm case-table">
+    <thead>
+      <tr>
+        {{#if showOrder}}<th class="col-order">#</th>{{/if}}
+        <th class="col-case">Test Case</th>
+        <th>Priority</th>
+        <th>Type</th>
+        {{#if showStatus}}<th>Status</th>{{/if}}
+        {{#if showGroup}}<th class="col-group">Group</th>{{/if}}
+        {{#if showTags}}<th class="col-tags">Tags</th>{{/if}}
+        {{#if showActions}}<th class="col-actions"></th>{{/if}}
+      </tr>
+    </thead>
+    <tbody>
+      {{#each cases}}
+      <tr>
+        {{#if ../showOrder}}<td class="col-order">{{add @index 1}}</td>{{/if}}
+        <td class="col-case">
+          <a class="case-link" href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/cases/{{id}}"
+            title="{{title}}">{{title}}</a>
+          {{#if url}}
+          <a class="case-url-link" href="{{url}}" target="_blank" rel="noopener" title="{{url}}">🔗</a>
+          {{/if}}
+        </td>
+        <td>
+          <span class="priority-badge {{priority}}">
+            <span class="priority-dot {{priority}}"></span>{{capitalize priority}}
+          </span>
+        </td>
+        <td><span class="badge badge-gray">{{typeLabel type}}</span></td>
+        {{#if ../showStatus}}
+        <td><span class="status-badge {{status}}">{{capitalize status}}</span></td>
+        {{/if}}
+        {{#if ../showGroup}}
+        <td class="col-group">{{#if group_name}}<span class="badge badge-blue">{{group_name}}</span>{{/if}}</td>
+        {{/if}}
+        {{#if ../showTags}}
+        <td class="col-tags">{{#if tags}}<span class="case-tags" title="{{tags}}">{{tags}}</span>{{/if}}</td>
+        {{/if}}
+        {{#if ../showActions}}
+        <td class="col-actions">
+          <a href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/cases/{{id}}/edit"
+            class="btn btn-ghost btn-icon btn-sm" title="Edit">✎</a>
+          <form action="/projects/{{../project.slug}}/repos/{{../repo.slug}}/cases/{{id}}/delete" method="POST"
+            style="display:inline">
+            <button type="submit" class="btn btn-ghost btn-icon btn-sm" style="color:var(--red)" title="Delete"
+              data-confirm="Delete this test case?">✕</button>
+          </form>
+        </td>
+        {{/if}}
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

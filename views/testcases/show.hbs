@@ -47,10 +47,6 @@
     <div class="card" style="margin-bottom:16px">
       <div class="card-header"><h3>Steps</h3></div>
       <div class="card-body">
-        <ol class="steps-list">
-          {{#each (json testCase.steps)}}{{else}}
-          {{/each}}
-        </ol>
         <div id="steps-text" style="font-size:0.875rem;line-height:1.8;white-space:pre-line">{{testCase.steps}}</div>
       </div>
     </div>

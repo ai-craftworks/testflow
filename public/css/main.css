@@ -611,6 +611,20 @@ select.form-control {
   border-radius: 99px;
 }
 
+.status-badge.draft {
+  background: var(--yellow-dim);
+  color: var(--yellow);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.status-badge.deprecated {
+  background: var(--gray-dim);
+  color: var(--text-3);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
 /* ── Tables ── */
 .table-wrap {
   overflow-x: auto;
@@ -648,6 +662,145 @@ tbody tr:nth-child(even) td {
 }
 
 tr:hover td {
+  background: var(--accent-dim) !important;
+}
+
+/* ── Compact tables (Bootstrap table-sm style) ── */
+.table-wrap {
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-sm {
+  font-size: 0.8rem;
+}
+
+.table-sm th {
+  padding: 6px 10px;
+  font-size: 0.7rem;
+}
+
+.table-sm td {
+  padding: 6px 10px;
+}
+
+.case-table {
+  min-width: 560px;
+}
+
+.plan-table {
+  min-width: 440px;
+}
+
+.case-table th,
+.case-table td {
+  white-space: nowrap;
+}
+
+.case-table .col-case {
+  min-width: 220px;
+  max-width: 420px;
+}
+
+.case-link,
+.case-title {
+  display: inline-block;
+  max-width: 360px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.case-url-link {
+  margin-left: 6px;
+  text-decoration: none;
+}
+
+.case-table .col-tags {
+  max-width: 180px;
+}
+
+.case-tags {
+  display: inline-block;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.case-table .col-group {
+  max-width: 160px;
+}
+
+.case-table .col-actions {
+  width: 1%;
+  text-align: right;
+}
+
+.case-table .col-order {
+  width: 1%;
+  text-align: right;
+  color: var(--text-3);
+  font-size: 0.75rem;
+}
+
+.case-table .col-drag {
+  width: 1%;
+}
+
+.table-body,
+.card-body.table-body,
+.accordion-body.table-body {
+  padding: 0;
+}
+
+.table-group-row td {
+  background: var(--gray-dim) !important;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-3);
+  padding: 6px 10px;
+}
+
+.plan-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 400px;
+}
+
+.plan-avail-card {
+  cursor: pointer;
+}
+
+.drag-handle {
+  cursor: grab;
+  color: var(--text-3);
+  font-size: 1rem;
+  user-select: none;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.plan-add-icon {
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.plan-empty-cell {
+  color: var(--text-3);
+  font-size: 0.82rem;
+  padding: 16px 10px !important;
+  text-align: center;
+}
+
+.plan-selected-card.drag-over td {
   background: var(--accent-dim) !important;
 }
 
@@ -1310,6 +1463,15 @@ pre {
 
   .page-title-row {
     flex-direction: column;
+  }
+
+  .plan-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .plan-columns > div:first-child {
+    border-right: none !important;
+    border-bottom: 1px solid var(--border);
   }
 }
 

@@ -57,6 +57,7 @@
             <table class="table table-sm case-table plan-table">
               <thead>
                 <tr>
+                  <th class="col-order">S.No</th>
                   <th class="col-case">Test Case</th>
                   <th>Priority</th>
                   <th>Type</th>
@@ -66,11 +67,12 @@
               <tbody id="available-list">
                 {{#if ungroupedCases.length}}
                 <tr class="table-group-row">
-                  <td colspan="4">Ungrouped</td>
+                  <td colspan="5">Ungrouped</td>
                 </tr>
                 {{#each ungroupedCases}}
                 <tr class="plan-avail-card" data-id="{{id}}" data-title="{{title}}" data-priority="{{priority}}"
                   data-type="{{type}}">
+                  <td class="col-order">{{sno}}</td>
                   <td class="col-case"><span class="case-title" title="{{title}}">{{title}}</span></td>
                   <td>
                     <span class="priority-badge {{priority}}"><span
@@ -84,11 +86,12 @@
 
                 {{#each groupedCases}}
                 <tr class="table-group-row">
-                  <td colspan="4">{{name}}</td>
+                  <td colspan="5">{{name}}</td>
                 </tr>
                 {{#each cases}}
                 <tr class="plan-avail-card" data-id="{{id}}" data-title="{{title}}" data-priority="{{priority}}"
                   data-type="{{type}}">
+                  <td class="col-order">{{sno}}</td>
                   <td class="col-case"><span class="case-title" title="{{title}}">{{title}}</span></td>
                   <td>
                     <span class="priority-badge {{priority}}"><span
@@ -120,7 +123,7 @@
               <thead>
                 <tr>
                   <th class="col-drag"></th>
-                  <th class="col-order">#</th>
+                  <th class="col-order">S.No</th>
                   <th class="col-case">Test Case</th>
                   <th>Priority</th>
                   <th>Type</th>

@@ -9,13 +9,14 @@
 {{#if issues.length}}
 <div class="card">
   <div class="table-wrap">
-    <table>
+    <table class="table table-sm">
       <thead><tr>
-        <th>Title</th><th>Type</th><th>Status</th><th>Steps</th><th>Created</th><th></th>
+        <th class="col-order">S.No</th><th>Title</th><th>Type</th><th>Status</th><th>Steps</th><th>Created</th><th></th>
       </tr></thead>
       <tbody>
       {{#each issues}}
       <tr>
+        <td class="col-order">{{add @index 1}}</td>
         <td>
           <a href="/projects/{{../project.slug}}/issues/{{id}}" style="font-weight:500">{{title}}</a>
           {{#if description}}<div style="font-size:0.78rem;color:var(--text-3);margin-top:2px">{{truncate description 60}}</div>{{/if}}

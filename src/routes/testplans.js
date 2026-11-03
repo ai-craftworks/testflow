@@ -27,6 +27,7 @@ router.get('/new', (req, res) => {
   db.close();
 
   // Pre-group for clean template rendering
+  testCases.forEach((tc, index) => { tc.sno = index + 1; });
   const ungroupedCases = testCases.filter(c => c.group_id === null || c.group_id === undefined);
   const groupedCases = groups.map(g => ({
     id: g.id, name: g.name,
@@ -109,6 +110,7 @@ router.get('/:planId/edit', (req, res) => {
   db.close();
 
   // Pre-group for clean template rendering
+  testCases.forEach((tc, index) => { tc.sno = index + 1; });
   const ungroupedCases = testCases.filter(c => c.group_id === null || c.group_id === undefined);
   const groupedCases = groups.map(g => ({
     id: g.id, name: g.name,

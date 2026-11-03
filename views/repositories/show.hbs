@@ -81,7 +81,7 @@
           <span class="badge badge-gray" style="margin-left:6px">{{ungroupedCases.length}}</span>
         </button>
         <div class="accordion-body open table-body">
-          {{> case-table project=project repo=repo cases=ungroupedCases showActions=true showStatus=true showTags=true}}
+          {{> case-table project=project repo=repo cases=ungroupedCases showOrder=true showActions=true showStatus=true showTags=true}}
         </div>
       </div>
       {{/if}}
@@ -95,7 +95,7 @@
           <span class="badge badge-gray" style="margin-left:6px">{{cases.length}}</span>
         </button>
         <div class="accordion-body open table-body">
-          {{> case-table project=../project repo=../repo cases=cases showActions=true showStatus=true showTags=true}}
+          {{> case-table project=../project repo=../repo cases=cases showOrder=true showActions=true showStatus=true showTags=true}}
         </div>
       </div>
       {{/each}}
@@ -116,13 +116,14 @@
     {{#if testPlans.length}}
     <div class="card">
       <div class="table-wrap">
-        <table>
+        <table class="table table-sm">
           <thead><tr>
-            <th>Name</th><th>Description</th><th>Cases</th><th>Status</th><th>Created</th><th></th>
+            <th class="col-order">S.No</th><th>Name</th><th>Description</th><th>Cases</th><th>Status</th><th>Created</th><th></th>
           </tr></thead>
           <tbody>
           {{#each testPlans}}
           <tr>
+            <td class="col-order">{{add @index 1}}</td>
             <td><a href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/plans/{{id}}" style="font-weight:500">{{name}}</a></td>
             <td style="color:var(--text-2);font-size:0.85rem">{{truncate description 60}}</td>
             <td><span class="badge badge-blue">{{case_count}}</span></td>
@@ -154,13 +155,14 @@
     {{#if testRuns.length}}
     <div class="card">
       <div class="table-wrap">
-        <table>
+        <table class="table table-sm">
           <thead><tr>
-            <th>Name</th><th>Plan</th><th>Environment</th><th>Progress</th><th>Status</th><th>Created</th><th></th>
+            <th class="col-order">S.No</th><th>Name</th><th>Plan</th><th>Environment</th><th>Progress</th><th>Status</th><th>Created</th><th></th>
           </tr></thead>
           <tbody>
           {{#each testRuns}}
           <tr>
+            <td class="col-order">{{add @index 1}}</td>
             <td><a href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/runs/{{id}}" style="font-weight:500">{{name}}</a></td>
             <td style="color:var(--text-2);font-size:0.85rem">{{or plan_name '—'}}</td>
             <td>{{#if environment}}<span class="env-badge env-{{envClass environment}}">{{environment}}</span>{{else}}<span style="color:var(--text-3)">—</span>{{/if}}</td>

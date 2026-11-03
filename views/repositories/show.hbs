@@ -80,10 +80,8 @@
           <span class="accordion-title">Ungrouped</span>
           <span class="badge badge-gray" style="margin-left:6px">{{ungroupedCases.length}}</span>
         </button>
-        <div class="accordion-body open">
-          {{#each ungroupedCases}}
-          {{> case-card project=../project repo=../repo case=this}}
-          {{/each}}
+        <div class="accordion-body open table-body">
+          {{> case-table project=project repo=repo cases=ungroupedCases showActions=true showStatus=true showTags=true}}
         </div>
       </div>
       {{/if}}
@@ -96,10 +94,8 @@
           <span class="accordion-title">{{name}}</span>
           <span class="badge badge-gray" style="margin-left:6px">{{cases.length}}</span>
         </button>
-        <div class="accordion-body open">
-          {{#each cases}}
-          {{> case-card project=../../project repo=../../repo case=this}}
-          {{/each}}
+        <div class="accordion-body open table-body">
+          {{> case-table project=../project repo=../repo cases=cases showActions=true showStatus=true showTags=true}}
         </div>
       </div>
       {{/each}}
@@ -303,9 +299,9 @@
         </div>
       </div>
       <div class="modal-footer">
-        <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/delete" method="POST" style="margin-right:auto">
-          <button type="submit" class="btn btn-danger btn-sm" data-confirm="Delete this repository and all its data?">Delete</button>
-        </form>
+        <button type="submit" formaction="/projects/{{project.slug}}/repos/{{repo.slug}}/delete" formmethod="post"
+          class="btn btn-danger btn-sm" style="margin-right:auto"
+          data-confirm="Delete this repository and all its data?">Delete</button>
         <button type="button" class="btn btn-secondary" data-close-modal="modal-edit-repo">Cancel</button>
         <button type="submit" class="btn btn-primary">Save</button>
       </div>

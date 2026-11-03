@@ -172,7 +172,7 @@ function initRichEditor(wrap) {
     if (!files?.length) return;
     for (const file of files) {
       if (file.type.startsWith('image/')) {
-        e.preventDefault(); handled = true;
+        e.preventDefault();
         uploadImage(file).then(url => {
           if (url) {
             editor.focus();
@@ -180,7 +180,7 @@ function initRichEditor(wrap) {
           }
         });
       } else if (file.type.startsWith('video/')) {
-        e.preventDefault(); handled = true;
+        e.preventDefault();
         uploadVideo(file).then(url => {
           if (url) {
             editor.focus();

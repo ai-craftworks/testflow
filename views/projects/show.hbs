@@ -130,9 +130,9 @@
             </div>
           </div>
           <div class="modal-footer">
-            <form action="/projects/{{../project.slug}}/repos/{{slug}}/delete" method="POST" style="margin-right:auto">
-              <button type="submit" class="btn btn-danger btn-sm" data-confirm="Delete this repository and ALL its data?">Delete</button>
-            </form>
+            <button type="submit" formaction="/projects/{{../project.slug}}/repos/{{slug}}/delete" formmethod="post"
+              class="btn btn-danger btn-sm" style="margin-right:auto"
+              data-confirm="Delete this repository and ALL its data?">Delete</button>
             <button type="button" class="btn btn-secondary" data-close-modal="modal-edit-repo-{{id}}">Cancel</button>
             <button type="submit" class="btn btn-primary">Save</button>
           </div>

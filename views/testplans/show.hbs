@@ -20,25 +20,9 @@
       <div class="card-header">
         <h2>Test Cases <span class="badge badge-gray" style="margin-left:4px">{{cases.length}}</span></h2>
       </div>
-      <div class="card-body">
+      <div class="card-body table-body">
         {{#if cases.length}}
-          {{#each cases}}
-          <div class="tc-card" style="margin-bottom:8px">
-            <div class="tc-card-body">
-              <div style="display:flex;align-items:flex-start;justify-content:space-between">
-                <div class="tc-card-title">
-                  <a href="/projects/{{../../project.slug}}/repos/{{../../repo.slug}}/cases/{{id}}">{{title}}</a>
-                </div>
-                <span style="font-size:0.75rem;color:var(--text-3);white-space:nowrap;margin-left:8px">#{{@index}}</span>
-              </div>
-              <div class="tc-card-meta" style="margin-top:5px">
-                <span class="priority-badge {{priority}}"><span class="priority-dot {{priority}}"></span>{{capitalize priority}}</span>
-                <span class="badge badge-gray">{{typeLabel type}}</span>
-                {{#if group_name}}<span class="badge badge-blue">{{group_name}}</span>{{/if}}
-              </div>
-            </div>
-          </div>
-          {{/each}}
+          {{> case-table project=project repo=repo cases=cases showOrder=true showStatus=true showGroup=true}}
         {{else}}
         <div class="empty-state" style="padding:24px">
           <div class="empty-state-icon">🧪</div>

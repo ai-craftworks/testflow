@@ -14,18 +14,37 @@ function ctx(db, pSlug, rSlug) {
 router.post('/', (req, res) => {
   const db = getDb();
   const c = ctx(db, req.params.projectSlug, req.params.repoSlug);
-  if (!c) { db.close(); return res.redirect('/'); }
+  if (!c) {
+    db.close();
+    if (req.accepts('json') && !req.accepts('html')) return res.status(404).json({ error: 'Not found' });
+    return res.redirect('/');
+  }
 
   const { title, description, url, priority, type, status, preconditions, steps, expected_result, tags, group_id } = req.body;
-  db.prepare(`
+  if (!title || !String(title).trim()) {
+    db.close();
+    const wantsJson = req.xhr || req.get('X-Requested-With') === 'XMLHttpRequest' || (req.accepts('json') && !req.accepts('html'));
+    if (wantsJson) return res.status(400).json({ error: 'Title is required' });
+    return res.redirect(`/projects/${req.params.projectSlug}/repos/${req.params.repoSlug}`);
+  }
+
+  const inserted = db.prepare(`
     INSERT INTO test_cases (repository_id, group_id, title, description, url, priority, type, status, preconditions, steps, expected_result, tags)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
-  `).run(c.repo.id, group_id || null, title, description || null, url || null,
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?) RETURNING id
+  `).get(c.repo.id, group_id || null, String(title).trim(), description || null, url || null,
     priority || 'medium', type || 'functional', status || 'active',
     preconditions || null, steps || null, expected_result || null, tags || null);
 
   db.prepare('UPDATE repositories SET updated_at=CURRENT_TIMESTAMP WHERE id=?').run(c.repo.id);
+  const created = db.prepare(`
+    SELECT tc.*, tg.name as group_name
+    FROM test_cases tc LEFT JOIN test_groups tg ON tg.id = tc.group_id
+    WHERE tc.id = ?
+  `).get(inserted.id);
   db.close();
+
+  const wantsJson = req.xhr || req.get('X-Requested-With') === 'XMLHttpRequest' || (req.accepts('json') && !req.accepts('html'));
+  if (wantsJson) return res.json({ ok: true, case: created });
   res.redirect(`/projects/${req.params.projectSlug}/repos/${req.params.repoSlug}`);
 });
 

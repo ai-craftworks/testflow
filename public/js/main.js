@@ -339,11 +339,14 @@ if (runSourceSelect) {
   toggleRunSource();
 }
 
-/* ── Confirm delete ── */
-document.querySelectorAll('[data-confirm]').forEach(btn => {
-  btn.addEventListener('click', e => {
-    if (!confirm(btn.dataset.confirm || 'Are you sure?')) e.preventDefault();
-  });
+/* ── Confirm delete (delegated) ── */
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-confirm]');
+  if (!btn) return;
+  if (!confirm(btn.dataset.confirm || 'Are you sure?')) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
 });
 
 /* small helpers */
@@ -397,3 +400,164 @@ document.querySelectorAll('.code-lang-select').forEach(function(sel) {
     if (hidden) hidden.value = this.value;
   });
 });
+
+
+/* ── Repo case group filter + inline add ── */
+(function () {
+  const filterBar = document.getElementById('case-group-filters');
+  const tbody = document.getElementById('repo-cases-tbody');
+  const searchInput = document.getElementById('case-filter-search');
+  const emptyState = document.getElementById('case-filter-empty');
+  if (!filterBar || !tbody) return;
+
+  let activeGroup = 'all';
+
+  function getRows() {
+    return Array.from(tbody.querySelectorAll('tr.case-row'));
+  }
+
+  function renumber() {
+    let n = 1;
+    getRows().forEach(row => {
+      if (row.style.display === 'none') return;
+      const cell = row.querySelector('.case-sno');
+      if (cell) cell.textContent = n++;
+    });
+  }
+
+  function updateCounts() {
+    const rows = getRows();
+    const total = rows.length;
+    const ungrouped = rows.filter(r => r.dataset.groupId === 'ungrouped').length;
+    const badge = document.getElementById('case-count-badge');
+    if (badge) badge.textContent = total;
+    const tabBadge = document.getElementById('tab-cases-count');
+    if (tabBadge) tabBadge.textContent = total;
+    const allBtn = filterBar.querySelector('[data-group-filter="all"] .count');
+    if (allBtn) allBtn.textContent = total;
+    const unBtn = document.getElementById('count-ungrouped');
+    if (unBtn) unBtn.textContent = ungrouped;
+    filterBar.querySelectorAll('[data-group-count]').forEach(el => {
+      const gid = el.getAttribute('data-group-count');
+      el.textContent = rows.filter(r => r.dataset.groupId === String(gid)).length;
+    });
+  }
+
+  function applyFilter() {
+    const q = (searchInput ? searchInput.value : '').toLowerCase().trim();
+    let visible = 0;
+    getRows().forEach(row => {
+      const groupId = row.dataset.groupId || 'ungrouped';
+      const title = (row.dataset.title || '').toLowerCase();
+      const tags = (row.dataset.tags || '').toLowerCase();
+      const matchGroup = activeGroup === 'all' || String(groupId) === String(activeGroup);
+      const matchSearch = !q || title.includes(q) || tags.includes(q);
+      const show = matchGroup && matchSearch;
+      row.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    renumber();
+    if (emptyState) emptyState.style.display = (visible === 0 && getRows().length > 0) ? '' : 'none';
+  }
+
+  filterBar.addEventListener('click', e => {
+    const btn = e.target.closest('[data-group-filter]');
+    if (!btn) return;
+    filterBar.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    activeGroup = btn.getAttribute('data-group-filter');
+    // sync inline add group select
+    const groupSelect = document.getElementById('inline-case-group');
+    if (groupSelect) {
+      if (activeGroup !== 'all' && activeGroup !== 'ungrouped') groupSelect.value = activeGroup;
+      else if (activeGroup === 'ungrouped') groupSelect.value = '';
+    }
+    applyFilter();
+  });
+
+  if (searchInput) searchInput.addEventListener('input', applyFilter);
+
+  // Inline add
+  const saveBtn = document.getElementById('inline-case-save');
+  const titleInput = document.getElementById('inline-case-title');
+  const addRow = document.getElementById('inline-add-row');
+  if (saveBtn && titleInput && addRow) {
+    const project = addRow.dataset.project;
+    const repo = addRow.dataset.repo;
+    const endpoint = `/projects/${project}/repos/${repo}/cases`;
+
+    async function saveInline() {
+      const title = titleInput.value.trim();
+      if (!title) { titleInput.focus(); titleInput.style.borderColor = 'var(--red)'; return; }
+      titleInput.style.borderColor = '';
+      saveBtn.disabled = true;
+      saveBtn.textContent = '...';
+      const payload = {
+        title,
+        priority: document.getElementById('inline-case-priority').value,
+        type: document.getElementById('inline-case-type').value,
+        status: document.getElementById('inline-case-status').value,
+        group_id: document.getElementById('inline-case-group').value || '',
+      };
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.error || 'Failed');
+        const tc = data.case;
+        const tr = document.createElement('tr');
+        tr.className = 'case-row';
+        tr.dataset.caseId = tc.id;
+        tr.dataset.groupId = tc.group_id ? String(tc.group_id) : 'ungrouped';
+        tr.dataset.title = tc.title || '';
+        tr.dataset.tags = tc.tags || '';
+        const caseUrl = `/projects/${project}/repos/${repo}/cases/${tc.id}`;
+        const editUrl = caseUrl + '/edit';
+        const delUrl = caseUrl + '/delete';
+        const pri = tc.priority || 'medium';
+        const type = tc.type || 'functional';
+        const status = tc.status || 'active';
+        const groupName = tc.group_name || '—';
+        const tags = tc.tags ? `<span class="case-tags text-muted" title="${escapeHtml(tc.tags)}">${escapeHtml(tc.tags)}</span>` : '<span class="text-muted">—</span>';
+        tr.innerHTML = `
+          <td class="col-order case-sno"></td>
+          <td class="col-case"><a class="case-link" href="${caseUrl}" title="${escapeHtml(tc.title)}">${escapeHtml(tc.title)}</a></td>
+          <td><span class="priority-badge ${pri}"><span class="priority-dot ${pri}"></span>${cap(pri)}</span></td>
+          <td><span class="badge badge-gray">${typeLabel(type)}</span></td>
+          <td><span class="status-badge ${status}">${cap(status)}</span></td>
+          <td class="col-group"><span class="text-muted">${escapeHtml(groupName)}</span></td>
+          <td class="col-tags">${tags}</td>
+          <td class="col-actions"><div class="btn-group">
+            <a href="${editUrl}" class="btn btn-ghost btn-sm">Edit</a>
+            <form action="${delUrl}" method="POST" style="display:inline"><button type="submit" class="btn btn-ghost btn-sm text-danger" data-confirm="Delete this test case?">Del</button></form>
+          </div></td>`;
+        tbody.insertBefore(tr, addRow);
+        titleInput.value = '';
+        updateCounts();
+        applyFilter();
+        titleInput.focus();
+      } catch (err) {
+        alert(err.message || 'Could not add test case');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Add';
+      }
+    }
+
+    function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+    function typeLabel(t) { return ({functional:'Functional',regression:'Regression',smoke:'Smoke',performance:'Performance',security:'Security',usability:'Usability',other:'Other'})[t] || t; }
+
+    saveBtn.addEventListener('click', saveInline);
+    titleInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); saveInline(); }
+    });
+    titleInput.addEventListener('input', () => { titleInput.style.borderColor = ''; });
+  }
+
+  updateCounts();
+  applyFilter();
+})();

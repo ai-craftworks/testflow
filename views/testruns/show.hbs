@@ -83,40 +83,21 @@
 </div>
 {{/if}}
 
+<div class="metric-grid" style="margin-bottom:20px">
+  <div class="metric-card"><div class="metric-label">Total</div><div class="metric-value">{{statusCounts.total}}</div><div class="metric-bar"><div class="metric-bar-fill" style="width:100%"></div></div></div>
+  <div class="metric-card"><div class="metric-label">Passed</div><div class="metric-value count-passed" style="color:var(--green)">{{statusCounts.passed}}</div><div class="metric-bar"><div class="metric-bar-fill green" style="width:{{pct statusCounts.passed statusCounts.total}}%"></div></div></div>
+  <div class="metric-card"><div class="metric-label">Failed</div><div class="metric-value count-failed" style="color:var(--red)">{{statusCounts.failed}}</div><div class="metric-bar"><div class="metric-bar-fill red" style="width:{{pct statusCounts.failed statusCounts.total}}%"></div></div></div>
+  <div class="metric-card"><div class="metric-label">Blocked</div><div class="metric-value count-blocked" style="color:#fb6340">{{statusCounts.blocked}}</div><div class="metric-bar"><div class="metric-bar-fill orange" style="width:{{pct statusCounts.blocked statusCounts.total}}%"></div></div></div>
+  <div class="metric-card"><div class="metric-label">Skipped</div><div class="metric-value count-skipped" style="color:var(--text-3)">{{statusCounts.skipped}}</div><div class="metric-bar"><div class="metric-bar-fill" style="width:{{pct statusCounts.skipped statusCounts.total}}%;background:#adb5bd"></div></div></div>
+  <div class="metric-card"><div class="metric-label">Pending</div><div class="metric-value count-pending" style="color:var(--text-3)">{{statusCounts.pending}}</div><div class="metric-bar"><div class="metric-bar-fill" style="width:{{pct statusCounts.pending statusCounts.total}}%;background:#cbd5e1"></div></div></div>
+</div>
 <div class="card" style="margin-bottom:20px">
-  <div class="card-body">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:16px;margin-bottom:14px">
-      <div style="text-align:center">
-        <div style="font-size:1.6rem;font-weight:600">{{statusCounts.total}}</div>
-        <div style="font-size:0.75rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em">Total</div>
-      </div>
-      <div style="text-align:center">
-        <div style="font-size:1.6rem;font-weight:600;color:var(--green)" class="count-passed">{{statusCounts.passed}}
-        </div>
-        <div style="font-size:0.75rem;color:var(--green);text-transform:uppercase;letter-spacing:0.04em">Passed</div>
-      </div>
-      <div style="text-align:center">
-        <div style="font-size:1.6rem;font-weight:600;color:var(--red)" class="count-failed">{{statusCounts.failed}}
-        </div>
-        <div style="font-size:0.75rem;color:var(--red);text-transform:uppercase;letter-spacing:0.04em">Failed</div>
-      </div>
-      <div style="text-align:center">
-        <div style="font-size:1.6rem;font-weight:600;color:var(--purple)" class="count-blocked">{{statusCounts.blocked}}
-        </div>
-        <div style="font-size:0.75rem;color:var(--purple);text-transform:uppercase;letter-spacing:0.04em">Blocked</div>
-      </div>
-      <div style="text-align:center">
-        <div style="font-size:1.6rem;font-weight:600;color:var(--text-3)" class="count-skipped">{{statusCounts.skipped}}
-        </div>
-        <div style="font-size:0.75rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em">Skipped</div>
-      </div>
-      <div style="text-align:center">
-        <div style="font-size:1.6rem;font-weight:600;color:var(--text-3)" class="count-pending">{{statusCounts.pending}}
-        </div>
-        <div style="font-size:0.75rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em">Pending</div>
-      </div>
+  <div class="card-body" style="padding:16px 20px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px;flex-wrap:wrap">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em">Execution Progress</div>
+      <div style="font-size:0.82rem;color:var(--text-2)">Pass rate: <strong style="color:var(--green)">{{pct statusCounts.passed statusCounts.total}}%</strong></div>
     </div>
-    <div class="progress-stacked">
+    <div class="progress-stacked" style="height:12px">
       <div class="seg seg-passed" style="width:{{pct statusCounts.passed statusCounts.total}}%"></div>
       <div class="seg seg-failed" style="width:{{pct statusCounts.failed statusCounts.total}}%"></div>
       <div class="seg seg-blocked" style="width:{{pct statusCounts.blocked statusCounts.total}}%"></div>
@@ -124,10 +105,7 @@
       <div class="seg seg-pending" style="width:{{pct statusCounts.pending statusCounts.total}}%"></div>
     </div>
     {{#if (eq run.status 'completed')}}
-    <div style="margin-top:10px;font-size:0.82rem;color:var(--text-3)">
-      ✔ Completed {{formatDateTime run.completed_at}}
-      — Pass rate: <strong style="color:var(--green)">{{pct statusCounts.passed statusCounts.total}}%</strong>
-    </div>
+    <div style="margin-top:10px;font-size:0.82rem;color:var(--text-3)">✔ Completed {{formatDateTime run.completed_at}}</div>
     {{/if}}
   </div>
 </div>

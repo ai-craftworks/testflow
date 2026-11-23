@@ -15,38 +15,32 @@
 <!-- Stats -->
 <div class="stats-row">
   <div class="stat-card">
-    <div class="stat-value" style="color:var(--accent)">{{stats.total_repos}}</div>
-    <div class="stat-label">Repositories</div>
+    <div class="stat-card-body"><div class="stat-label">Repositories</div><div class="stat-value">{{stats.total_repos}}</div></div>
+    <div class="stat-icon">📦</div>
+  </div>
+  <div class="stat-card stat-cyan">
+    <div class="stat-card-body"><div class="stat-label">Test Cases</div><div class="stat-value">{{stats.total_cases}}</div></div>
+    <div class="stat-icon cyan">🧪</div>
   </div>
   <div class="stat-card">
-    <div class="stat-value">{{stats.total_cases}}</div>
-    <div class="stat-label">Test Cases</div>
+    <div class="stat-card-body"><div class="stat-label">Test Plans</div><div class="stat-value">{{stats.total_plans}}</div></div>
+    <div class="stat-icon">📋</div>
   </div>
-  <div class="stat-card">
-    <div class="stat-value">{{stats.total_plans}}</div>
-    <div class="stat-label">Test Plans</div>
+  <div class="stat-card stat-orange">
+    <div class="stat-card-body"><div class="stat-label">Active Runs</div><div class="stat-value">{{stats.active_runs}}</div></div>
+    <div class="stat-icon orange">⚡</div>
   </div>
-  <div class="stat-card">
-    <div class="stat-value" style="color:var(--accent)">{{stats.active_runs}}</div>
-    <div class="stat-label">Active Runs</div>
+  <div class="stat-card stat-green">
+    <div class="stat-card-body"><div class="stat-label">Completed</div><div class="stat-value">{{stats.completed_runs}}</div></div>
+    <div class="stat-icon green">✓</div>
   </div>
-  <div class="stat-card">
-    <div class="stat-value" style="color:var(--green)">{{stats.completed_runs}}</div>
-    <div class="stat-label">Completed Runs</div>
+  <div class="stat-card stat-gray" style="--tw:0">
+    <div class="stat-card-body"><div class="stat-label">Issues</div><div class="stat-value">{{issueStats.total_issues}}</div></div>
+    <div class="stat-icon gray">🐛</div>
   </div>
-  <div class="stat-card">
-    <div class="stat-value">{{issueStats.total_issues}}</div>
-    <div class="stat-label">Issues</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-value" style="color:var(--red)">
-      {{#if issueStats.open_issues}}
-        {{issueStats.open_issues}}
-      {{else}}
-        0
-      {{/if}}
-    </div>
-    <div class="stat-label">Open Issues</div>
+  <div class="stat-card stat-red">
+    <div class="stat-card-body"><div class="stat-label">Open Issues</div><div class="stat-value">{{#if issueStats.open_issues}}{{issueStats.open_issues}}{{else}}0{{/if}}</div></div>
+    <div class="stat-icon red">!</div>
   </div>
 </div>
 

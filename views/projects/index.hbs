@@ -20,18 +20,18 @@
       </div>
       <button class="btn btn-icon btn-ghost" data-modal="modal-edit-project-{{id}}" title="Edit" style="font-size:0.9rem">✎</button>
     </div>
-    <div class="project-stats">
-      <div class="project-stat">
-        <div class="project-stat-value">{{repo_count}}</div>
-        <div class="project-stat-label">Repos</div>
+    <div class="project-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 18px;border-top:1px solid var(--border-light);background:linear-gradient(180deg,#fbfcff,#fff)">
+      <div style="text-align:center">
+        <div style="font-size:1.15rem;font-weight:700;color:var(--accent)">{{repo_count}}</div>
+        <div style="font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3)">Repos</div>
       </div>
-      <div class="project-stat">
-        <div class="project-stat-value">{{test_case_count}}</div>
-        <div class="project-stat-label">Cases</div>
+      <div style="text-align:center">
+        <div style="font-size:1.15rem;font-weight:700;color:#11cdef">{{test_case_count}}</div>
+        <div style="font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3)">Cases</div>
       </div>
-      <div class="project-stat">
-        <div class="project-stat-value">{{test_run_count}}</div>
-        <div class="project-stat-label">Runs</div>
+      <div style="text-align:center">
+        <div style="font-size:1.15rem;font-weight:700;color:#2dce89">{{test_run_count}}</div>
+        <div style="font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3)">Runs</div>
       </div>
     </div>
     <a href="/projects/{{slug}}" class="btn btn-secondary" style="width:100%;justify-content:center">Open Project →</a>

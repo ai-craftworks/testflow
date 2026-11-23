@@ -4,28 +4,44 @@
     {{#if repo.description}}<p>{{repo.description}}</p>{{/if}}
   </div>
   <div class="btn-group">
-    <button class="btn btn-secondary" data-modal="modal-edit-repo">✎ Edit</button>
-    <button class="btn btn-primary" data-modal="modal-new-case">+ New Test Case</button>
+    <button class="btn btn-secondary" data-modal="modal-edit-repo"><i class="bi bi-pencil"></i> Edit</button>
+    <button class="btn btn-primary" data-modal="modal-new-case"><i class="bi bi-plus-lg"></i> New Test Case</button>
   </div>
 </div>
 
 <!-- Stats -->
 <div class="stats-row">
   <div class="stat-card">
-    <div class="stat-value">{{stats.totalCases}}</div>
-    <div class="stat-label">Test Cases</div>
+    <div class="stat-card-body">
+      <div class="stat-label">Test Cases</div>
+      <div class="stat-value">{{stats.totalCases}}</div>
+      <div class="stat-meta"><span class="up">●</span> Repository coverage</div>
+    </div>
+    <div class="stat-icon"><i class="bi bi-bug"></i></div>
   </div>
-  <div class="stat-card">
-    <div class="stat-value">{{stats.totalPlans}}</div>
-    <div class="stat-label">Test Plans</div>
+  <div class="stat-card stat-cyan">
+    <div class="stat-card-body">
+      <div class="stat-label">Test Plans</div>
+      <div class="stat-value">{{stats.totalPlans}}</div>
+      <div class="stat-meta">Planning assets</div>
+    </div>
+    <div class="stat-icon cyan"><i class="bi bi-journal-text"></i></div>
   </div>
-  <div class="stat-card">
-    <div class="stat-value">{{stats.totalRuns}}</div>
-    <div class="stat-label">Total Runs</div>
+  <div class="stat-card stat-green">
+    <div class="stat-card-body">
+      <div class="stat-label">Total Runs</div>
+      <div class="stat-value">{{stats.totalRuns}}</div>
+      <div class="stat-meta">Execution history</div>
+    </div>
+    <div class="stat-icon green"><i class="bi bi-play-circle"></i></div>
   </div>
-  <div class="stat-card">
-    <div class="stat-value" style="color:var(--accent)">{{stats.activeRuns}}</div>
-    <div class="stat-label">Active Runs</div>
+  <div class="stat-card stat-orange">
+    <div class="stat-card-body">
+      <div class="stat-label">Active Runs</div>
+      <div class="stat-value">{{stats.activeRuns}}</div>
+      <div class="stat-meta">{{#if stats.activeRuns}}<span class="up">In progress</span>{{else}}All clear{{/if}}</div>
+    </div>
+    <div class="stat-icon orange"><i class="bi bi-lightning-charge"></i></div>
   </div>
 </div>
 
@@ -53,65 +69,114 @@
 <!-- Tabs -->
 <div class="tab-set">
   <div class="tabs">
-    <button class="tab-btn active" data-tab="tab-cases">Test Cases <span class="badge badge-gray" style="margin-left:4px">{{testCases.length}}</span></button>
+    <button class="tab-btn active" data-tab="tab-cases">Test Cases <span class="badge badge-gray" style="margin-left:4px" id="tab-cases-count">{{testCases.length}}</span></button>
     <button class="tab-btn" data-tab="tab-plans">Test Plans <span class="badge badge-gray" style="margin-left:4px">{{testPlans.length}}</span></button>
     <button class="tab-btn" data-tab="tab-runs">Test Runs <span class="badge badge-gray" style="margin-left:4px">{{testRuns.length}}</span></button>
   </div>
 
   <!-- Test Cases Tab -->
   <div class="tab-panel active" id="tab-cases">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap">
-      <div class="search-wrap" style="flex:1;max-width:320px">
-        <span class="search-icon">🔍</span>
-        <input type="text" class="form-control" id="case-search" placeholder="Search test cases…">
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-secondary btn-sm" data-modal="modal-manage-groups">⊞ Manage Groups</button>
-        <button class="btn btn-primary btn-sm" data-modal="modal-new-case">+ New Case</button>
-      </div>
-    </div>
-
-    {{#if testCases.length}}
-      <!-- Ungrouped cases -->
-      {{#if ungroupedCases.length}}
-      <div class="accordion-group">
-        <button type="button" class="accordion-trigger" aria-expanded="true">
-          <span class="accordion-arrow">▼</span>
-          <span class="accordion-title">Ungrouped</span>
-          <span class="badge badge-gray" style="margin-left:6px">{{ungroupedCases.length}}</span>
-        </button>
-        <div class="accordion-body open table-body">
-          {{> case-table project=project repo=repo cases=ungroupedCases showOrder=true showActions=true showStatus=true showTags=true}}
+    <div class="card">
+      <div class="card-header">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <h2 style="margin:0">Test Cases</h2>
+          <span class="badge badge-gray" id="case-count-badge">{{testCases.length}}</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <input type="text" class="form-control" id="case-filter-search" placeholder="Search cases..." style="width:220px;min-width:160px">
+          <button class="btn btn-secondary btn-sm" data-modal="modal-manage-groups">Groups</button>
+          <button class="btn btn-primary btn-sm" data-modal="modal-new-case"><i class="bi bi-plus-lg"></i> New Test Case</button>
         </div>
       </div>
-      {{/if}}
-
-      <!-- Grouped cases -->
-      {{#each groupedCases}}
-      <div class="accordion-group">
-        <button type="button" class="accordion-trigger" aria-expanded="true">
-          <span class="accordion-arrow">▼</span>
-          <span class="accordion-title">{{name}}</span>
-          <span class="badge badge-gray" style="margin-left:6px">{{cases.length}}</span>
-        </button>
-        <div class="accordion-body open table-body">
-          {{> case-table project=../project repo=../repo cases=cases showOrder=true showActions=true showStatus=true showTags=true}}
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border-light);background:#fbfcff">
+        <div class="filter-bar" id="case-group-filters" style="margin-bottom:0">
+          <button type="button" class="filter-chip active" data-group-filter="all">All <span class="count">{{testCases.length}}</span></button>
+          <button type="button" class="filter-chip" data-group-filter="ungrouped">Ungrouped <span class="count" id="count-ungrouped">{{ungroupedCases.length}}</span></button>
+          {{#each groups}}
+          <button type="button" class="filter-chip" data-group-filter="{{id}}">{{name}} <span class="count" data-group-count="{{id}}">{{case_count}}</span></button>
+          {{/each}}
         </div>
       </div>
-      {{/each}}
-    {{else}}
-    <div class="empty-state">
-      <div class="empty-state-icon">🧪</div>
-      <h3>No test cases yet</h3>
-      <p>Create your first test case to get started</p>
+      <div class="table-wrap">
+        <table class="table table-sm case-table" id="repo-cases-table">
+          <thead>
+            <tr>
+              <th class="col-order">S.No</th>
+              <th class="col-case">Test Case</th>
+              <th>Priority</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th class="col-group">Group</th>
+              <th class="col-tags">Tags</th>
+              <th class="col-actions"></th>
+            </tr>
+          </thead>
+          <tbody id="repo-cases-tbody">
+            {{#each testCases}}
+            <tr class="case-row" data-case-id="{{id}}" data-group-id="{{#if group_id}}{{group_id}}{{else}}ungrouped{{/if}}" data-title="{{title}}" data-tags="{{tags}}">
+              <td class="col-order case-sno">{{add @index 1}}</td>
+              <td class="col-case">
+                <a class="case-link" href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/cases/{{id}}" title="{{title}}">{{title}}</a>
+                {{#if url}}<a class="case-url-link" href="{{url}}" target="_blank" rel="noopener" title="{{url}}">🔗</a>{{/if}}
+              </td>
+              <td><span class="priority-badge {{priority}}"><span class="priority-dot {{priority}}"></span>{{capitalize priority}}</span></td>
+              <td><span class="badge badge-gray">{{typeLabel type}}</span></td>
+              <td><span class="status-badge {{status}}">{{capitalize status}}</span></td>
+              <td class="col-group"><span class="text-muted">{{or group_name '—'}}</span></td>
+              <td class="col-tags">{{#if tags}}<span class="case-tags text-muted" title="{{tags}}">{{tags}}</span>{{else}}<span class="text-muted">—</span>{{/if}}</td>
+              <td class="col-actions">
+                <div class="btn-group">
+                  <a href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/cases/{{id}}/edit" class="btn btn-ghost btn-icon btn-sm" title="Edit"><i class="bi bi-pencil"></i></a>
+                  <form action="/projects/{{../project.slug}}/repos/{{../repo.slug}}/cases/{{id}}/delete" method="POST" style="display:inline">
+                    <button type="submit" class="btn btn-ghost btn-icon btn-sm text-danger" title="Delete" data-confirm="Delete this test case?"><i class="bi bi-trash3"></i></button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            {{/each}}
+            <tr class="inline-add-row" id="inline-add-row" data-project="{{project.slug}}" data-repo="{{repo.slug}}">
+              <td class="col-order" style="color:var(--text-3)">+</td>
+              <td class="col-case"><input class="form-control" id="inline-case-title" placeholder="Quick add test case title..." maxlength="500"></td>
+              <td>
+                <select class="form-control" id="inline-case-priority">
+                  <option value="medium">Medium</option><option value="critical">Critical</option><option value="high">High</option><option value="low">Low</option>
+                </select>
+              </td>
+              <td>
+                <select class="form-control" id="inline-case-type">
+                  <option value="functional">Functional</option><option value="regression">Regression</option><option value="smoke">Smoke</option><option value="performance">Performance</option><option value="security">Security</option><option value="usability">Usability</option><option value="other">Other</option>
+                </select>
+              </td>
+              <td>
+                <select class="form-control" id="inline-case-status">
+                  <option value="active">Active</option><option value="draft">Draft</option><option value="deprecated">Deprecated</option>
+                </select>
+              </td>
+              <td class="col-group">
+                <select class="form-control" id="inline-case-group">
+                  <option value="">— No Group —</option>
+                  {{#each groups}}
+                  <option value="{{id}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </td>
+              <td class="col-tags"><input class="form-control" id="inline-case-tags" placeholder="Tags (comma separated)" maxlength="200"></td>
+              <td class="col-actions"><div class="inline-add-actions"><button type="button" class="btn btn-primary btn-sm" id="inline-case-save">Add</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="case-filter-empty" class="empty-state" style="display:none;padding:28px">
+        <h3>No matching test cases</h3>
+        <p>Try a different filter or search term.</p>
+      </div>
     </div>
-    {{/if}}
   </div>
 
   <!-- Test Plans Tab -->
   <div class="tab-panel" id="tab-plans">
     <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
-      <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/plans/new" class="btn btn-primary btn-sm">+ New Plan</a>
+      <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/plans/new" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> New Plan</a>
     </div>
     {{#if testPlans.length}}
     <div class="card">
@@ -185,7 +250,7 @@
     </div>
     {{else}}
     <div class="empty-state">
-      <div class="empty-state-icon">▶️</div>
+      <div class="empty-state-icon"><i class="bi bi-play-circle"></i></div>
       <h3>No test runs yet</h3>
       <p>Start a test run to execute test cases</p>
     </div>

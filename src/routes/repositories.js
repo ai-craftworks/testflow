@@ -31,7 +31,14 @@ router.get('/:repoSlug', (req, res) => {
   const repo = getRepo(db, project.id, req.params.repoSlug);
   if (!repo) { db.close(); return res.status(404).render('404', { title: 'Not Found' }); }
 
-  const groups = db.prepare('SELECT * FROM test_groups WHERE repository_id = ? ORDER BY name').all(repo.id);
+  const groups = db.prepare(`
+    SELECT tg.*, COUNT(tc.id) as case_count
+    FROM test_groups tg
+    LEFT JOIN test_cases tc ON tc.group_id = tg.id
+    WHERE tg.repository_id = ?
+    GROUP BY tg.id
+    ORDER BY tg.name
+  `).all(repo.id);
   const testCases = db.prepare(`
     SELECT tc.*, tg.name as group_name
     FROM test_cases tc

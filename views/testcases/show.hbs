@@ -11,7 +11,7 @@
     <h1>{{testCase.title}}</h1>
   </div>
   <div class="btn-group">
-    <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{testCase.id}}/edit" class="btn btn-secondary">✎ Edit</a>
+    <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{testCase.id}}/edit" class="btn btn-secondary"><i class="bi bi-pencil"></i> Edit</a>
     <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{testCase.id}}/delete" method="POST" style="display:inline">
       <button type="submit" class="btn btn-danger" data-confirm="Delete this test case?">Delete</button>
     </form>
@@ -68,7 +68,8 @@
     <div class="card" style="margin-bottom:16px">
       <div class="card-header"><h3>Details</h3></div>
       <div class="card-body">
-        <table style="width:100%;border-collapse:collapse">
+        <div class="table-wrap">
+        <table class="table table-sm" style="width:100%;border-collapse:collapse">
           <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3);width:45%">Priority</td><td><span class="priority-badge {{testCase.priority}}"><span class="priority-dot {{testCase.priority}}"></span>{{capitalize testCase.priority}}</span></td></tr>
           <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3)">Type</td><td><span class="badge badge-gray" style="font-size:0.78rem">{{typeLabel testCase.type}}</span></td></tr>
           <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3)">Status</td><td><span class="status-badge {{testCase.status}}">{{capitalize testCase.status}}</span></td></tr>
@@ -76,6 +77,7 @@
           <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3)">Created</td><td style="font-size:0.82rem">{{formatDate testCase.created_at}}</td></tr>
           <tr><td style="padding:6px 0;font-size:0.8rem;color:var(--text-3)">Updated</td><td style="font-size:0.82rem">{{formatDate testCase.updated_at}}</td></tr>
         </table>
+        </div>
         {{#if testCase.tags}}
         <div class="divider"></div>
         <div class="tags-wrap">

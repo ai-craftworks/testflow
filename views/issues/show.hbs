@@ -9,7 +9,7 @@
     {{#if issue.description}}<p style="color:var(--text-2);margin-top:4px">{{issue.description}}</p>{{/if}}
   </div>
   <div class="btn-group">
-    <button class="btn btn-secondary" data-modal="modal-edit-issue">✎ Edit</button>
+    <button class="btn btn-secondary" data-modal="modal-edit-issue"><i class="bi bi-pencil"></i> Edit</button>
     <button class="btn btn-primary" data-modal="modal-new-step">+ Add Debug Step</button>
   </div>
 </div>
@@ -43,7 +43,7 @@
         <span style="font-size:0.75rem;color:var(--text-3);flex-shrink:0;min-width:20px;font-weight:600">{{add @index 1}}.</span>
         <span class="accordion-title" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px">{{title}}</span>
         <span style="display:flex;align-items:center;gap:4px;flex-shrink:0" onclick="event.stopPropagation()">
-          <button type="button" class="btn btn-ghost btn-sm" data-modal="modal-edit-step-{{id}}" style="font-size:0.78rem;padding:3px 8px">✎ Edit</button>
+          <button type="button" class="btn btn-ghost btn-sm" data-modal="modal-edit-step-{{id}}" style="font-size:0.78rem;padding:3px 8px"><i class="bi bi-pencil"></i> Edit</button>
           <form action="/projects/{{../project.slug}}/issues/{{../issue.id}}/steps/{{id}}/delete" method="POST" style="display:inline;margin:0">
             <button type="submit" class="btn btn-ghost btn-sm" style="color:var(--red);font-size:0.78rem;padding:3px 8px" data-confirm="Delete this debug step?">✕</button>
           </form>
@@ -151,7 +151,7 @@
     {{/each}}
   {{else}}
   <div class="empty-state">
-    <div class="empty-state-icon">🔍</div>
+    <div class="empty-state-icon"><i class="bi bi-search"></i></div>
     <h3>No debug steps yet</h3>
     <p>Add debug steps to document your investigation</p>
   </div>

@@ -40,13 +40,12 @@
         {{/if}}
         {{#if ../showActions}}
         <td class="col-actions">
-          <a href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/cases/{{id}}/edit"
-            class="btn btn-ghost btn-icon btn-sm" title="Edit">✎</a>
-          <form action="/projects/{{../project.slug}}/repos/{{../repo.slug}}/cases/{{id}}/delete" method="POST"
-            style="display:inline">
-            <button type="submit" class="btn btn-ghost btn-icon btn-sm" style="color:var(--red)" title="Delete"
-              data-confirm="Delete this test case?">✕</button>
-          </form>
+          <div class="btn-group">
+            <a href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/cases/{{id}}/edit" class="btn btn-ghost btn-icon btn-sm" title="Edit"><i class="bi bi-pencil"></i></a>
+            <form action="/projects/{{../project.slug}}/repos/{{../repo.slug}}/cases/{{id}}/delete" method="POST" style="display:inline">
+              <button type="submit" class="btn btn-ghost btn-icon btn-sm text-danger" title="Delete" data-confirm="Delete this test case?"><i class="bi bi-trash3"></i></button>
+            </form>
+          </div>
         </td>
         {{/if}}
       </tr>

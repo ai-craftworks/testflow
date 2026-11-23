@@ -10,12 +10,12 @@
   </div>
   <div class="btn-group">
     <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/pdf" target="_blank"
-      class="btn btn-secondary">⬇ Export PDF</a>
+      class="btn btn-secondary"><i class="bi bi-download"></i> Export PDF</a>
     {{#if (eq run.status 'in_progress')}}
     <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/status" method="POST"
       style="display:inline">
       <input type="hidden" name="status" value="completed">
-      <button type="submit" class="btn btn-primary" data-confirm="Mark this run as completed?">✔ Complete Run</button>
+      <button type="submit" class="btn btn-primary" data-confirm="Mark this run as completed?"><i class="bi bi-check2-circle"></i> Complete Run</button>
     </form>
     <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/status" method="POST"
       style="display:inline">

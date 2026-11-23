@@ -498,6 +498,7 @@ document.querySelectorAll('.code-lang-select').forEach(function(sel) {
         type: document.getElementById('inline-case-type').value,
         status: document.getElementById('inline-case-status').value,
         group_id: document.getElementById('inline-case-group').value || '',
+        tags: (document.getElementById('inline-case-tags')?.value || '').trim(),
       };
       try {
         const res = await fetch(endpoint, {
@@ -531,11 +532,13 @@ document.querySelectorAll('.code-lang-select').forEach(function(sel) {
           <td class="col-group"><span class="text-muted">${escapeHtml(groupName)}</span></td>
           <td class="col-tags">${tags}</td>
           <td class="col-actions"><div class="btn-group">
-            <a href="${editUrl}" class="btn btn-ghost btn-sm">Edit</a>
-            <form action="${delUrl}" method="POST" style="display:inline"><button type="submit" class="btn btn-ghost btn-sm text-danger" data-confirm="Delete this test case?">Del</button></form>
+            <a href="${editUrl}" class="btn btn-ghost btn-icon btn-sm" title="Edit"><i class="bi bi-pencil"></i></a>
+            <form action="${delUrl}" method="POST" style="display:inline"><button type="submit" class="btn btn-ghost btn-icon btn-sm text-danger" title="Delete" data-confirm="Delete this test case?"><i class="bi bi-trash3"></i></button></form>
           </div></td>`;
         tbody.insertBefore(tr, addRow);
         titleInput.value = '';
+        const tagsInput = document.getElementById('inline-case-tags');
+        if (tagsInput) tagsInput.value = '';
         updateCounts();
         applyFilter();
         titleInput.focus();

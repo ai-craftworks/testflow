@@ -1,6 +1,6 @@
 <div class="page-title-row">
   <h1>New Test Run</h1>
-  <a href="/projects/{{project.slug}}/repos/{{repo.slug}}" class="btn btn-secondary">← Back</a>
+  <a href="/projects/{{project.slug}}/repos/{{repo.slug}}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back</a>
 </div>
 
 <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs" method="POST" id="run-form">
@@ -162,7 +162,7 @@
       <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
         <div style="font-size:0.875rem;color:var(--text-2)" id="run-summary">Configure your test run above</div>
         <div class="divider"></div>
-        <button type="submit" class="btn btn-primary" style="justify-content:center">▶ Start Run</button>
+        <button type="submit" class="btn btn-primary" style="justify-content:center"><i class="bi bi-play-fill"></i> Start Run</button>
         <a href="/projects/{{project.slug}}/repos/{{repo.slug}}" class="btn btn-secondary"
           style="justify-content:center">Cancel</a>
       </div>

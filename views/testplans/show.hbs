@@ -8,8 +8,8 @@
     {{#if plan.description}}<p>{{plan.description}}</p>{{/if}}
   </div>
   <div class="btn-group">
-    <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/plans/{{plan.id}}/edit" class="btn btn-secondary">✎ Edit Plan</a>
-    <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/new?plan_id={{plan.id}}" class="btn btn-primary">▶ Start Run</a>
+    <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/plans/{{plan.id}}/edit" class="btn btn-secondary"><i class="bi bi-pencil"></i> Edit Plan</a>
+    <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/new?plan_id={{plan.id}}" class="btn btn-primary"><i class="bi bi-play-fill"></i> Start Run</a>
   </div>
 </div>
 
@@ -83,8 +83,8 @@
 
     <div class="card">
       <div class="card-body" style="display:flex;flex-direction:column;gap:8px">
-        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/new?plan_id={{plan.id}}" class="btn btn-primary" style="justify-content:center">▶ Start New Run</a>
-        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/plans/{{plan.id}}/edit" class="btn btn-secondary" style="justify-content:center">✎ Edit Plan</a>
+        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/new?plan_id={{plan.id}}" class="btn btn-primary" style="justify-content:center"><i class="bi bi-play-fill"></i> Start New Run</a>
+        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/plans/{{plan.id}}/edit" class="btn btn-secondary" style="justify-content:center"><i class="bi bi-pencil"></i> Edit Plan</a>
         <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/plans/{{plan.id}}/delete" method="POST">
           <button type="submit" class="btn btn-danger" style="width:100%;justify-content:center" data-confirm="Delete this test plan?">Delete Plan</button>
         </form>

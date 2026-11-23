@@ -7,8 +7,8 @@
     </div>
   </div>
   <div class="btn-group">
-    <button class="btn btn-secondary" data-modal="modal-edit-project">✎ Edit</button>
-    <button class="btn btn-primary" data-modal="modal-new-repo">+ New Repository</button>
+    <button class="btn btn-secondary" data-modal="modal-edit-project"><i class="bi bi-pencil"></i> Edit</button>
+    <button class="btn btn-primary" data-modal="modal-new-repo"><i class="bi bi-plus-lg"></i> New Repository</button>
   </div>
 </div>
 
@@ -16,31 +16,31 @@
 <div class="stats-row">
   <div class="stat-card">
     <div class="stat-card-body"><div class="stat-label">Repositories</div><div class="stat-value">{{stats.total_repos}}</div></div>
-    <div class="stat-icon">📦</div>
+    <div class="stat-icon"><i class="bi bi-folder2-open"></i></div>
   </div>
   <div class="stat-card stat-cyan">
     <div class="stat-card-body"><div class="stat-label">Test Cases</div><div class="stat-value">{{stats.total_cases}}</div></div>
-    <div class="stat-icon cyan">🧪</div>
+    <div class="stat-icon cyan"><i class="bi bi-bug"></i></div>
   </div>
   <div class="stat-card">
     <div class="stat-card-body"><div class="stat-label">Test Plans</div><div class="stat-value">{{stats.total_plans}}</div></div>
-    <div class="stat-icon">📋</div>
+    <div class="stat-icon"><i class="bi bi-journal-text"></i></div>
   </div>
   <div class="stat-card stat-orange">
     <div class="stat-card-body"><div class="stat-label">Active Runs</div><div class="stat-value">{{stats.active_runs}}</div></div>
-    <div class="stat-icon orange">⚡</div>
+    <div class="stat-icon orange"><i class="bi bi-lightning-charge"></i></div>
   </div>
   <div class="stat-card stat-green">
     <div class="stat-card-body"><div class="stat-label">Completed</div><div class="stat-value">{{stats.completed_runs}}</div></div>
-    <div class="stat-icon green">✓</div>
+    <div class="stat-icon green"><i class="bi bi-check2-circle"></i></div>
   </div>
   <div class="stat-card stat-gray" style="--tw:0">
     <div class="stat-card-body"><div class="stat-label">Issues</div><div class="stat-value">{{issueStats.total_issues}}</div></div>
-    <div class="stat-icon gray">🐛</div>
+    <div class="stat-icon gray"><i class="bi bi-exclamation-circle"></i></div>
   </div>
   <div class="stat-card stat-red">
     <div class="stat-card-body"><div class="stat-label">Open Issues</div><div class="stat-value">{{#if issueStats.open_issues}}{{issueStats.open_issues}}{{else}}0{{/if}}</div></div>
-    <div class="stat-icon red">!</div>
+    <div class="stat-icon red"><i class="bi bi-exclamation-triangle"></i></div>
   </div>
 </div>
 

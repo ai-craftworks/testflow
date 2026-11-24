@@ -5,9 +5,9 @@
         <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{case.id}}">{{case.title}}</a>
       </div>
       <div class="tc-card-actions">
-        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{case.id}}/edit" class="btn btn-ghost btn-icon btn-sm" title="Edit">✎</a>
+        <a href="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{case.id}}/edit" class="btn btn-ghost btn-icon btn-sm" title="Edit"><i class="bi bi-pencil-square"></i></a>
         <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/cases/{{case.id}}/delete" method="POST" style="display:inline">
-          <button type="submit" class="btn btn-ghost btn-icon btn-sm" style="color:var(--red)" title="Delete" data-confirm="Delete this test case?">✕</button>
+          <button type="submit" class="btn btn-ghost btn-icon btn-sm" style="color:var(--red)" title="Delete" data-confirm="Delete this test case?"><i class="bi bi-trash3"></i></button>
         </form>
       </div>
     </div>
@@ -16,7 +16,7 @@
         <span class="priority-dot {{case.priority}}"></span>{{capitalize case.priority}}
       </span>
       <span class="badge badge-gray">{{typeLabel case.type}}</span>
-      {{#if case.url}}<span style="font-size:0.78rem;color:var(--text-3)">🔗 URL</span>{{/if}}
+      {{#if case.url}}<span style="font-size:0.78rem;color:var(--text-3)"><i class="bi bi-link-45deg"></i> URL</span>{{/if}}
       {{#if case.tags}}
       <div class="tags-wrap">
         {{case.tags}}

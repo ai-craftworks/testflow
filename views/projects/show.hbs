@@ -82,8 +82,8 @@
     <h2>Repositories <span class="badge badge-gray" style="margin-left:6px">{{repos.length}}</span></h2>
     <!-- Quick links -->
     <div style="display:flex;gap:10px;margin-bottom:24px">
-      <a href="/projects/{{project.slug}}/runs" class="btn btn-secondary">▶ All Test Runs</a>
-      <a href="/projects/{{project.slug}}/issues" class="btn btn-secondary">🐛 Issues</a>
+      <a href="/projects/{{project.slug}}/runs" class="btn btn-secondary"><i class="bi bi-clock-history"></i> All Test Runs</a>
+      <a href="/projects/{{project.slug}}/issues" class="btn btn-secondary"><i class="bi bi-bug"></i> Issues</a>
     </div>
   </div>
   {{#if repos.length}}
@@ -95,14 +95,14 @@
           <div style="font-weight:600;font-size:0.95rem"><a href="/projects/{{../project.slug}}/repos/{{slug}}" style="color:var(--text)">{{name}}</a></div>
           {{#if description}}<div style="font-size:0.82rem;color:var(--text-2);margin-top:3px">{{truncate description 60}}</div>{{/if}}
         </div>
-        <button class="btn btn-icon btn-ghost btn-sm" data-modal="modal-edit-repo-{{id}}" style="font-size:0.85rem">✎</button>
+        <button class="btn btn-icon btn-ghost btn-sm" data-modal="modal-edit-repo-{{id}}" style="font-size:0.85rem"><i class="bi bi-pencil-square"></i></button>
       </div>
       <div style="display:flex;gap:14px;font-size:0.8rem;color:var(--text-3)">
         <span>{{test_case_count}} cases</span>
         <span>{{test_plan_count}} plans</span>
         <span>{{test_run_count}} runs</span>
       </div>
-      <a href="/projects/{{../project.slug}}/repos/{{slug}}" class="btn btn-secondary btn-sm" style="margin-top:12px;width:100%;justify-content:center">Open →</a>
+      <a href="/projects/{{../project.slug}}/repos/{{slug}}" class="btn btn-secondary btn-sm" style="margin-top:12px;width:100%;justify-content:center"><i class="bi bi-box-arrow-up-right"></i> Open</a>
     </div>
 
     <!-- Edit Repo Modal -->
@@ -110,7 +110,7 @@
       <div class="modal">
         <div class="modal-header">
           <h2>Edit Repository</h2>
-          <button class="modal-close" data-close-modal="modal-edit-repo-{{id}}">✕</button>
+          <button class="modal-close" data-close-modal="modal-edit-repo-{{id}}"><i class="bi bi-x-lg"></i></button>
         </div>
         <form action="/projects/{{../project.slug}}/repos/{{slug}}/edit" method="POST">
           <div class="modal-body">
@@ -137,7 +137,7 @@
   </div>
   {{else}}
   <div class="empty-state">
-    <div class="empty-state-icon">📁</div>
+    <div class="empty-state-icon"><i class="bi bi-folder"></i></div>
     <h3>No repositories yet</h3>
     <p>Create a repository to organize test cases</p>
   </div>
@@ -149,7 +149,7 @@
   <div class="modal">
     <div class="modal-header">
       <h2>Edit Project</h2>
-      <button class="modal-close" data-close-modal="modal-edit-project">✕</button>
+      <button class="modal-close" data-close-modal="modal-edit-project"><i class="bi bi-x-lg"></i></button>
     </div>
     <form action="/projects/{{project.slug}}/edit" method="POST">
       <div class="modal-body">
@@ -184,7 +184,7 @@
   <div class="modal">
     <div class="modal-header">
       <h2>New Repository</h2>
-      <button class="modal-close" data-close-modal="modal-new-repo">✕</button>
+      <button class="modal-close" data-close-modal="modal-new-repo"><i class="bi bi-x-lg"></i></button>
     </div>
     <form action="/projects/{{project.slug}}/repos" method="POST">
       <div class="modal-body">

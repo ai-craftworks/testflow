@@ -49,7 +49,7 @@ document.addEventListener('click', e => {
   if (body?.classList.contains('run-result-body')) {
     body.classList.toggle('open');
     const arrow = hdr.querySelector('.result-arrow');
-    if (arrow) arrow.textContent = body.classList.contains('open') ? '▲' : '▼';
+    if (arrow) arrow.classList.toggle('open', body.classList.contains('open'));
   }
 });
 

@@ -193,12 +193,12 @@
       tr.dataset.id = id;
       tr.draggable = true;
       tr.innerHTML =
-        '<td class="col-drag"><span class="drag-handle" title="Drag to reorder">⠿</span></td>' +
+        '<td class="col-drag"><span class="drag-handle" title="Drag to reorder"><i class="bi bi-grip-vertical"></i></span></td>' +
         '<td class="col-order">' + (index + 1) + '</td>' +
         '<td class="col-case"><span class="case-title" title="' + escHtml(c.title) + '">' + escHtml(c.title) + '</span></td>' +
         '<td><span class="priority-badge ' + c.priority + '"><span class="priority-dot ' + c.priority + '"></span>' + cap(c.priority) + '</span></td>' +
         '<td><span class="badge badge-gray">' + cap(c.type) + '</span></td>' +
-        '<td class="col-actions"><button type="button" class="btn btn-ghost btn-icon btn-sm remove-selected" data-id="' + id + '" title="Remove" style="color:var(--red)">✕</button></td>';
+        '<td class="col-actions"><button type="button" class="btn btn-ghost btn-icon btn-sm remove-selected" data-id="' + id + '" title="Remove" style="color:var(--red)"><i class="bi bi-x-lg"></i></button></td>';
       list.appendChild(tr);
     });
 

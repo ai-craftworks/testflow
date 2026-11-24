@@ -18,23 +18,23 @@
           {{#if description}}<div class="project-desc" style="margin-top:3px">{{truncate description 80}}</div>{{/if}}
         </div>
       </div>
-      <button class="btn btn-icon btn-ghost" data-modal="modal-edit-project-{{id}}" title="Edit" style="font-size:0.9rem">✎</button>
+      <button class="btn btn-icon btn-ghost" data-modal="modal-edit-project-{{id}}" title="Edit" style="font-size:0.9rem"><i class="bi bi-pencil-square"></i></button>
     </div>
-    <div class="project-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 18px;border-top:1px solid var(--border-light);background:linear-gradient(180deg,#fbfcff,#fff)">
+    <div class="project-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 18px;border-top:1px solid var(--border-light);background:var(--bg-soft)">
       <div style="text-align:center">
         <div style="font-size:1.15rem;font-weight:700;color:var(--accent)">{{repo_count}}</div>
-        <div style="font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3)">Repos</div>
+        <div style="font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-2)">Repos</div>
       </div>
       <div style="text-align:center">
-        <div style="font-size:1.15rem;font-weight:700;color:#11cdef">{{test_case_count}}</div>
-        <div style="font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3)">Cases</div>
+        <div style="font-size:1.15rem;font-weight:700;color:var(--cyan)">{{test_case_count}}</div>
+        <div style="font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-2)">Cases</div>
       </div>
       <div style="text-align:center">
-        <div style="font-size:1.15rem;font-weight:700;color:#2dce89">{{test_run_count}}</div>
-        <div style="font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3)">Runs</div>
+        <div style="font-size:1.15rem;font-weight:700;color:var(--green)">{{test_run_count}}</div>
+        <div style="font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-2)">Runs</div>
       </div>
     </div>
-    <a href="/projects/{{slug}}" class="btn btn-secondary" style="width:100%;justify-content:center">Open Project →</a>
+    <a href="/projects/{{slug}}" class="btn btn-secondary" style="width:100%;justify-content:center"><i class="bi bi-box-arrow-up-right"></i> Open Project</a>
   </div>
 
   <!-- Edit Project Modal -->
@@ -42,7 +42,7 @@
     <div class="modal">
       <div class="modal-header">
         <h2>Edit Project</h2>
-        <button class="modal-close" data-close-modal="modal-edit-project-{{id}}">✕</button>
+        <button class="modal-close" data-close-modal="modal-edit-project-{{id}}"><i class="bi bi-x-lg"></i></button>
       </div>
       <form action="/projects/{{slug}}/edit" method="POST">
         <div class="modal-body">
@@ -78,7 +78,7 @@
 </div>
 {{else}}
 <div class="empty-state">
-  <div class="empty-state-icon">📋</div>
+  <div class="empty-state-icon"><i class="bi bi-clipboard-data"></i></div>
   <h3>No projects yet</h3>
   <p>Create your first project to start organizing test cases</p>
 </div>
@@ -89,7 +89,7 @@
   <div class="modal">
     <div class="modal-header">
       <h2>New Project</h2>
-      <button class="modal-close" data-close-modal="modal-new-project">✕</button>
+      <button class="modal-close" data-close-modal="modal-new-project"><i class="bi bi-x-lg"></i></button>
     </div>
     <form action="/projects" method="POST">
       <div class="modal-body">

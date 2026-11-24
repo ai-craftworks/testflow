@@ -20,13 +20,13 @@
     <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/status" method="POST"
       style="display:inline">
       <input type="hidden" name="status" value="aborted">
-      <button type="submit" class="btn btn-secondary" data-confirm="Abort this run?">✕ Abort</button>
+      <button type="submit" class="btn btn-secondary" data-confirm="Abort this run?"><i class="bi bi-x-octagon"></i> Abort</button>
     </form>
     {{else}}
     <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/status" method="POST"
       style="display:inline">
       <input type="hidden" name="status" value="in_progress">
-      <button type="submit" class="btn btn-secondary">↩ Reopen</button>
+      <button type="submit" class="btn btn-secondary"><i class="bi bi-arrow-counterclockwise"></i> Reopen</button>
     </form>
     {{/if}}
     <form action="/projects/{{project.slug}}/repos/{{repo.slug}}/runs/{{run.id}}/delete" method="POST"
@@ -41,21 +41,21 @@
   <div class="card-body" style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;padding:12px 20px">
     {{#if run.environment}}
     <div style="display:flex;align-items:center;gap:7px;font-size:0.875rem">
-      <span style="color:var(--text-3)">🖥</span>
+      <span style="color:var(--text-3)"><i class="bi bi-display"></i></span>
       <span style="font-weight:500;color:var(--text-2)">Environment:</span>
       <span>{{run.environment}}</span>
     </div>
     {{/if}}
     {{#if run.browser}}
     <div style="display:flex;align-items:center;gap:7px;font-size:0.875rem">
-      <span style="color:var(--text-3)">🌐</span>
+      <span style="color:var(--text-3)"><i class="bi bi-globe2"></i></span>
       <span style="font-weight:500;color:var(--text-2)">Browser:</span>
       <span>{{run.browser}}</span>
     </div>
     {{/if}}
     {{#if run.test_url}}
     <div style="display:flex;align-items:center;gap:7px;font-size:0.875rem">
-      <span style="color:var(--text-3)">🔗</span>
+      <span style="color:var(--text-3)"><i class="bi bi-link-45deg"></i></span>
       <span style="font-weight:500;color:var(--text-2)">URL:</span>
       <a href="{{run.test_url}}" target="_blank">{{run.test_url}}</a>
     </div>
@@ -67,7 +67,7 @@
 {{#if linkedIssues.length}}
 <div class="card" style="margin-bottom:16px">
   <div class="card-header">
-    <h3>🐛 Linked Issues</h3>
+    <h3><i class="bi bi-bug"></i> Linked Issues</h3>
   </div>
   <div class="card-body" style="display:flex;gap:8px;flex-wrap:wrap;padding:12px 20px">
     {{#each linkedIssues}}
@@ -87,9 +87,9 @@
   <div class="metric-card"><div class="metric-label">Total</div><div class="metric-value">{{statusCounts.total}}</div><div class="metric-bar"><div class="metric-bar-fill" style="width:100%"></div></div></div>
   <div class="metric-card"><div class="metric-label">Passed</div><div class="metric-value count-passed" style="color:var(--green)">{{statusCounts.passed}}</div><div class="metric-bar"><div class="metric-bar-fill green" style="width:{{pct statusCounts.passed statusCounts.total}}%"></div></div></div>
   <div class="metric-card"><div class="metric-label">Failed</div><div class="metric-value count-failed" style="color:var(--red)">{{statusCounts.failed}}</div><div class="metric-bar"><div class="metric-bar-fill red" style="width:{{pct statusCounts.failed statusCounts.total}}%"></div></div></div>
-  <div class="metric-card"><div class="metric-label">Blocked</div><div class="metric-value count-blocked" style="color:#fb6340">{{statusCounts.blocked}}</div><div class="metric-bar"><div class="metric-bar-fill orange" style="width:{{pct statusCounts.blocked statusCounts.total}}%"></div></div></div>
-  <div class="metric-card"><div class="metric-label">Skipped</div><div class="metric-value count-skipped" style="color:var(--text-3)">{{statusCounts.skipped}}</div><div class="metric-bar"><div class="metric-bar-fill" style="width:{{pct statusCounts.skipped statusCounts.total}}%;background:#adb5bd"></div></div></div>
-  <div class="metric-card"><div class="metric-label">Pending</div><div class="metric-value count-pending" style="color:var(--text-3)">{{statusCounts.pending}}</div><div class="metric-bar"><div class="metric-bar-fill" style="width:{{pct statusCounts.pending statusCounts.total}}%;background:#cbd5e1"></div></div></div>
+  <div class="metric-card"><div class="metric-label">Blocked</div><div class="metric-value count-blocked" style="color:var(--orange)">{{statusCounts.blocked}}</div><div class="metric-bar"><div class="metric-bar-fill orange" style="width:{{pct statusCounts.blocked statusCounts.total}}%"></div></div></div>
+  <div class="metric-card"><div class="metric-label">Skipped</div><div class="metric-value count-skipped" style="color:var(--text-2)">{{statusCounts.skipped}}</div><div class="metric-bar"><div class="metric-bar-fill" style="width:{{pct statusCounts.skipped statusCounts.total}}%;background:var(--secondary)"></div></div></div>
+  <div class="metric-card"><div class="metric-label">Pending</div><div class="metric-value count-pending" style="color:var(--text-2)">{{statusCounts.pending}}</div><div class="metric-bar"><div class="metric-bar-fill" style="width:{{pct statusCounts.pending statusCounts.total}}%;background:var(--border)"></div></div></div>
 </div>
 <div class="card" style="margin-bottom:20px">
   <div class="card-body" style="padding:16px 20px">
@@ -105,7 +105,7 @@
       <div class="seg seg-pending" style="width:{{pct statusCounts.pending statusCounts.total}}%"></div>
     </div>
     {{#if (eq run.status 'completed')}}
-    <div style="margin-top:10px;font-size:0.82rem;color:var(--text-3)">✔ Completed {{formatDateTime run.completed_at}}</div>
+    <div style="margin-top:10px;font-size:0.82rem;color:var(--text-3)"><i class="bi bi-check-circle-fill"></i> Completed {{formatDateTime run.completed_at}}</div>
     {{/if}}
   </div>
 </div>
@@ -113,7 +113,7 @@
 <!-- Run-level Notes -->
 <div class="card" style="margin-bottom:20px">
   <div class="card-header">
-    <h2>📝 Run Notes</h2>
+    <h2><i class="bi bi-pencil-square"></i> Run Notes</h2>
     <span style="font-size:0.8rem;color:var(--text-3)">General observations, suggestions, and thoughts about this
       run</span>
   </div>
@@ -128,7 +128,7 @@
             <button type="button" class="btn btn-ghost btn-sm run-note-edit-btn" style="font-size:0.78rem">Edit</button>
             <button type="button" class="btn btn-ghost btn-sm run-note-delete-btn"
               style="font-size:0.78rem;color:var(--red)"
-              data-url="/projects/{{../project.slug}}/repos/{{../repo.slug}}/runs/{{../run.id}}/run-notes/{{id}}/delete">✕</button>
+              data-url="/projects/{{../project.slug}}/repos/{{../repo.slug}}/runs/{{../run.id}}/run-notes/{{id}}/delete"><i class="bi bi-trash3"></i></button>
           </div>
           {{/if}}
         </div>
@@ -146,17 +146,17 @@
           <button type="button" class="toolbar-btn" data-cmd="underline"><u>U</u></button>
           <button type="button" class="toolbar-btn" data-cmd="strikeThrough"><s>S</s></button>
           <span class="toolbar-sep"></span>
-          <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList">• List</button>
+          <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList"><i class="bi bi-list-ul"></i> List</button>
           <button type="button" class="toolbar-btn" data-cmd="insertOrderedList">1. List</button>
           <span class="toolbar-sep"></span>
-          <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="blockquote">❝</button>
+          <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="blockquote"><i class="bi bi-quote"></i></button>
           <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="pre">{ }</button>
           <span class="toolbar-sep"></span>
-          <button type="button" class="toolbar-btn" data-cmd="insertImage">📷 Image</button>
-          <button type="button" class="toolbar-btn" data-cmd="insertVideo" title="Upload video">🎥 Video</button>
-          <button type="button" class="toolbar-btn" data-cmd="createLink">🔗 Link</button>
+          <button type="button" class="toolbar-btn" data-cmd="insertImage"><i class="bi bi-image"></i> Image</button>
+          <button type="button" class="toolbar-btn" data-cmd="insertVideo" title="Upload video"><i class="bi bi-camera-video"></i> Video</button>
+          <button type="button" class="toolbar-btn" data-cmd="createLink"><i class="bi bi-link-45deg"></i> Link</button>
           <span class="toolbar-sep"></span>
-          <button type="button" class="toolbar-btn" data-cmd="removeFormat">✕</button>
+          <button type="button" class="toolbar-btn" data-cmd="removeFormat"><i class="bi bi-eraser"></i></button>
         </div>
         <div class="rich-editor" id="run-note-editor" contenteditable="true" style="min-height:100px"></div>
         <input type="hidden" id="run-note-content">
@@ -184,7 +184,7 @@
   {{#each results}}
   <div class="run-result-row" data-status="{{status}}">
     <div class="run-result-header">
-      <span class="result-arrow" style="color:var(--text-3);font-size:0.7rem;width:14px;flex-shrink:0">▼</span>
+      <span class="result-arrow" style="color:var(--text-3);font-size:0.7rem;width:14px;flex-shrink:0"><i class="bi bi-chevron-down"></i></span>
       <div style="flex:1;min-width:0">
         <div class="result-title">
           <a href="/projects/{{../project.slug}}/repos/{{../repo.slug}}/cases/{{test_case_id}}" target="_blank"
@@ -195,7 +195,7 @@
             priority}}</span>
           <span class="badge badge-gray" style="font-size:0.72rem">{{typeLabel type}}</span>
           {{#if group_name}}<span class="badge badge-blue" style="font-size:0.72rem">{{group_name}}</span>{{/if}}
-          {{#if url}}<a href="{{url}}" target="_blank" style="font-size:0.75rem;color:var(--text-3)">🔗 URL</a>{{/if}}
+          {{#if url}}<a href="{{url}}" target="_blank" style="font-size:0.75rem;color:var(--text-3)"><i class="bi bi-link-45deg"></i> URL</a>{{/if}}
           <span style="font-size:0.75rem;color:var(--text-3)">{{notes.length}} note{{#if (ne notes.length
             1)}}s{{/if}}</span>
         </div>
@@ -206,11 +206,11 @@
         <select class="form-control result-status-select"
           data-url="/projects/{{../project.slug}}/repos/{{../repo.slug}}/runs/{{../run.id}}/results/{{id}}/status"
           style="width:auto;padding:4px 8px;font-size:0.82rem" onclick="event.stopPropagation()">
-          <option value="pending" {{#if (eq status 'pending' )}}selected{{/if}}>⬜ Pending</option>
-          <option value="passed" {{#if (eq status 'passed' )}}selected{{/if}}>✅ Passed</option>
-          <option value="failed" {{#if (eq status 'failed' )}}selected{{/if}}>❌ Failed</option>
-          <option value="blocked" {{#if (eq status 'blocked' )}}selected{{/if}}>🚫 Blocked</option>
-          <option value="skipped" {{#if (eq status 'skipped' )}}selected{{/if}}>⏭ Skipped</option>
+          <option value="pending" {{#if (eq status 'pending' )}}selected{{/if}}>Pending</option>
+          <option value="passed" {{#if (eq status 'passed' )}}selected{{/if}}>Passed</option>
+          <option value="failed" {{#if (eq status 'failed' )}}selected{{/if}}>Failed</option>
+          <option value="blocked" {{#if (eq status 'blocked' )}}selected{{/if}}><i class="bi bi-x-octagon"></i> Blocked</option>
+          <option value="skipped" {{#if (eq status 'skipped' )}}selected{{/if}}>Skipped</option>
         </select>
         {{/if}}
       </div>
@@ -250,7 +250,7 @@
       <div class="divider"></div>
 
       <div style="margin-bottom:12px">
-        <div style="font-size:0.82rem;font-weight:600;color:var(--text-2);margin-bottom:10px">📝 Test Case Notes</div>
+        <div style="font-size:0.82rem;font-weight:600;color:var(--text-2);margin-bottom:10px"><i class="bi bi-pencil-square"></i> Test Case Notes</div>
         <div class="notes-list">
           {{#each notes}}
           <div class="note-card" data-note-id="{{id}}" style="margin-bottom:8px">
@@ -261,7 +261,7 @@
                 <button type="button" class="btn btn-ghost btn-sm edit-note-btn" style="font-size:0.78rem">Edit</button>
                 <button type="button" class="btn btn-ghost btn-sm delete-note-btn"
                   style="font-size:0.78rem;color:var(--red)"
-                  data-url="/projects/{{../../../project.slug}}/repos/{{../../../repo.slug}}/runs/{{../../../run.id}}/results/{{../../id}}/notes/{{id}}/delete">✕</button>
+                  data-url="/projects/{{../../../project.slug}}/repos/{{../../../repo.slug}}/runs/{{../../../run.id}}/results/{{../../id}}/notes/{{id}}/delete"><i class="bi bi-trash3"></i></button>
               </div>
               {{/if}}
             </div>
@@ -283,17 +283,17 @@
                 <button type="button" class="toolbar-btn" data-cmd="underline"><u>U</u></button>
                 <button type="button" class="toolbar-btn" data-cmd="strikeThrough"><s>S</s></button>
                 <span class="toolbar-sep"></span>
-                <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList">• List</button>
+                <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList"><i class="bi bi-list-ul"></i> List</button>
                 <button type="button" class="toolbar-btn" data-cmd="insertOrderedList">1. List</button>
                 <span class="toolbar-sep"></span>
-                <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="blockquote">❝</button>
+                <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="blockquote"><i class="bi bi-quote"></i></button>
                 <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="pre">{ }</button>
                 <span class="toolbar-sep"></span>
-                <button type="button" class="toolbar-btn" data-cmd="insertImage">📷 Image</button>
-                <button type="button" class="toolbar-btn" data-cmd="insertVideo" title="Upload video">🎥 Video</button>
-                <button type="button" class="toolbar-btn" data-cmd="createLink">🔗 Link</button>
+                <button type="button" class="toolbar-btn" data-cmd="insertImage"><i class="bi bi-image"></i> Image</button>
+                <button type="button" class="toolbar-btn" data-cmd="insertVideo" title="Upload video"><i class="bi bi-camera-video"></i> Video</button>
+                <button type="button" class="toolbar-btn" data-cmd="createLink"><i class="bi bi-link-45deg"></i> Link</button>
                 <span class="toolbar-sep"></span>
-                <button type="button" class="toolbar-btn" data-cmd="removeFormat">✕</button>
+                <button type="button" class="toolbar-btn" data-cmd="removeFormat"><i class="bi bi-eraser"></i></button>
               </div>
               <div class="rich-editor" contenteditable="true" style="min-height:80px"></div>
               <input type="hidden" name="content">
@@ -309,7 +309,7 @@
   </div>
   {{else}}
   <div class="empty-state">
-    <div class="empty-state-icon">🧪</div>
+    <div class="empty-state-icon"><i class="bi bi-clipboard2-data"></i></div>
     <h3>No test cases in this run</h3>
   </div>
   {{/each}}
@@ -415,7 +415,7 @@
           const notesList = form.closest('.run-result-body').querySelector('.notes-list');
           const div = document.createElement('div');
           div.className = 'note-card'; div.dataset.noteId = data.note.id; div.style.marginBottom = '8px';
-          div.innerHTML = `<div class="note-card-header"><span class="note-time">Just now</span><div style="display:flex;gap:4px"><button type="button" class="btn btn-ghost btn-sm edit-note-btn" style="font-size:0.78rem">Edit</button><button type="button" class="btn btn-ghost btn-sm delete-note-btn" style="font-size:0.78rem;color:var(--red)">✕</button></div></div><div class="note-content">${data.note.content}</div>`;
+          div.innerHTML = `<div class="note-card-header"><span class="note-time">Just now</span><div style="display:flex;gap:4px"><button type="button" class="btn btn-ghost btn-sm edit-note-btn" style="font-size:0.78rem">Edit</button><button type="button" class="btn btn-ghost btn-sm delete-note-btn" style="font-size:0.78rem;color:var(--red)"><i class="bi bi-trash3"></i></button></div></div><div class="note-content">${data.note.content}</div>`;
           notesList.appendChild(div);
           editor.innerHTML = ''; if (hidden) hidden.value = '';
           showToast('Note added', 'success');
@@ -523,7 +523,7 @@
           const list = document.getElementById('run-notes-list');
           const div = document.createElement('div');
           div.className = 'note-card'; div.dataset.runNoteId = data.note.id; div.style.marginBottom = '10px';
-          div.innerHTML = `<div class="note-card-header"><span class="note-time">Just now</span><div style="display:flex;gap:4px"><button type="button" class="btn btn-ghost btn-sm run-note-edit-btn" style="font-size:0.78rem">Edit</button><button type="button" class="btn btn-ghost btn-sm run-note-delete-btn" style="font-size:0.78rem;color:var(--red)" data-url="${form.dataset.url}/${data.note.id}/delete">✕</button></div></div><div class="note-content">${data.note.content}</div>`;
+          div.innerHTML = `<div class="note-card-header"><span class="note-time">Just now</span><div style="display:flex;gap:4px"><button type="button" class="btn btn-ghost btn-sm run-note-edit-btn" style="font-size:0.78rem">Edit</button><button type="button" class="btn btn-ghost btn-sm run-note-delete-btn" style="font-size:0.78rem;color:var(--red)" data-url="${form.dataset.url}/${data.note.id}/delete"><i class="bi bi-trash3"></i></button></div></div><div class="note-content">${data.note.content}</div>`;
           list.appendChild(div);
           editor.innerHTML = ''; hidden.value = '';
           showToast('Note added', 'success');

@@ -106,10 +106,10 @@
               </span>
             </div>
             <div style="display:flex;gap:8px;margin-top:4px;font-size:0.72rem">
-              {{#if passed}}<span style="color:var(--green)">✓{{passed}}</span>{{/if}}
-              {{#if failed}}<span style="color:var(--red)">✗{{failed}}</span>{{/if}}
-              {{#if blocked}}<span style="color:var(--purple)">⊘{{blocked}}</span>{{/if}}
-              {{#if pending}}<span style="color:var(--text-3)">◌{{pending}}</span>{{/if}}
+              {{#if passed}}<span style="color:var(--green)"><i class="bi bi-check-circle-fill"></i> {{passed}}</span>{{/if}}
+              {{#if failed}}<span style="color:var(--red)"><i class="bi bi-x-circle-fill"></i> {{failed}}</span>{{/if}}
+              {{#if blocked}}<span style="color:var(--orange)"><i class="bi bi-slash-circle"></i> {{blocked}}</span>{{/if}}
+              {{#if pending}}<span style="color:var(--cyan)"><i class="bi bi-circle"></i> {{pending}}</span>{{/if}}
             </div>
             {{else}}
             <span style="color:var(--text-3);font-size:0.82rem">No cases</span>
@@ -118,7 +118,7 @@
           <td><span class="status-badge {{status}}">{{statusLabel status}}</span></td>
           <td style="color:var(--text-3);font-size:0.82rem;white-space:nowrap">{{formatDate created_at}}</td>
           <td onclick="event.stopPropagation()">
-            <a href="/projects/{{../project.slug}}/repos/{{repo_slug}}/runs/{{id}}" class="btn btn-ghost btn-sm">Open →</a>
+            <a href="/projects/{{../project.slug}}/repos/{{repo_slug}}/runs/{{id}}" class="btn btn-ghost btn-sm"><i class="bi bi-box-arrow-up-right"></i> Open</a>
           </td>
         </tr>
         {{/each}}
